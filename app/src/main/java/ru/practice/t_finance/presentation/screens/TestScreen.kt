@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
@@ -22,7 +23,7 @@ fun ColorTestScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(dimensionResource(R.dimen.HorizontalScreenPadding))
+                    .padding(dimensionResource(R.dimen.horizontal_screen_padding))
                     .padding(padding),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -76,7 +77,7 @@ fun ColorTestScreen() {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     ),
-                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.cardShadowElevation))
+                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.card_shadow_elevation))
                 ) {
                     Text(
                         text = "Surface",
@@ -132,5 +133,13 @@ fun ColorTestScreen() {
                 }
             }
         }
+    }
+}
+
+@Composable
+@Preview
+private fun Preview() {
+    TfinanceTheme {
+        ColorTestScreen()
     }
 }

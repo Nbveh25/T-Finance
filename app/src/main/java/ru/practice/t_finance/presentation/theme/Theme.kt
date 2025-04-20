@@ -45,7 +45,7 @@ fun TfinanceTheme(
 
     MaterialTheme(
         colorScheme = colors,
-        typography = Typography,
+        typography = CustomTypography,
         content = content,
     )
 }

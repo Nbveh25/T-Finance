@@ -13,7 +13,13 @@ val TinkoffSans = FontFamily(
     Font(R.font.tinkoffsans_bold,FontWeight.Bold)
 )
 
-val Typography = Typography(
+val Roboto = FontFamily(
+    Font(R.font.roboto_bold, FontWeight.Bold),
+    Font(R.font.roboto_regular,FontWeight.Normal),
+    Font(R.font.roboto_medium,FontWeight.Medium)
+)
+
+val CustomTypography = Typography(
     //тайтл
     displayLarge = TextStyle(
         fontFamily = TinkoffSans,
@@ -23,19 +29,20 @@ val Typography = Typography(
     ),
     //жирный обычный текст
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
+        fontSize = 32.sp,
+        letterSpacing = 0.5.sp
     ),
     //нежирный обычный текст
     bodySmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp
     ),
     //медиум текст(использовать по ситуации)
     bodyMedium = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = Roboto,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp
     )
