@@ -30,7 +30,7 @@ fun AuthScreen(
     modifier: Modifier
 ) {
     var phoneNumber by remember { mutableStateOf("") }
-    val isButtonEnabled = phoneNumber.isNotBlank() // Простая валидация
+    val isButtonEnabled = phoneNumber.isNotBlank()
 
     Column(
         modifier = modifier
@@ -74,6 +74,7 @@ fun AuthScreen(
         }
     }
 }
+
 @Composable
 @Preview
 private fun Preview() {
