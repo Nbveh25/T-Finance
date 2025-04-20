@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,7 +18,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import ru.practice.t_finance.R
-import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @Composable
 fun CustomTextField(
@@ -27,19 +27,27 @@ fun CustomTextField(
     placeholderText: String = "",
     keyboardType: KeyboardType = KeyboardType.Text,
     singleLine: Boolean = true,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    centerText: Boolean = false // Новый параметр для центрирования текста
 ) {
+    val centeredTextStyle = if (centerText) {
+        MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center)
+    } else {
+        MaterialTheme.typography.bodySmall
+    }
+
     TextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = if (centerText) modifier.fillMaxWidth() else modifier,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         singleLine = singleLine,
         shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape)),
         placeholder = {
             Text(
                 text = placeholderText,
-                style = MaterialTheme.typography.bodySmall
+                style = centeredTextStyle,
+                modifier = if (centerText) Modifier.fillMaxWidth() else Modifier
             )
         },
         colors = TextFieldDefaults.colors(
@@ -53,7 +61,7 @@ fun CustomTextField(
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface
         ),
-        textStyle = MaterialTheme.typography.bodySmall,
+        textStyle = centeredTextStyle,
         visualTransformation = visualTransformation
     )
 }
@@ -79,7 +87,7 @@ fun CustomButton(
             text = text,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(
-                vertical = dimensionResource(R.dimen.padding_small)
+                vertical = dimensionResource(R.dimen.padding_medium)
             ),
             textAlign = TextAlign.Center
         )

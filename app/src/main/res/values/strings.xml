@@ -4,4 +4,8 @@
     <string name="input_phone_number">Введите\nномер телефона</string>
     <string name="phone_number">Номер телефона</string>
     <string name="next">Далее</string>
+    <string name="send_code_again">Отправить код заново</string>
+    <string name="confirmation">Подтверждение</string>
+    <string name="input_your_name">Введите ваше имя</string>
+    <string name="name">Имя</string>
 </resources>
