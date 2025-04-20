@@ -1,4 +1,4 @@
-package ru.practice.t_finance.presentation.test
+package ru.practice.t_finance.presentation.screens
 
 
 import androidx.compose.foundation.background
