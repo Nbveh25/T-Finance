@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="HorizontalScreenPadding">16.dp</dimen>
+    <dimen name="cardShadowElevation">8.dp</dimen>
+
+</resources>
