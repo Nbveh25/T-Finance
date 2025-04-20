@@ -25,12 +25,13 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
+        fontSize = 32.sp,
+        letterSpacing = 0.5.sp
     ),
     //нежирный обычный текст
     bodySmall = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp
     ),
     //медиум текст(использовать по ситуации)

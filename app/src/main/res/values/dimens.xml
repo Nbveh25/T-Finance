@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="HorizontalScreenPadding">16.dp</dimen>
-    <dimen name="cardShadowElevation">8.dp</dimen>
+    <!-- Screen paddings -->
+    <dimen name="horizontal_screen_padding">32dp</dimen>
+    <dimen name="vertical_screen_padding">16dp</dimen>
+
+    <!-- Component paddings -->
+    <dimen name="padding_extra_small">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_extra_large">48dp</dimen>
+
+    <!-- Shadows & elevations -->
+    <dimen name="card_shadow_elevation">8dp</dimen>
+    <dimen name="button_elevation">2dp</dimen>
+
+    <!-- Corner Shapes-->
+    <dimen name="corner_shape">12dp</dimen>
 
 </resources>
