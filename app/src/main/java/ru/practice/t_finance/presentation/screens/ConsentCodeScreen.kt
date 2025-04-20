@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -31,11 +30,11 @@ import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @Composable
-fun ConsentCodeScreen() {
+fun ConsentCodeScreen(modifier: Modifier) {
     var phoneNumber by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
     ) {
 
@@ -118,7 +117,7 @@ fun ConsentCodeScreen() {
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            ConsentCodeScreen()
+            ConsentCodeScreen(Modifier)
         }
     }
 }
