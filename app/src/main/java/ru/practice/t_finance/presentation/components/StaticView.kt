@@ -60,19 +60,27 @@ fun CustomTextField(
     placeholderText: String = "",
     keyboardType: KeyboardType = KeyboardType.Text,
     singleLine: Boolean = true,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    centerText: Boolean = false // Новый параметр для центрирования текста
 ) {
+    val centeredTextStyle = if (centerText) {
+        MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center)
+    } else {
+        MaterialTheme.typography.bodySmall
+    }
+
     TextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = if (centerText) modifier.fillMaxWidth() else modifier,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         singleLine = singleLine,
         shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape)),
         placeholder = {
             Text(
                 text = placeholderText,
-                style = MaterialTheme.typography.bodySmall
+                style = centeredTextStyle,
+                modifier = if (centerText) Modifier.fillMaxWidth() else Modifier
             )
         },
         colors = TextFieldDefaults.colors(
@@ -86,7 +94,7 @@ fun CustomTextField(
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface
         ),
-        textStyle = MaterialTheme.typography.bodySmall,
+        textStyle = centeredTextStyle,
         visualTransformation = visualTransformation
     )
 }
