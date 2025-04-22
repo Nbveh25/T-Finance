@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.practice.t_finance.R
 import ru.practice.t_finance.domain.model.Category
-import ru.practice.t_finance.domain.repository.Categories
 import ru.practice.t_finance.presentation.components.BudgetDiagram
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 import androidx.compose.runtime.remember
@@ -45,7 +44,7 @@ fun BudgetAllocationScreen(
         )
         Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.padding_large)))
         BudgetDiagram(Modifier,
-            data = Categories.categories
+            data = viewModel.getCategories()
         )
         Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
         HorizontalDivider()

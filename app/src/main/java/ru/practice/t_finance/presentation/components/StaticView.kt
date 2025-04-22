@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.practice.t_finance.R
 import ru.practice.t_finance.domain.model.Category
-import ru.practice.t_finance.domain.repository.Categories
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @Composable
@@ -212,6 +211,6 @@ private fun Preview(){
 //        BudgetDiagram(Modifier,
 //            data = Categories.categories
 //            )
-        CategoryTile(category = Category("Продукты",Color(0xFFFF983D)), {}, false)
+//        CategoryTile(category = Category("Продукты",Color(0xFFFF983D)), {}, false)
     }
 }
