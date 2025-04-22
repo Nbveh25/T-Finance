@@ -1,9 +1,12 @@
 package ru.practice.t_finance.presentation.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,31 +38,37 @@ fun AuthScreen(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.padding(top = 48.dp))
+        Spacer(modifier = Modifier.padding(top = 144.dp))
 
-        Text(
-            text = stringResource(R.string.t_finance),
-            style = MaterialTheme.typography.displayLarge,
+        Image(
+            painter = painterResource(R.drawable.tfinance_logo),
+            contentDescription = "logo",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(horizontal = 64.dp)
         )
 
-        Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_extra_large)))
+        Spacer(modifier = Modifier.padding(top = 44.dp))
 
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
                 text = stringResource(R.string.input_phone_number),
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding))
             )
 
-            Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_large)))
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))
 
             CustomTextField(
                 value = phoneNumber,
                 onValueChange = { phoneNumber = it },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
                 placeholderText = stringResource(R.string.phone_number),
                 keyboardType = KeyboardType.Phone
             )
@@ -68,8 +78,21 @@ fun AuthScreen(
             CustomButton(
                 text = stringResource(R.string.next),
                 onClick = { /* Обработка нажатия */ },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
                 enabled = isButtonEnabled
+            )
+
+            Spacer(modifier = Modifier.padding(vertical = 6.dp))
+
+            Image(
+                painter = painterResource(R.drawable.img_tbank),
+                contentDescription = "logo",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .offset(y = 80.dp),
+                //contentScale = ContentScale.Crop
             )
         }
     }
