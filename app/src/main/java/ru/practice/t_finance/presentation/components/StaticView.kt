@@ -204,6 +204,6 @@ private fun Preview(){
 //        BudgetDiagram(Modifier,
 //            data = Categories.categories
 //            )
-        CategoryTile(category = Category("Продукты",Color(0xFFFF983D)), {})
+        CategoryTile(category = Category("Продукты",Color(0xFFFF983D)), {}, false)
     }
 }
