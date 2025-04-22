@@ -37,7 +37,7 @@ val CustomTypography = Typography(
     //нежирный обычный текст
     bodySmall = TextStyle(
         fontFamily = Roboto,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     //медиум текст(использовать по ситуации)
