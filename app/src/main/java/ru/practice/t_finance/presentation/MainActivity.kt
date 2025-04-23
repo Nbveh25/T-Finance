@@ -10,9 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
-import ru.practice.t_finance.presentation.screens.AuthScreen
-import ru.practice.t_finance.presentation.screens.ColorTestScreen
-import ru.practice.t_finance.presentation.screens.ConsentCodeScreen
+import ru.practice.t_finance.presentation.screens.authentication.AuthScreen
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 
@@ -28,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.background
                 ){ padding ->
                     AuthScreen(modifier = Modifier.padding(padding))
-//                    ConsentCodeScreen(modifier = Modifier.padding(padding))
+                    //ConsentCodeScreen(modifier = Modifier.padding(padding))
                 }
             }
         }
