@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
@@ -28,7 +29,11 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 
 @Composable
-fun BudgetInputScreen(modifier: Modifier){
+fun BudgetInputScreen(
+    modifier: Modifier,
+    navController: NavController,
+    viewModel: BudgetViewModel
+){
 
     var budget by remember { mutableStateOf("")}
     val isButtonEnabled = budget.isNotBlank()
@@ -42,13 +47,14 @@ fun BudgetInputScreen(modifier: Modifier){
         Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large)))
         Text(
             style = MaterialTheme.typography.displayLarge,
-            text = "Введите сумму вашего дохода",
+            text = stringResource(R.string.input_budget),
         )
         Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large)))
         CustomTextField(
             value = budget,
             onValueChange = { budget = it},
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(),
             placeholderText = "Сумма дохода",
             keyboardType = KeyboardType.Number,
@@ -57,7 +63,11 @@ fun BudgetInputScreen(modifier: Modifier){
         Spacer(modifier = Modifier.weight(1f))
         CustomButton(
             text = stringResource(R.string.next),
-            {},
+            onClick = {
+                val amount = budget.toLongOrNull() ?: 0L
+                viewModel.setBudgetAmount(amount)
+//                navController.navigate("budget_allocation_screen")
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = isButtonEnabled
         )
@@ -74,7 +84,6 @@ private fun Preview(){
             modifier = Modifier.fillMaxSize(),
             containerColor = MaterialTheme.colorScheme.background
         ){ padding ->
-            BudgetInputScreen(Modifier.padding(padding))
         }
     }
 }
