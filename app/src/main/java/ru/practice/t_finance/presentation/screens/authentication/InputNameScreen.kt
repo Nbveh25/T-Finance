@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.screens.authentication
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,10 +27,12 @@ import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun InputNameScreen(
     modifier: Modifier,
     onBackClick: () -> Unit = {},
+    onRegistrationComplete: () -> Unit = {},
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     Column(
@@ -61,8 +64,10 @@ fun InputNameScreen(
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_small)))
 
             CustomTextField(
-                value = viewModel.name,
-                onValueChange = { viewModel.updateName(it) },
+                value = "",
+                onValueChange = { //
+                    // viewModel.updatePhoneNumber(it)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(R.dimen.padding_medium)),
@@ -73,14 +78,17 @@ fun InputNameScreen(
 
         CustomButton(
             text = stringResource(R.string.next),
-            onClick = { /* TODO: Обработка завершения регистрации */ },
+            onClick = {
+                //viewModel.getPhoneNumber()
+                onRegistrationComplete()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = dimensionResource(R.dimen.padding_medium),
                     vertical = dimensionResource(R.dimen.padding_large)
                 ),
-            enabled = viewModel.name.isNotBlank()
+            enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
         )
     }
 }

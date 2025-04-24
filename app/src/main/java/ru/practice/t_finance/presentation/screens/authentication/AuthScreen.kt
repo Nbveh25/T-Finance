@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.screens.authentication
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,17 +22,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collect
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AuthScreen(
     modifier: Modifier,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
-    val isButtonEnabled = viewModel.phoneNumber.isNotBlank()
+    //val isButtonEnabled = viewModel.getPhoneNumber().isNotBlank()
+    val isButtonEnabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
+
 
     Column(
         modifier = modifier
@@ -62,7 +68,10 @@ fun AuthScreen(
 
             CustomTextField(
                 value = "",
-                onValueChange = {  },
+                    //viewModel.getPhoneNumber(),
+                onValueChange = {
+                    //viewModel.updatePhoneNumber(it)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
@@ -74,7 +83,8 @@ fun AuthScreen(
 
             CustomButton(
                 text = stringResource(R.string.next),
-                onClick = { //viewModel.sendCode()
+                onClick = { 
+                    //viewModel.sendCode()
                 },
                 modifier = Modifier
                     .fillMaxWidth()

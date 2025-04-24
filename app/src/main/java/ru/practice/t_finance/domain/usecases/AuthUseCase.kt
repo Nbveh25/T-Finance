@@ -9,15 +9,23 @@ import javax.inject.Inject
 class AuthUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
-    suspend fun sendCode(phoneNumber: PhoneNumber): Result<Unit> {
-        return repository.sendCode(phoneNumber)
+    // Отправка кода подтверждения на номер телефона
+    suspend fun sendCode(phoneNumber: PhoneNumber) {
+        repository.sendCode(phoneNumber)
     }
 
-    suspend fun verifyCode(code: Code): Result<Unit> {
+    // Повторная отправка кода
+    suspend fun resendCode(phoneNumber: PhoneNumber) {
+        repository.sendCode(phoneNumber)
+    }
+
+    // Проверка кода подтверждения
+    suspend fun verifyCode(code: Code): Boolean {
         return repository.verifyCode(code)
     }
 
-    suspend fun saveUserName(name: Name): Result<Unit> {
-        return repository.saveUserName(name)
+    // Сохранение имени пользователя
+    suspend fun saveName(name: Name) {
+        repository.saveName(name)
     }
 }

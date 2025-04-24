@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.screens.authentication
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,10 +28,12 @@ import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ConsentCodeScreen(
     modifier: Modifier,
     onBackClick: () -> Unit = {},
+    onNavigateToInputName: () -> Unit = {},
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     Column(
@@ -64,7 +67,7 @@ fun ConsentCodeScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
             Text(
-                text = "Код отправлен на номер\n      ${viewModel.phoneNumber}",
+                text = "Код отправлен на номер\n      ${viewModel}",
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
@@ -74,8 +77,10 @@ fun ConsentCodeScreen(
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_small)))
 
             CustomTextField(
-                value = viewModel.code,
-                onValueChange = { viewModel.updateCode(it) },
+                value = "",
+                onValueChange = {
+                    //viewModel.updatePhoneNumber(it)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 80.dp),
@@ -88,7 +93,9 @@ fun ConsentCodeScreen(
 
             CustomButton(
                 text = stringResource(R.string.send_code_again),
-                onClick = { viewModel.resendCode() },
+                onClick = {
+                    //viewModel.sendCode()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 80.dp),
@@ -98,11 +105,14 @@ fun ConsentCodeScreen(
 
             CustomButton(
                 text = stringResource(R.string.next),
-                onClick = { viewModel.verifyCode() },
+                onClick = { 
+                    //viewModel.sendCode()
+                    onNavigateToInputName()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 80.dp),
-                enabled = viewModel.code.isNotBlank()
+                enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
             )
         }
     }

@@ -5,9 +5,12 @@ import ru.practice.t_finance.domain.model.Name
 import ru.practice.t_finance.domain.model.PhoneNumber
 
 interface AuthRepository {
-    suspend fun sendCode(phoneNumber: PhoneNumber): Result<Unit>
-
-    suspend fun verifyCode(code: Code): Result<Unit>
-
-    suspend fun saveUserName(name: Name): Result<Unit>
+    // Отправка кода подтверждения
+    suspend fun sendCode(phoneNumber: PhoneNumber)
+    
+    // Проверка кода подтверждения
+    suspend fun verifyCode(code: Code): Boolean
+    
+    // Сохранение имени пользователя
+    suspend fun saveName(name: Name)
 }
