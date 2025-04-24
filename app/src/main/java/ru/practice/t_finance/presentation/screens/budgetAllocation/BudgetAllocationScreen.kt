@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ru.practice.t_finance.data.repository.CategoryRepositoryImpl
 import ru.practice.t_finance.domain.usecases.BudgetUseCase
+import ru.practice.t_finance.presentation.components.AvailableCategories
+import ru.practice.t_finance.presentation.components.SelectedCategories
 
 
 @Composable
@@ -45,6 +47,7 @@ fun BudgetAllocationScreen(
     }
 
     var selectedCategories by remember { mutableStateOf<List<Category>>(emptyList())}
+
 
     when(categoryState){
         is CategoryState.Loading -> {
@@ -64,13 +67,32 @@ fun BudgetAllocationScreen(
                 )
                 Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)))
                 BudgetDiagram(Modifier,
-                    data = categories
+                    data = selectedCategories
                 )
+                Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
+                SelectedCategories(
+                    selectedCategories = selectedCategories,
+                    onCategoryDeselected = { category ->
+                        selectedCategories = selectedCategories.filterNot { it == category }
+                    }
+                )
+
                 Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
 
                 HorizontalDivider(
                     thickness = 1.dp
                 )
+
+                Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
+
+                AvailableCategories(
+                    categories = categories,
+                    selectedCategories = selectedCategories,
+                    onCategorySelected = { category ->
+                        selectedCategories = selectedCategories + category
+                    }
+                )
+
             }
         }
         is CategoryState.Error -> {
