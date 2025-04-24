@@ -228,6 +228,34 @@ fun SelectedCategories(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun AvailableCategories(
+    categories: List<Category>,
+    selectedCategories: List<Category>,
+    onCategorySelected: (Category) -> Unit
+) {
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        categories.forEach { category ->
+            if (!selectedCategories.contains(category)) {
+                val currentCategory = category.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                CategoryTile(
+                    category = currentCategory,
+                    onClick = { onCategorySelected(category) },
+                    isSelected = false
+                )
+            }
+        }
+    }
+}
+
+
 @Preview
 @Composable
 private fun Preview(){
