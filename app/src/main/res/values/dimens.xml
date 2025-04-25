@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Screen paddings -->
-    <dimen name="horizontal_screen_padding">32dp</dimen>
+    <dimen name="horizontal_screen_padding">16dp</dimen>
     <dimen name="vertical_screen_padding">16dp</dimen>
 
     <!-- Component paddings -->
@@ -16,6 +16,7 @@
     <dimen name="button_elevation">2dp</dimen>
 
     <!-- Corner Shapes-->
-    <dimen name="corner_shape">12dp</dimen>
+    <dimen name="corner_shape_medium">12dp</dimen>
+    <dimen name="corner_shape_large">24dp</dimen>
 
 </resources>
