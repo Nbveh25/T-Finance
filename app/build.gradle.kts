@@ -60,13 +60,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    //hilt
+    // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
 
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Retrofit
     implementation(libs.retrofit)
 
+    // Coil
+    implementation(libs.coil.compose)
 }
