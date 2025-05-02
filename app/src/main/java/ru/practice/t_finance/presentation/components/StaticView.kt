@@ -171,24 +171,23 @@ fun PickerButton(
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White // Фон кнопки
+            containerColor = Color.White
         ),
         modifier = modifier
-            .height(56.dp)
             .shadow(
-                elevation = dimensionResource(R.dimen.card_shadow_elevation_large)
+                elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium)),
+                clip = false
             )
-            .let {
-                if (isSelected) {
-                    it.border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium))
-                    )
-                } else {
-                    it
-                }
-            },
+            .then(
+                if (isSelected) Modifier.border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium))
+                ) else Modifier
+            )
+            .height(56.dp),
+
         shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium)),
     ) {
         Text(
