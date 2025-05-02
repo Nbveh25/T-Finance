@@ -112,7 +112,7 @@ fun ConsentCodeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 80.dp),
-                enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
+                //enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
             )
         }
     }

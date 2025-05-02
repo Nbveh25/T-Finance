@@ -88,7 +88,7 @@ fun InputNameScreen(
                     horizontal = dimensionResource(R.dimen.padding_medium),
                     vertical = dimensionResource(R.dimen.padding_large)
                 ),
-            enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
+            //enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
         )
     }
 }

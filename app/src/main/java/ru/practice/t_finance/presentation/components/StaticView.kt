@@ -1,7 +1,10 @@
 package ru.practice.t_finance.presentation.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +26,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,6 +37,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,6 +68,12 @@ import ru.practice.t_finance.R
 import ru.practice.t_finance.domain.model.Category
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import ru.practice.t_finance.presentation.theme.CalendarTypography
+import java.time.YearMonth
 
 @Composable
 fun CustomTextField(
@@ -65,7 +84,7 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     singleLine: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    centerText: Boolean = false // Новый параметр для центрирования текста
+    centerText: Boolean = false
 ) {
     val centeredTextStyle = if (centerText) {
         MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center)
@@ -131,6 +150,182 @@ fun CustomButton(
     }
 }
 
+@Composable
+fun PickerButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    maxLines: Int = 1
+) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        modifier = modifier
+            .shadow(
+                elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium)),
+                clip = false
+            )
+            .then(
+                if (isSelected) Modifier.border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium))
+                ) else Modifier
+            )
+            .height(56.dp),
+
+        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium)),
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CalendarBottomSheet(
+    onDateSelected: (Long) -> Unit,
+    onDismiss: () -> Unit
+) {
+
+    val selectableDates = object : SelectableDates {
+        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+            return utcTimeMillis <= System.currentTimeMillis()
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun isSelectableYear(year: Int): Boolean {
+            return year <= YearMonth.now().year
+        }
+    }
+
+    val datePickerState = rememberDatePickerState(
+        initialDisplayMode = DisplayMode.Picker,
+        selectableDates = selectableDates
+    )
+    MaterialTheme(typography = CalendarTypography) {
+        DatePickerDialog(
+            modifier = Modifier
+                .shadow(
+                    elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+                )
+                .background(color = MaterialTheme.colorScheme.background),
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                CalendarButton(
+                    text = stringResource(R.string.select),
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { onDateSelected(it) }
+                        onDismiss()
+                    },
+                )
+            },
+            dismissButton = {
+                CalendarButton(
+                    text = stringResource(R.string.cancel),
+                    onClick = onDismiss
+                )
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background,
+            )
+        ) {
+            DatePicker(
+                state = datePickerState,
+                colors = DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    headlineContentColor = MaterialTheme.colorScheme.onBackground,
+                    weekdayContentColor = MaterialTheme.colorScheme.onBackground,
+                    subheadContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    dayContentColor = MaterialTheme.colorScheme.onBackground,
+                    selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedDayContentColor = MaterialTheme.colorScheme.onBackground,
+                    disabledDayContentColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                    //disabledDayContainerColor = Color.Transparent
+                )
+            )
+        }
+    }
+}
+
+@Composable
+fun CalendarButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: () -> Unit
+) {
+    TextButton(
+        onClick = onClick,
+        modifier = modifier,
+        colors = ButtonDefaults.textButtonColors(
+            containerColor = Color.Transparent
+        ),
+        border = null,
+        elevation = null
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
+@Composable
+fun DatePicker(
+    modifier: Modifier = Modifier,
+    selectedDate: String = stringResource(R.string.another_day),
+    onAnotherDayClick: (Long) -> Unit = {}
+) {
+    var selectedButton by remember { mutableIntStateOf(2) }
+    var showCalendar by remember { mutableStateOf(false) }
+
+    if (showCalendar) {
+        CalendarBottomSheet(
+            onDateSelected = { millis ->
+                onAnotherDayClick(millis)
+                showCalendar = false
+            },
+            onDismiss = { showCalendar = false }
+        )
+    }
+
+    Row(modifier = modifier) {
+        PickerButton(
+            text = stringResource(R.string.yesterday),
+            isSelected = selectedButton == 0,
+            onClick = { selectedButton = 0 }
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        PickerButton(
+            text = stringResource(R.string.today),
+            isSelected = selectedButton == 1,
+            onClick = { selectedButton = 1 }
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        PickerButton(
+            text = selectedDate,
+            isSelected = selectedButton == 2,
+            onClick = {
+                selectedButton = 2
+                showCalendar = true
+            },
+            maxLines = 2
+        )
+    }
+}
 
 @Composable
 fun BudgetDiagram(
@@ -156,7 +351,7 @@ fun BudgetDiagram(
             useCenter = false,
             style = Stroke(thicknessPx),
             topLeft = Offset(centerX - outerRadius, centerY - outerRadius),
-            size = androidx.compose.ui.geometry.Size(outerRadius * 2, outerRadius * 2)
+            size = Size(outerRadius * 2, outerRadius * 2)
         )
 
         var startAngle = 0f
@@ -177,7 +372,6 @@ fun BudgetDiagram(
         }
     }
 }
-
 
 @Composable
 fun CategoryTile(category: Category, onClick: () -> Unit, isSelected: Boolean) {
@@ -277,7 +471,7 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
     Card(
         modifier = modifier
             .shadow(
-                elevation = dimensionResource(R.dimen.card_shadow_elevation),
+                elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
                 shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
             ),
         colors = CardDefaults.cardColors(

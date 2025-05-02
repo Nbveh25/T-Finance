@@ -2,6 +2,7 @@
 accompanistDrawablepainter = "0.36.0"
 accompanistGlide = "0.30.1"
 agp = "8.9.1"
+calendarCompose = "0.5.0"
 coilCompose = "2.4.0"
 glideImage = "lastVersion"
 hiltAndroidCompiler = "2.56.1"
@@ -20,6 +21,7 @@ retrofit = "2.11.0"
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanistDrawablepainter" }
 accompanist-glide = { module = "com.google.accompanist:accompanist-glide", version.ref = "accompanistGlide" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+calendar-compose = { module = "com.kizitonwose.calendar:calendar-compose", version.ref = "calendarCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 glide-image = { module = "com.github.danchoo21:glide-image", version.ref = "glideImage" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }

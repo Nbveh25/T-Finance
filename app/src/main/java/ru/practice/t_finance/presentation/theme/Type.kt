@@ -47,3 +47,30 @@ val CustomTypography = Typography(
         fontSize = 16.sp
     )
 )
+
+val CalendarTypography = Typography(
+    headlineSmall = TextStyle( // Заголовок месяца и года
+        fontWeight = FontWeight.Medium,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.sp
+    ),
+    bodyLarge = TextStyle( // Числа (дни месяца)
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    bodySmall = TextStyle( // Названия дней недели (пн, вт...)
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    ),
+    labelLarge = TextStyle( // Кнопки "OK" / "Cancel"
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
+    )
+)

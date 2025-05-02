@@ -12,4 +12,12 @@
     <string name="more">Подробнее</string>
     <string name="on_this_week">На этой неделе</string>
     <string name="goals">Цели</string>
+    <string name="adding_transaction">Добавление транзакции</string>
+    <string name="category">Категория</string>
+    <string name="summa">Сумма</string>
+    <string name="select">Выбрать</string>
+    <string name="cancel">Отмена</string>
+    <string name="another_day">Другой день</string>
+    <string name="yesterday">Вчера</string>
+    <string name="today">Сегодня</string>
 </resources>
