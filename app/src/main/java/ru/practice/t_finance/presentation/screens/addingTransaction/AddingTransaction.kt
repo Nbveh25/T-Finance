@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.practice.t_finance.R
+import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomSpinner
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.components.DatePicker
@@ -39,61 +40,82 @@ fun AddingTransaction(
 ) {
     var selectedValue by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("Другой день") }
-    val items = listOf("Продукты", "Коммунальные услуги", "Развлечения", "Транспорт", "Накопления", "Остальное")
+    val items = listOf(
+        "Продукты",
+        "Коммунальные услуги",
+        "Развлечения",
+        "Транспорт",
+        "Накопления",
+        "Остальное"
+    )
 
     Column(
         modifier = modifier
             .fillMaxSize()
     ) {
-        IconButton(
-            modifier = Modifier,
-            onClick = onBackClick
+        Column(
+            modifier = Modifier
+                .weight(1f)
         ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_arrow_back),
-                contentDescription = "Назад",
+            IconButton(
+                modifier = Modifier,
+                onClick = onBackClick
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = "Назад",
+                    modifier = Modifier
+                        .padding(start = dimensionResource(R.dimen.padding_small))
+                        .size(96.dp),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+            Text(
+                text = stringResource(R.string.adding_transaction),
+                style = MaterialTheme.typography.displayLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium))
+            )
+
+            CustomTextField(
+                value = "",
+                onValueChange = {
+                    //viewModel.updatePhoneNumber(it)
+                },
                 modifier = Modifier
-                    .padding(start = dimensionResource(R.dimen.padding_small))
-                    .size(96.dp),
-                tint = MaterialTheme.colorScheme.secondary
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.horizontal_screen_padding)),
+                placeholderText = stringResource(R.string.summa),
+                keyboardType = KeyboardType.Number,
+            )
+
+
+            CustomSpinner(
+                value = selectedValue,
+                onValueChange = { selectedValue = it },
+                items = items,
+                placeholderText = stringResource(R.string.category),
+                modifier = Modifier.padding(dimensionResource(R.dimen.horizontal_screen_padding))
+            )
+
+            DatePicker(
+                modifier = Modifier.padding(dimensionResource(R.dimen.horizontal_screen_padding)),
+                selectedDate = selectedDate,
+                onAnotherDayClick = { millis ->
+                    val date = Date(millis)
+                    val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                    selectedDate = formatter.format(date)
+                }
             )
         }
-
-        Text(
-            text = stringResource(R.string.adding_transaction),
-            style = MaterialTheme.typography.displayLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium))
-        )
-
-        CustomTextField(
-            value = "",
-            onValueChange = {
-                //viewModel.updatePhoneNumber(it)
-            },
+        CustomButton(
+            text = "Добавить",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.horizontal_screen_padding)),
-            placeholderText = stringResource(R.string.summa),
-            keyboardType = KeyboardType.Number,
-        )
+                .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
+            onClick = {
 
-
-        CustomSpinner(
-            value = selectedValue,
-            onValueChange = { selectedValue = it },
-            items = items,
-            placeholderText = stringResource(R.string.category),
-            modifier = Modifier.padding(dimensionResource(R.dimen.horizontal_screen_padding))
-        )
-
-        DatePicker(
-            modifier = Modifier.padding(dimensionResource(R.dimen.horizontal_screen_padding)),
-            selectedDate = selectedDate,
-            onAnotherDayClick = { millis ->
-                val date = Date(millis)
-                val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-                selectedDate = formatter.format(date)
             }
         )
     }
