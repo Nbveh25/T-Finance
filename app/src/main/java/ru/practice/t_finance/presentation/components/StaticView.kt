@@ -1,7 +1,5 @@
 package ru.practice.t_finance.presentation.components
 
-import android.R.attr.text
-import android.R.attr.textColor
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,12 +28,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -73,17 +68,12 @@ import ru.practice.t_finance.R
 import ru.practice.t_finance.domain.model.Category
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
-import java.time.LocalDate
-import java.time.YearMonth
-import java.util.Calendar
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.material3.rememberDatePickerState
 import ru.practice.t_finance.presentation.theme.CalendarTypography
+import java.time.YearMonth
 
 @Composable
 fun CustomTextField(
@@ -171,7 +161,7 @@ fun PickerButton(
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         modifier = modifier
             .shadow(
@@ -193,6 +183,7 @@ fun PickerButton(
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
@@ -206,21 +197,34 @@ fun CalendarBottomSheet(
     onDateSelected: (Long) -> Unit,
     onDismiss: () -> Unit
 ) {
+
+    val selectableDates = object : SelectableDates {
+        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+            return utcTimeMillis <= System.currentTimeMillis()
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun isSelectableYear(year: Int): Boolean {
+            return year <= YearMonth.now().year
+        }
+    }
+
     val datePickerState = rememberDatePickerState(
-        initialDisplayMode = DisplayMode.Picker
+        initialDisplayMode = DisplayMode.Picker,
+        selectableDates = selectableDates
     )
     MaterialTheme(typography = CalendarTypography) {
         DatePickerDialog(
             modifier = Modifier
                 .shadow(
                     elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
-                    shape = RoundedCornerShape(24.dp)
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
                 )
                 .background(color = MaterialTheme.colorScheme.background),
             onDismissRequest = onDismiss,
             confirmButton = {
                 CalendarButton(
-                    text = "Выбрать",
+                    text = stringResource(R.string.select),
                     onClick = {
                         datePickerState.selectedDateMillis?.let { onDateSelected(it) }
                         onDismiss()
@@ -229,7 +233,7 @@ fun CalendarBottomSheet(
             },
             dismissButton = {
                 CalendarButton(
-                    text = "Отмена",
+                    text = stringResource(R.string.cancel),
                     onClick = onDismiss
                 )
             },
@@ -248,8 +252,8 @@ fun CalendarBottomSheet(
                     dayContentColor = MaterialTheme.colorScheme.onBackground,
                     selectedDayContainerColor = MaterialTheme.colorScheme.primary,
                     selectedDayContentColor = MaterialTheme.colorScheme.onBackground,
-                    //disabledDayContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
-                    //navigationIconContentColor = MaterialTheme.colorScheme.secondary
+                    disabledDayContentColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                    //disabledDayContainerColor = Color.Transparent
                 )
             )
         }
@@ -282,7 +286,7 @@ fun CalendarButton(
 @Composable
 fun DatePicker(
     modifier: Modifier = Modifier,
-    selectedDate: String = "Другой день",
+    selectedDate: String = stringResource(R.string.another_day),
     onAnotherDayClick: (Long) -> Unit = {}
 ) {
     var selectedButton by remember { mutableIntStateOf(2) }
@@ -300,13 +304,13 @@ fun DatePicker(
 
     Row(modifier = modifier) {
         PickerButton(
-            text = "Вчера",
+            text = stringResource(R.string.yesterday),
             isSelected = selectedButton == 0,
             onClick = { selectedButton = 0 }
         )
         Spacer(modifier = Modifier.width(8.dp))
         PickerButton(
-            text = "Сегодня",
+            text = stringResource(R.string.today),
             isSelected = selectedButton == 1,
             onClick = { selectedButton = 1 }
         )
