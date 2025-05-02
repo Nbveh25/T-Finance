@@ -83,6 +83,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.material3.rememberDatePickerState
+import ru.practice.t_finance.presentation.theme.CalendarTypography
 
 @Composable
 fun CustomTextField(
@@ -209,49 +210,50 @@ fun CalendarBottomSheet(
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Picker
     )
-
-    DatePickerDialog(
-        modifier = Modifier
-            .shadow(
-                elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
-                shape = RoundedCornerShape(24.dp)
-            )
-            .background(color = MaterialTheme.colorScheme.background),
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            CalendarButton(
-                text = "Выбрать",
-                onClick = {
-                    datePickerState.selectedDateMillis?.let { onDateSelected(it) }
-                    onDismiss()
-                },
-            )
-        },
-        dismissButton = {
-            CalendarButton(
-                text = "Отмена",
-                onClick = onDismiss
-            )
-        },
-        colors = DatePickerDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.background,
-        )
-    ) {
-        DatePicker(
-            state = datePickerState,
+    MaterialTheme(typography = CalendarTypography) {
+        DatePickerDialog(
+            modifier = Modifier
+                .shadow(
+                    elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                    shape = RoundedCornerShape(24.dp)
+                )
+                .background(color = MaterialTheme.colorScheme.background),
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                CalendarButton(
+                    text = "Выбрать",
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { onDateSelected(it) }
+                        onDismiss()
+                    },
+                )
+            },
+            dismissButton = {
+                CalendarButton(
+                    text = "Отмена",
+                    onClick = onDismiss
+                )
+            },
             colors = DatePickerDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.background,
-                titleContentColor = MaterialTheme.colorScheme.onBackground,
-                headlineContentColor = MaterialTheme.colorScheme.onBackground,
-                weekdayContentColor = MaterialTheme.colorScheme.onBackground,
-                subheadContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                dayContentColor = MaterialTheme.colorScheme.onBackground,
-                selectedDayContainerColor = MaterialTheme.colorScheme.primary,
-                selectedDayContentColor = MaterialTheme.colorScheme.onBackground,
-                //disabledDayContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
-                //navigationIconContentColor = MaterialTheme.colorScheme.secondary
             )
-        )
+        ) {
+            DatePicker(
+                state = datePickerState,
+                colors = DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    headlineContentColor = MaterialTheme.colorScheme.onBackground,
+                    weekdayContentColor = MaterialTheme.colorScheme.onBackground,
+                    subheadContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    dayContentColor = MaterialTheme.colorScheme.onBackground,
+                    selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedDayContentColor = MaterialTheme.colorScheme.onBackground,
+                    //disabledDayContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+                    //navigationIconContentColor = MaterialTheme.colorScheme.secondary
+                )
+            )
+        }
     }
 }
 
