@@ -1,6 +1,5 @@
 package ru.practice.t_finance.presentation.screens.authentication
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -29,15 +29,11 @@ import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AuthScreen(
     modifier: Modifier,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
-    //val isButtonEnabled = viewModel.getPhoneNumber().isNotBlank()
-    val isButtonEnabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
-
 
     Column(
         modifier = modifier
@@ -67,10 +63,9 @@ fun AuthScreen(
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
 
             CustomTextField(
-                value = "",
-                    //viewModel.getPhoneNumber(),
+                value = viewModel.phoneNumber,
                 onValueChange = {
-                    //viewModel.updatePhoneNumber(it)
+                    viewModel.updatePhoneNumber(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,7 +84,7 @@ fun AuthScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
-                enabled = isButtonEnabled
+
             )
 
             Spacer(modifier = Modifier.padding(vertical = 6.dp))
@@ -110,7 +105,10 @@ fun AuthScreen(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            AuthScreen(Modifier)
+            AuthScreen(
+                modifier = Modifier,
+                viewModel = viewModel()
+            )
         }
     }
 }

@@ -77,7 +77,7 @@ fun ColorTestScreen() {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     ),
-                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.card_shadow_elevation))
+                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.card_shadow_elevation_medium))
                 ) {
                     Text(
                         text = "Surface",

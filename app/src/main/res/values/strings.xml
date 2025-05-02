@@ -12,4 +12,7 @@
     <string name="more">Подробнее</string>
     <string name="on_this_week">На этой неделе</string>
     <string name="goals">Цели</string>
+    <string name="adding_transaction">Добавление транзакции</string>
+    <string name="category">Категория</string>
+    <string name="summa">Сумма</string>
 </resources>
