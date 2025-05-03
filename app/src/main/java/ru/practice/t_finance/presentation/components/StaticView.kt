@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +26,9 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
@@ -404,6 +407,49 @@ fun CategoryTile(category: Category, onClick: () -> Unit, isSelected: Boolean) {
 }
 
 @Composable
+fun GoalCard(
+    modifier: Modifier = Modifier,
+    name: String,
+    description: String,
+    maxValue: Int,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
+        )
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = maxValue.toString(),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
 fun Transaction(
     iconUrl: String,
     transactionName: String,
@@ -539,29 +585,11 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
 @Composable
 private fun Preview() {
     TfinanceTheme {
-        Surface(modifier = Modifier.fillMaxWidth()) {
-            TransactionSlot(
-                modifier = Modifier,
-                transactionModelList = listOf(
-                    TransactionModel(
-                        iconUrl = "https://avatars.mds.yandex.net/i?id=ce9759b87fb0b2f7276b28e34f0c1ff4e2499d3d-3919804-images-thumbs&n=13",
-                        transactionName = "Меган Фокс",
-                        categoryName = "Бордель",
-                        summa = 55_000_000
-                    ),
-                    TransactionModel(
-                        iconUrl = "https://avatars.mds.yandex.net/i?id=de31ce5f68663b3c96e2c129b26db7f7057723a0-5243188-images-thumbs&n=13",
-                        transactionName = "Марго Робби",
-                        categoryName = "Бордель",
-                        summa = 55_000_000
-                    ),
-                    TransactionModel(
-                        iconUrl = "https://avatars.mds.yandex.net/i?id=d3bc9dcac62f4320d08112a3f53d1209b4a17e6b-13061308-images-thumbs&n=13",
-                        transactionName = "Ана де Армас",
-                        categoryName = "Бордель",
-                        summa = 55_000_000
-                    ),
-                )
+        Surface(modifier = Modifier.fillMaxSize()) {
+            GoalCard(
+                name = "Dodge Challenger",
+                description = "wrooom wroom",
+                maxValue = 5555555
             )
         }
     }

@@ -1,6 +1,7 @@
-package ru.practice.t_finance.presentation.screens.addingTransaction
+package ru.practice.t_finance.presentation.screens.goal
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,29 +25,67 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.practice.t_finance.R
+import ru.practice.t_finance.domain.model.GoalModel
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomSpinner
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.components.DatePicker
+import ru.practice.t_finance.presentation.components.Goal
+import ru.practice.t_finance.presentation.components.GoalCard
+import ru.practice.t_finance.presentation.components.GoalsList
+import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransaction
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
-fun AddingTransaction(
+fun GoalScreen(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {},
 ) {
-    var selectedValue by remember { mutableStateOf("") }
-    var selectedDate by remember { mutableStateOf("Другой день") }
-    val items = listOf(
-        "Продукты",
-        "Коммунальные услуги",
-        "Развлечения",
-        "Транспорт",
-        "Накопления",
-        "Остальное"
+    val goals = listOf(
+        GoalModel(
+            name = "Dodge Challenger",
+            description = "Много лошадок делает врум-врум",
+            currentValue = 1_200_000,
+            maxValue = 5_556_000
+        ),
+        GoalModel(
+            name = "Хата в Казани",
+            description = "Ипотекаaaaaa",
+            currentValue = 3_000_000,
+            maxValue = 15_556_000
+        ),
+        GoalModel(
+            name = "Dodge Challenger",
+            description = "Много лошадок делает врум-врум",
+            currentValue = 1_200_000,
+            maxValue = 5_556_000
+        ),
+        GoalModel(
+            name = "Dodge Challenger",
+            description = "Много лошадок делает врум-врум",
+            currentValue = 1_200_000,
+            maxValue = 5_556_000
+        ),
+        GoalModel(
+            name = "Dodge Challenger",
+            description = "Много лошадок делает врум-врум",
+            currentValue = 1_200_000,
+            maxValue = 5_556_000
+        ),
+        GoalModel(
+            name = "Dodge Challenger",
+            description = "Много лошадок делает врум-врум",
+            currentValue = 1_200_000,
+            maxValue = 5_556_000
+        ),
+        GoalModel(
+            name = "Dodge Challenger",
+            description = "Много лошадок делает врум-врум",
+            currentValue = 1_200_000,
+            maxValue = 5_556_000
+        ),
     )
 
     Column(
@@ -58,60 +97,25 @@ fun AddingTransaction(
             modifier = Modifier
                 .weight(1f)
         ) {
-            IconButton(
-                modifier = Modifier,
-                onClick = onBackClick
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_back),
-                    contentDescription = "Назад",
-                    modifier = Modifier
-                        .padding(start = dimensionResource(R.dimen.padding_small))
-                        .size(96.dp),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
-
             Text(
-                text = stringResource(R.string.adding_transaction),
+                text = "Цели",
                 style = MaterialTheme.typography.displayLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium))
             )
 
-            CustomTextField(
-                value = "",
-                onValueChange = {
-                    //viewModel.updatePhoneNumber(it)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.horizontal_screen_padding)),
-                placeholderText = stringResource(R.string.summa),
-                keyboardType = KeyboardType.Number,
+
+            GoalsList(
+                modifier = Modifier,
+                goals = goals
             )
 
 
-            CustomSpinner(
-                value = selectedValue,
-                onValueChange = { selectedValue = it },
-                items = items,
-                placeholderText = stringResource(R.string.category),
-                modifier = Modifier.padding(dimensionResource(R.dimen.horizontal_screen_padding))
-            )
 
-            DatePicker(
-                modifier = Modifier.padding(dimensionResource(R.dimen.horizontal_screen_padding)),
-                selectedDate = selectedDate,
-                onAnotherDayClick = { millis ->
-                    val date = Date(millis)
-                    val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-                    selectedDate = formatter.format(date)
-                }
-            )
+
         }
         CustomButton(
-            text = "Добавить",
+            text = "Добавить цель",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
@@ -127,7 +131,7 @@ fun AddingTransaction(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            AddingTransaction()
+            GoalScreen()
         }
     }
 }

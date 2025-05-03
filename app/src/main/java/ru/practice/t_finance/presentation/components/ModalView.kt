@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -22,8 +24,10 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -91,13 +95,13 @@ fun CustomProgressBar(
 }
 
 @Composable
-fun Goal(goalName: String, currentValue: Int, maxValue: Int, modifier: Modifier) {
+fun Goal(name: String, currentValue: Int, maxValue: Int, modifier: Modifier) {
     Column {
         Row(
             modifier = modifier
         ) {
             Text(
-                text = goalName,
+                text = name,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f)
             )
@@ -136,7 +140,7 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
             )
         )
         Goal(
-            goalName = goalModelList[0].goalName,
+            name = goalModelList[0].name,
             currentValue = goalModelList[0].currentValue,
             maxValue = goalModelList[0].maxValue,
             modifier = Modifier.padding(
@@ -145,7 +149,7 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
             ),
         )
         Goal(
-            goalName = goalModelList[1].goalName,
+            name = goalModelList[1].name,
             currentValue = goalModelList[1].currentValue,
             maxValue = goalModelList[1].maxValue,
             modifier = Modifier.padding(
@@ -154,7 +158,7 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
             ),
         )
         Goal(
-            goalName = goalModelList[2].goalName,
+            name = goalModelList[2].name,
             currentValue = goalModelList[2].currentValue,
             maxValue = goalModelList[2].maxValue,
             modifier = Modifier.padding(
@@ -249,6 +253,27 @@ fun CustomSpinner(
                     }
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun GoalsList(
+    modifier: Modifier = Modifier,
+    goals: List<GoalModel>
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize().padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    )
+    {
+        itemsIndexed(goals) { index, goal ->
+            GoalCard(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                name = goal.name,
+                description = goal.description,
+                maxValue = goal.currentValue
+            )
         }
     }
 }
