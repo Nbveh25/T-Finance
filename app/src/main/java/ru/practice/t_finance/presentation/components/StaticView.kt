@@ -75,6 +75,7 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.ui.text.font.Font
 import ru.practice.t_finance.presentation.theme.CalendarTypography
 import java.time.YearMonth
 
@@ -87,7 +88,8 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     singleLine: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    centerText: Boolean = false
+    centerText: Boolean = false,
+    enabled: Boolean = true
 ) {
     val centeredTextStyle = if (centerText) {
         MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center)
@@ -121,7 +123,8 @@ fun CustomTextField(
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface
         ),
         textStyle = centeredTextStyle,
-        visualTransformation = visualTransformation
+        visualTransformation = visualTransformation,
+        enabled = enabled
     )
 }
 
@@ -198,19 +201,9 @@ fun PickerButton(
 @Composable
 fun CalendarBottomSheet(
     onDateSelected: (Long) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    selectableDates: SelectableDates
 ) {
-
-    val selectableDates = object : SelectableDates {
-        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-            return utcTimeMillis <= System.currentTimeMillis()
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun isSelectableYear(year: Int): Boolean {
-            return year <= YearMonth.now().year
-        }
-    }
 
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Picker,
@@ -286,6 +279,7 @@ fun CalendarButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePicker(
     modifier: Modifier = Modifier,
@@ -301,6 +295,16 @@ fun DatePicker(
                 onAnotherDayClick(millis)
                 showCalendar = false
             },
+            selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis <= System.currentTimeMillis()
+            }
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun isSelectableYear(year: Int): Boolean {
+                return year <= YearMonth.now().year
+            }
+        },
             onDismiss = { showCalendar = false }
         )
     }
@@ -412,6 +416,7 @@ fun GoalCard(
     name: String,
     description: String,
     maxValue: Int,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier
@@ -423,23 +428,27 @@ fun GoalCard(
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
-        )
+        ),
+        onClick = {
+
+        }
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = maxValue.toString(),
+                    text = "${maxValue} ₽",
                     style = MaterialTheme.typography.titleLarge
                 )
             }
-            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small)))
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
@@ -589,7 +598,8 @@ private fun Preview() {
             GoalCard(
                 name = "Dodge Challenger",
                 description = "wrooom wroom",
-                maxValue = 5555555
+                maxValue = 5555555,
+                onClick = {}
             )
         }
     }

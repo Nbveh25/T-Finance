@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -205,7 +206,10 @@ fun CustomSpinner(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium))
                 )
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_medium),
+                    vertical = dimensionResource(R.dimen.padding_medium)
+                )
         ) {
             if (value.isEmpty()) {
                 Text(
@@ -263,16 +267,43 @@ fun GoalsList(
     goals: List<GoalModel>
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxSize().padding(vertical = 8.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(vertical = dimensionResource(R.dimen.padding_extra_small)),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     )
     {
+        item {
+            Text(
+                text = stringResource(R.string.goals),
+                style = MaterialTheme.typography.displayLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium))
+            )
+        }
+
         itemsIndexed(goals) { index, goal ->
             GoalCard(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                modifier = Modifier.padding(
+                    horizontal = dimensionResource(R.dimen.padding_medium),
+                    vertical = dimensionResource(R.dimen.padding_extra_small)
+                ),
                 name = goal.name,
                 description = goal.description,
-                maxValue = goal.currentValue
+                maxValue = goal.currentValue,
+                onClick = {}
+            )
+        }
+
+        item {
+            CustomButton(
+                text = stringResource(R.string.add_goal),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
+                onClick = {
+
+                }
             )
         }
     }
