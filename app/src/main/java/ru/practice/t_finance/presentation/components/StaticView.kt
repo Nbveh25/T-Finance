@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +26,9 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
@@ -72,6 +75,7 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.ui.text.font.Font
 import ru.practice.t_finance.presentation.theme.CalendarTypography
 import java.time.YearMonth
 
@@ -84,7 +88,8 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     singleLine: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    centerText: Boolean = false
+    centerText: Boolean = false,
+    enabled: Boolean = true
 ) {
     val centeredTextStyle = if (centerText) {
         MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center)
@@ -118,7 +123,8 @@ fun CustomTextField(
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface
         ),
         textStyle = centeredTextStyle,
-        visualTransformation = visualTransformation
+        visualTransformation = visualTransformation,
+        enabled = enabled
     )
 }
 
@@ -195,19 +201,9 @@ fun PickerButton(
 @Composable
 fun CalendarBottomSheet(
     onDateSelected: (Long) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    selectableDates: SelectableDates
 ) {
-
-    val selectableDates = object : SelectableDates {
-        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-            return utcTimeMillis <= System.currentTimeMillis()
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun isSelectableYear(year: Int): Boolean {
-            return year <= YearMonth.now().year
-        }
-    }
 
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Picker,
@@ -283,6 +279,7 @@ fun CalendarButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePicker(
     modifier: Modifier = Modifier,
@@ -298,6 +295,16 @@ fun DatePicker(
                 onAnotherDayClick(millis)
                 showCalendar = false
             },
+            selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis <= System.currentTimeMillis()
+            }
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun isSelectableYear(year: Int): Boolean {
+                return year <= YearMonth.now().year
+            }
+        },
             onDismiss = { showCalendar = false }
         )
     }
@@ -398,6 +405,54 @@ fun CategoryTile(category: Category, onClick: () -> Unit, isSelected: Boolean) {
                 contentDescription = if (isSelected) "Remove" else "Add",
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun GoalCard(
+    modifier: Modifier = Modifier,
+    name: String,
+    description: String,
+    maxValue: Int,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
+        ),
+        onClick = {
+
+        }
+    ) {
+        Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${maxValue} ₽",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+            Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small)))
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -539,29 +594,12 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
 @Composable
 private fun Preview() {
     TfinanceTheme {
-        Surface(modifier = Modifier.fillMaxWidth()) {
-            TransactionSlot(
-                modifier = Modifier,
-                transactionModelList = listOf(
-                    TransactionModel(
-                        iconUrl = "https://avatars.mds.yandex.net/i?id=ce9759b87fb0b2f7276b28e34f0c1ff4e2499d3d-3919804-images-thumbs&n=13",
-                        transactionName = "Меган Фокс",
-                        categoryName = "Бордель",
-                        summa = 55_000_000
-                    ),
-                    TransactionModel(
-                        iconUrl = "https://avatars.mds.yandex.net/i?id=de31ce5f68663b3c96e2c129b26db7f7057723a0-5243188-images-thumbs&n=13",
-                        transactionName = "Марго Робби",
-                        categoryName = "Бордель",
-                        summa = 55_000_000
-                    ),
-                    TransactionModel(
-                        iconUrl = "https://avatars.mds.yandex.net/i?id=d3bc9dcac62f4320d08112a3f53d1209b4a17e6b-13061308-images-thumbs&n=13",
-                        transactionName = "Ана де Армас",
-                        categoryName = "Бордель",
-                        summa = 55_000_000
-                    ),
-                )
+        Surface(modifier = Modifier.fillMaxSize()) {
+            GoalCard(
+                name = "Dodge Challenger",
+                description = "wrooom wroom",
+                maxValue = 5555555,
+                onClick = {}
             )
         }
     }

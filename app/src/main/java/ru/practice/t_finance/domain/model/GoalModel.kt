@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class GoalModel(
-    val goalName: String,
+    val name: String,
+    val description: String,
     val currentValue: Int,
     val maxValue: Int
-) {
-}
+)
