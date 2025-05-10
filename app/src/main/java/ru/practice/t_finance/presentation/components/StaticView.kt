@@ -45,7 +45,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -75,6 +74,7 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.Font
 import ru.practice.t_finance.presentation.theme.CalendarTypography
 import java.time.YearMonth
@@ -296,15 +296,15 @@ fun DatePicker(
                 showCalendar = false
             },
             selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis <= System.currentTimeMillis()
-            }
+                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                    return utcTimeMillis <= System.currentTimeMillis()
+                }
 
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun isSelectableYear(year: Int): Boolean {
-                return year <= YearMonth.now().year
-            }
-        },
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun isSelectableYear(year: Int): Boolean {
+                    return year <= YearMonth.now().year
+                }
+            },
             onDismiss = { showCalendar = false }
         )
     }
@@ -587,8 +587,133 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
             )
         }
     }
-
 }
+
+@Composable
+fun CashbackBonusCard(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(130.dp)
+            .padding(
+                vertical = dimensionResource(R.dimen.padding_small),
+                horizontal = dimensionResource(R.dimen.padding_medium)
+            ),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFA1F936)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    vertical = dimensionResource(R.dimen.padding_small),
+                    horizontal = dimensionResource(R.dimen.padding_medium)
+                ),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.t),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Card(
+                    modifier = Modifier.padding(horizontal = 2.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.onBackground
+                    ),
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                        text = stringResource(R.string.pro),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.background,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 26.sp
+                    )
+                }
+            }
+            Card(
+                modifier = Modifier.padding(horizontal = 2.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onBackground
+                ),
+                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+            ) {
+                Text(
+                    modifier = Modifier.padding(vertical = 4.dp, horizontal = 12.dp),
+                    text = stringResource(R.string.more),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.background,
+                    fontSize = 14.sp
+                )
+            }
+        }
+
+        Text(
+            modifier = Modifier.padding(
+                vertical = dimensionResource(R.dimen.padding_small),
+                horizontal = dimensionResource(R.dimen.padding_medium)
+            ),
+            text = stringResource(R.string.lock_stock_2_smoking_barrels),
+            style = MaterialTheme.typography.titleLarge,
+            fontSize = 14.sp
+        )
+    }
+}
+
+@Composable
+fun MoreCard(modifier: Modifier = Modifier, name: String, desc: String) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(130.dp)
+            .padding(
+                vertical = dimensionResource(R.dimen.padding_small),
+                horizontal = dimensionResource(R.dimen.padding_medium)
+            ),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
+        )
+    ) {
+        Column {
+            Text(
+                modifier = Modifier.padding(
+                    vertical = dimensionResource(R.dimen.padding_small),
+                    horizontal = dimensionResource(R.dimen.padding_medium)
+                ),
+                text = name,
+                style = MaterialTheme.typography.titleLarge,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                modifier = Modifier.padding(
+                    vertical = dimensionResource(R.dimen.padding_small),
+                    horizontal = dimensionResource(R.dimen.padding_medium)
+                ),
+                text = desc,
+                style = MaterialTheme.typography.titleLarge,
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
 
 @Preview
 @Composable

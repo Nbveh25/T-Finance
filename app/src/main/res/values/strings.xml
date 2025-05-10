@@ -27,4 +27,7 @@
     <string name="description">Описание</string>
     <string name="edit">Редактировать</string>
     <string name="save">Сохранить</string>
+    <string name="t">T</string>
+    <string name="pro">PRO</string>
+    <string name="lock_stock_2_smoking_barrels">Больше кэшбэка и бонусов</string>
 </resources>
