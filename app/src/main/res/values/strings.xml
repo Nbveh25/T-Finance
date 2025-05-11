@@ -8,6 +8,8 @@
     <string name="confirmation">Подтверждение</string>
     <string name="input_your_name">Введите ваше имя</string>
     <string name="name">Имя</string>
+    <string name="allocate_budget">Распределите бюджет</string>
+    <string name="input_budget">Введите сумму вашего дохода</string>
     <string name="rubles">Рубли</string>
     <string name="more">Подробнее</string>
     <string name="on_this_week">На этой неделе</string>

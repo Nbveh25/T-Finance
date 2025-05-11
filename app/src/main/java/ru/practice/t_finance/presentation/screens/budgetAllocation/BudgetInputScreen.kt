@@ -46,13 +46,14 @@ fun BudgetInputScreen(
         Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large)))
         Text(
             style = MaterialTheme.typography.displayLarge,
-            text = "Введите сумму вашего дохода",
+            text = stringResource(R.string.input_budget),
         )
         Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large)))
         CustomTextField(
             value = budget,
             onValueChange = { budget = it},
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(),
             placeholderText = "Сумма дохода",
             keyboardType = KeyboardType.Number,
@@ -61,7 +62,11 @@ fun BudgetInputScreen(
         Spacer(modifier = Modifier.weight(1f))
         CustomButton(
             text = stringResource(R.string.next),
-            {},
+            onClick = {
+                val amount = budget.toLongOrNull() ?: 0L
+                viewModel.setBudgetAmount(amount)
+//                navController.navigate("budget_allocation_screen")
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = isButtonEnabled
         )
