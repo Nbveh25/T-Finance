@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -44,20 +45,18 @@ fun CustomBottomAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(124.dp)
-            .background(Color.Transparent),
-        tonalElevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
-        containerColor = Color.Transparent,
+            .background(MaterialTheme.colorScheme.background),
+        containerColor = MaterialTheme.colorScheme.background,
+        tonalElevation = 0.dp
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background),
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background),
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -109,7 +108,7 @@ fun CustomBottomAppBar(
                             painter = painterResource(R.drawable.ic_add),
                             contentDescription = "Добавить",
                             modifier = Modifier.size(36.dp),
-                            tint = MaterialTheme.colorScheme.background
+                            tint = Color.White
                         )
                     }
 
@@ -160,11 +159,12 @@ fun NavItem(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .width(64.dp)
+            .width(74.dp)
+            .padding(horizontal = dimensionResource(R.dimen.padding_small))
+            .clip(shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_extra_large)))
             .clickable {
                 onItemClick()
             }
-            .padding(horizontal = dimensionResource(R.dimen.padding_small))
     ) {
         Icon(
             painter = painterResource(iconRes),

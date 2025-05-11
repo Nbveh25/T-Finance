@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -28,14 +29,20 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
                     bottomBar = {
                         CustomBottomAppBar(
                             navController = navController
                         )
-                    }
+                    },
+                    containerColor = MaterialTheme.colorScheme.background
                 ) { paddingValues ->
-                    Surface(modifier = Modifier.padding(paddingValues)) {
+                    Surface(
+                        modifier = Modifier.padding(paddingValues),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
                         AppNavigation(
                             navController = navController,
                             startDestination = Routes.MAIN_SCREEN

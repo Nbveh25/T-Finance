@@ -23,7 +23,7 @@ fun MoreScreen(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
-    Column {
+    Column(modifier = modifier.fillMaxSize()) {
         Text(
             text = stringResource(R.string.echo),
             style = MaterialTheme.typography.displayLarge,

@@ -129,7 +129,7 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
                 shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
             ),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Text(
