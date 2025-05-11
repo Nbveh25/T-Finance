@@ -66,7 +66,12 @@ fun CustomBottomAppBar(
                     title = stringResource(R.string.main),
                     iconRes = R.drawable.ic_main,
                     onItemClick = {
-                        navController.navigate(Routes.MAIN_SCREEN)
+                        navController.navigate(Routes.MAIN_SCREEN) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
                     },
                     isActive = currentRoute == Routes.MAIN_SCREEN
                 )
@@ -74,7 +79,12 @@ fun CustomBottomAppBar(
                     title = stringResource(R.string.budget),
                     iconRes = R.drawable.ic_budget,
                     onItemClick = {
-                        navController.navigate(Routes.BUDGET_SCREEN)
+                        navController.navigate(Routes.BUDGET_SCREEN) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
                     },
                     isActive = currentRoute == Routes.BUDGET_SCREEN
                 )
@@ -109,7 +119,12 @@ fun CustomBottomAppBar(
                     title = stringResource(R.string.goals),
                     iconRes = R.drawable.ic_goal,
                     onItemClick = {
-                        navController.navigate(Routes.GOALS_SCREEN)
+                        navController.navigate(Routes.GOALS_SCREEN) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
                     },
                     isActive = currentRoute == Routes.GOALS_SCREEN
                 )
@@ -117,7 +132,12 @@ fun CustomBottomAppBar(
                     title = stringResource(R.string.echo),
                     iconRes = R.drawable.ic_more,
                     onItemClick = {
-                        navController.navigate(Routes.MORE_SCREEN)
+                        navController.navigate(Routes.MORE_SCREEN) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
                     },
                     isActive = currentRoute == Routes.MORE_SCREEN
                 )
