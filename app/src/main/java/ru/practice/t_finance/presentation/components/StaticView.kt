@@ -481,7 +481,7 @@ fun GoalCard(
             .height(100.dp),
         shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
@@ -587,7 +587,7 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
                 shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
             ),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         )
 
     ) {
@@ -681,12 +681,13 @@ fun CashbackBonusCard(modifier: Modifier = Modifier) {
                     text = stringResource(R.string.t),
                     style = MaterialTheme.typography.titleLarge,
                     fontSize = 36.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Card(
                     modifier = Modifier.padding(horizontal = 2.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.onBackground
+                        containerColor = Color.White
                     ),
                     shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
                 ) {
@@ -694,16 +695,17 @@ fun CashbackBonusCard(modifier: Modifier = Modifier) {
                         modifier = Modifier.padding(horizontal = 4.dp),
                         text = stringResource(R.string.pro),
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.background,
+                        color = Color.Black,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 26.sp
+                        fontSize = 26.sp,
+
                     )
                 }
             }
             Card(
                 modifier = Modifier.padding(horizontal = 2.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.onBackground
+                    containerColor = Color.Black
                 ),
                 shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
             ) {
@@ -711,7 +713,7 @@ fun CashbackBonusCard(modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(vertical = 4.dp, horizontal = 12.dp),
                     text = stringResource(R.string.more),
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.background,
+                    color = Color.White,
                     fontSize = 14.sp
                 )
             }
@@ -724,7 +726,8 @@ fun CashbackBonusCard(modifier: Modifier = Modifier) {
             ),
             text = stringResource(R.string.lock_stock_2_smoking_barrels),
             style = MaterialTheme.typography.titleLarge,
-            fontSize = 14.sp
+            fontSize = 14.sp,
+            color = Color.Black
         )
     }
 }
@@ -741,7 +744,7 @@ fun MoreCard(modifier: Modifier = Modifier, name: String, desc: String) {
             ),
         shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)

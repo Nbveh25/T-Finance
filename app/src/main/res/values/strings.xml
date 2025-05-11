@@ -32,6 +32,7 @@
     <string name="t">T</string>
     <string name="pro">PRO</string>
     <string name="lock_stock_2_smoking_barrels">Больше кэшбэка и бонусов</string>
-    <string name="allocate_budget">Распределите бюджет</string>
-    <string name="input_budget">Введите сумму вашего дохода</string>
+    <string name="main">Главная</string>
+    <string name="budget">Бюджет</string>
+    <string name="echo">Еще</string>
 </resources>

@@ -30,9 +30,8 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @Composable
 fun BudgetInputScreen(
-    modifier: Modifier,
-    navController: NavController,
-    viewModel: BudgetViewModel
+    modifier: Modifier = Modifier,
+    navController: NavController
 ){
 
     var budget by remember { mutableStateOf("")}
@@ -84,6 +83,7 @@ private fun Preview(){
             modifier = Modifier.fillMaxSize(),
             containerColor = MaterialTheme.colorScheme.background
         ){ padding ->
+            //BudgetInputScreen(Modifier.padding(padding))
         }
     }
 }
