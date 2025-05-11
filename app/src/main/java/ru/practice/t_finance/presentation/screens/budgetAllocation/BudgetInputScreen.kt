@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
@@ -28,7 +29,10 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 
 @Composable
-fun BudgetInputScreen(modifier: Modifier){
+fun BudgetInputScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+){
 
     var budget by remember { mutableStateOf("")}
     val isButtonEnabled = budget.isNotBlank()
@@ -74,7 +78,7 @@ private fun Preview(){
             modifier = Modifier.fillMaxSize(),
             containerColor = MaterialTheme.colorScheme.background
         ){ padding ->
-            BudgetInputScreen(Modifier.padding(padding))
+            //BudgetInputScreen(Modifier.padding(padding))
         }
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomSpinner
@@ -34,9 +35,9 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun AddingTransaction(
+fun AddingTransactionScreen(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {},
+    navController: NavController
 ) {
     var selectedValue by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("Другой день") }
@@ -60,7 +61,7 @@ fun AddingTransaction(
         ) {
             IconButton(
                 modifier = Modifier,
-                onClick = onBackClick
+                onClick = {}
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
@@ -127,7 +128,7 @@ fun AddingTransaction(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            AddingTransaction()
+            //AddingTransaction()
         }
     }
 }

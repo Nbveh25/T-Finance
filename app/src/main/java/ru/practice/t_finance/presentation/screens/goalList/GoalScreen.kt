@@ -6,6 +6,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import ru.practice.t_finance.domain.model.GoalModel
 import ru.practice.t_finance.presentation.components.GoalsList
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
@@ -13,6 +14,7 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 @Composable
 fun GoalScreen(
     modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val goals = listOf(
         GoalModel(
@@ -82,7 +84,7 @@ fun GoalScreen(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            GoalScreen()
+            //GoalScreen()
         }
     }
 }

@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation
 
+import CustomBottomAppBar
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,16 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.practice.t_finance.presentation.screens.authentication.AuthScreen
-import ru.practice.t_finance.presentation.screens.authentication.ConsentCodeScreen
-import ru.practice.t_finance.presentation.screens.authentication.InputNameScreen
+import ru.practice.t_finance.presentation.navigation.AppNavigation
+import ru.practice.t_finance.presentation.navigation.Routes
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @AndroidEntryPoint
@@ -27,51 +25,45 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TfinanceTheme {
+                val navController = rememberNavController()
+
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.background
-                ){ padding ->
-                    AuthNavigation(modifier = Modifier.padding(padding))
+                    bottomBar = {
+                        CustomBottomAppBar(
+                            navController = navController
+                        )
+                    }
+                ) { paddingValues ->
+                    Surface(modifier = Modifier.padding(paddingValues)) {
+                        AppNavigation(
+                            navController = navController,
+                            startDestination = Routes.MAIN_SCREEN
+                        )
+                    }
                 }
+
             }
         }
     }
 }
 
 @Composable
-fun AuthNavigation(modifier: Modifier) {
-    // Управление состоянием навигации
-    var currentScreen by remember { mutableStateOf(AuthNavigationScreens.AuthScreen) }
+fun MainScreen() {
+    val navController = rememberNavController()
     
-    when (currentScreen) {
-        AuthNavigationScreens.AuthScreen -> {
-            AuthScreen(
-                modifier = modifier,
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = {
+            CustomBottomAppBar(
+                navController = navController
             )
         }
-        AuthNavigationScreens.ConsentCodeScreen -> {
-            ConsentCodeScreen(
-                modifier = modifier,
-                onBackClick = { currentScreen = AuthNavigationScreens.AuthScreen },
-                onNavigateToInputName = { currentScreen = AuthNavigationScreens.InputNameScreen }
-            )
-        }
-        AuthNavigationScreens.InputNameScreen -> {
-            InputNameScreen(
-                modifier = modifier,
-                onBackClick = { currentScreen = AuthNavigationScreens.ConsentCodeScreen },
-                onRegistrationComplete = { 
-                    // Здесь переход на главный экран после успешной регистрации
-                    // Заглушка для примера
-                    currentScreen = AuthNavigationScreens.AuthScreen
-                }
-            )
-        }
+    ) { paddingValues ->
+        AppNavigation(
+            navController = navController,
+            modifier = Modifier.padding(paddingValues)
+        )
     }
-}
-
-enum class AuthNavigationScreens {
-    AuthScreen,
-    ConsentCodeScreen,
-    InputNameScreen
 }

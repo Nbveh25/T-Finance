@@ -20,5 +20,6 @@
     <dimen name="corner_shape_small">8dp</dimen>
     <dimen name="corner_shape_medium">12dp</dimen>
     <dimen name="corner_shape_large">24dp</dimen>
+    <dimen name="corner_shape_extra_large">48dp</dimen>
 
 </resources>

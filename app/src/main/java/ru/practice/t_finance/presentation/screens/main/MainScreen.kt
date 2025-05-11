@@ -15,6 +15,8 @@ import ru.practice.t_finance.R
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import ru.practice.t_finance.domain.model.GoalModel
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.presentation.components.GoalSlot
@@ -24,6 +26,7 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     //viewModel: MainViewModel = hiltViewModel(),
 ) {
     Column(
@@ -92,7 +95,7 @@ fun MainScreen(
 fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            MainScreen()
+            MainScreen(navController = rememberNavController())
         }
     }
 }
