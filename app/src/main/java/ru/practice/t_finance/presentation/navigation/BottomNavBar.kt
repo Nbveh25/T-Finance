@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.navigation.Routes
@@ -37,9 +38,12 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 fun CustomBottomAppBar(
     navController: NavController,
 ) {
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
     BottomAppBar(
         modifier = Modifier
-            .fillMaxWidth().height(124.dp)
+            .fillMaxWidth()
+            .height(124.dp)
             .background(Color.Transparent),
         tonalElevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
         containerColor = Color.Transparent,
@@ -61,18 +65,18 @@ fun CustomBottomAppBar(
                 NavItem(
                     title = stringResource(R.string.main),
                     iconRes = R.drawable.ic_main,
-                    route = Routes.MAIN_SCREEN,
                     onItemClick = {
                         navController.navigate(Routes.MAIN_SCREEN)
-                    }
+                    },
+                    isActive = currentRoute == Routes.MAIN_SCREEN
                 )
                 NavItem(
                     title = stringResource(R.string.budget),
                     iconRes = R.drawable.ic_budget,
-                    route = Routes.BUDGET_SCREEN,
                     onItemClick = {
                         navController.navigate(Routes.BUDGET_SCREEN)
-                    }
+                    },
+                    isActive = currentRoute == Routes.BUDGET_SCREEN
                 )
 
                 Column(
@@ -104,18 +108,18 @@ fun CustomBottomAppBar(
                 NavItem(
                     title = stringResource(R.string.goals),
                     iconRes = R.drawable.ic_goal,
-                    route = Routes.GOALS_SCREEN,
                     onItemClick = {
                         navController.navigate(Routes.GOALS_SCREEN)
-                    }
+                    },
+                    isActive = currentRoute == Routes.GOALS_SCREEN
                 )
                 NavItem(
                     title = stringResource(R.string.echo),
                     iconRes = R.drawable.ic_more,
-                    route = Routes.MORE_SCREEN,
                     onItemClick = {
                         navController.navigate(Routes.MORE_SCREEN)
-                    }
+                    },
+                    isActive = currentRoute == Routes.MORE_SCREEN
                 )
 
             }
@@ -127,30 +131,33 @@ fun CustomBottomAppBar(
 fun NavItem(
     title: String,
     iconRes: Int,
-    route: String,
-    onItemClick: (String) -> Unit,
-    iconTint: Color = MaterialTheme.colorScheme.onSurface,
-    textColor: Color = MaterialTheme.colorScheme.onSurface
+    onItemClick: () -> Unit,
+    isActive: Boolean = false,
 ) {
+    val activeColor = MaterialTheme.colorScheme.secondary
+    val inactiveColor = MaterialTheme.colorScheme.onSurface
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .width(64.dp)
-            .clickable { onItemClick(route) }
+            .clickable {
+                onItemClick()
+            }
             .padding(horizontal = dimensionResource(R.dimen.padding_small))
     ) {
         Icon(
             painter = painterResource(iconRes),
             contentDescription = title,
             modifier = Modifier.size(24.dp),
-            tint = iconTint,
+            tint = if (isActive) activeColor else inactiveColor,
         )
         Text(
             text = title,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(top = 2.dp),
             maxLines = 1,
-            color = textColor,
+            color = if (isActive) activeColor else inactiveColor,
         )
     }
 }

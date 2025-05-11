@@ -48,22 +48,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun MainScreen() {
-    val navController = rememberNavController()
-    
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
-        bottomBar = {
-            CustomBottomAppBar(
-                navController = navController
-            )
-        }
-    ) { paddingValues ->
-        AppNavigation(
-            navController = navController,
-            modifier = Modifier.padding(paddingValues)
-        )
-    }
-}
