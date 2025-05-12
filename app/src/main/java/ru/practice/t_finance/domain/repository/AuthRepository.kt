@@ -1,16 +1,11 @@
 package ru.practice.t_finance.domain.repository
 
-import ru.practice.t_finance.domain.model.Code
-import ru.practice.t_finance.domain.model.Name
-import ru.practice.t_finance.domain.model.PhoneNumber
+import retrofit2.Response
+import ru.practice.t_finance.domain.model.PhoneNumberModel
+import ru.practice.t_finance.domain.util.ResponseResult
 
 interface AuthRepository {
-    // Отправка кода подтверждения
-    suspend fun sendCode(phoneNumber: PhoneNumber)
-    
-    // Проверка кода подтверждения
-    suspend fun verifyCode(code: Code): Boolean
-    
-    // Сохранение имени пользователя
-    suspend fun saveName(name: Name)
+
+    suspend fun sendCode(phoneNumberModel: PhoneNumberModel): ResponseResult<Response<Unit>>
+
 }

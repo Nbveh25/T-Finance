@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.screens.authentication
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,9 +10,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -22,16 +27,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import kotlinx.coroutines.flow.observeOn
+import kotlinx.coroutines.launch
 import ru.practice.t_finance.R
+import ru.practice.t_finance.domain.util.ResponseResult
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
+import java.io.IOException
 
 @Composable
 fun AuthScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Column(
         modifier = modifier
@@ -58,7 +71,7 @@ fun AuthScreen(
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding))
             )
 
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))
+            Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_medium)))
 
             CustomTextField(
                 value = viewModel.phoneNumber,
@@ -76,14 +89,42 @@ fun AuthScreen(
 
             CustomButton(
                 text = stringResource(R.string.next),
-                onClick = { 
-                    //viewModel.sendCode()
+                onClick = {
+                    scope.launch {
+                        viewModel.sendCode().collect { result ->
+                            when (result) {
+                                is ResponseResult.Success -> {
+                                    if (result.data.code() == 204) {
+                                        navController.navigate("verification")
+                                    } else {
+                                        snackbarHostState.showSnackbar(
+                                            //message = result.data.message() ?: "Ошибка отправки кода"
+                                            result.data.code().toString()
+                                        )
+                                    }
+                                }
+
+                                is ResponseResult.Failure -> {
+                                    val message = when (result.error) {
+                                        is IllegalArgumentException -> "Неверный формат номера телефона"
+                                        is IOException -> "Ошибка сети. Проверьте подключение"
+                                        else -> "Произошла ошибка. Попробуйте позже"
+                                    }
+                                    //snackbarHostState.showSnackbar(message)
+                                }
+
+                                is ResponseResult.Loading -> {
+                                    // Загрузка
+                                }
+                            }
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
 
-            )
+                )
 
             Spacer(modifier = Modifier.padding(vertical = 6.dp))
 
@@ -96,6 +137,10 @@ fun AuthScreen(
             )
         }
     }
+
+    SnackbarHost(
+        hostState = snackbarHostState,
+    )
 }
 
 @Composable
@@ -103,10 +148,7 @@ fun AuthScreen(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            AuthScreen(
-                modifier = Modifier,
-                viewModel = viewModel()
-            )
+            //AuthScreen()
         }
     }
 }

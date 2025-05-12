@@ -7,7 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransactionScreen
+import ru.practice.t_finance.presentation.screens.authentication.AuthScreen
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetInputScreen
+import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetViewModel
 import ru.practice.t_finance.presentation.screens.goalList.GoalScreen
 import ru.practice.t_finance.presentation.screens.main.MainScreen
 import ru.practice.t_finance.presentation.screens.more.MoreScreen
@@ -23,6 +25,12 @@ fun AppNavigation(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        composable(Routes.AUTH_SCREEN) {
+            AuthScreen(
+                navController = navController
+            )
+        }
+
         composable(Routes.MAIN_SCREEN) {
             MainScreen(
                 navController = navController
@@ -31,7 +39,7 @@ fun AppNavigation(
 
         composable(Routes.BUDGET_SCREEN) {
             BudgetInputScreen(
-                navController = navController
+                navController = navController,
             )
         }
 
