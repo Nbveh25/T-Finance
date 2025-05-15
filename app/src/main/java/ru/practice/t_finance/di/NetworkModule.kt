@@ -9,12 +9,13 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practice.t_finance.data.remote.api.ApiService
+import ru.practice.t_finance.data.remote.handler.NetworkResponseAdapterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "http://51.250.32.164:8080/"
+    private const val BASE_URL = "https://t-bank-finance.ru/"
 
     @Provides
     fun provideOkHttpClient(
@@ -27,6 +28,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
+            .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

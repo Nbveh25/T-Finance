@@ -7,9 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransactionScreen
-import ru.practice.t_finance.presentation.screens.authentication.AuthScreen
+import ru.practice.t_finance.presentation.screens.authentication.auth.AuthScreen
+import ru.practice.t_finance.presentation.screens.authentication.consentCode.ConsentCodeScreen
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetInputScreen
-import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetViewModel
 import ru.practice.t_finance.presentation.screens.goalList.GoalScreen
 import ru.practice.t_finance.presentation.screens.main.MainScreen
 import ru.practice.t_finance.presentation.screens.more.MoreScreen
@@ -28,6 +28,14 @@ fun AppNavigation(
         composable(Routes.AUTH_SCREEN) {
             AuthScreen(
                 navController = navController
+            )
+        }
+
+        composable(Routes.CONSENT_CODE_SCREEN) {
+            ConsentCodeScreen(
+                modifier = Modifier,
+                onBackClick = { navController.popBackStack() },
+                onNavigateToInputName = { /* TODO: Добавить навигацию к экрану ввода имени */ }
             )
         }
 

@@ -8,6 +8,8 @@ class AuthUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
 
-    suspend fun sendCode(phoneNumberModel: PhoneNumberModel) = repository.sendCode(phoneNumberModel)
+    suspend operator fun invoke(phoneNumberModel: PhoneNumberModel): Result<Unit> {
+        return repository.sendCode(phoneNumberModel)
+    }
 
 }

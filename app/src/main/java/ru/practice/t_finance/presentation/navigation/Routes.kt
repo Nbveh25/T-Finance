@@ -1,8 +1,12 @@
 package ru.practice.t_finance.presentation.navigation
 
 object Routes {
-    const val AUTH_SCREEN = "auth_screen"
 
+    // Authentication
+    const val AUTH_SCREEN = "auth_screen"
+    const val CONSENT_CODE_SCREEN = "consent_code_screen"
+
+    // BottomNavBar
     const val MAIN_SCREEN = "main_screen"
     const val BUDGET_SCREEN = "budget_screen"
     const val GOALS_SCREEN = "goals_screen"
