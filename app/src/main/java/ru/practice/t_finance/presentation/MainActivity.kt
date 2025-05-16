@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.practice.t_finance.presentation.navigation.AppNavigation
@@ -27,15 +28,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             TfinanceTheme {
                 val navController = rememberNavController()
-
+                val currentRoute =
+                    navController.currentBackStackEntryAsState().value?.destination?.route
+                val showBottomBar =
+                    currentRoute in listOf("mainScreen", "budget_screen", "goals_screen", "more_screen", "add_screen")
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                     bottomBar = {
-                        CustomBottomAppBar(
-                            navController = navController
-                        )
+                        if (showBottomBar) {
+                            CustomBottomAppBar(
+                                navController = navController
+                            )
+                        }
                     },
                     containerColor = MaterialTheme.colorScheme.background
                 ) { paddingValues ->
@@ -45,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         AppNavigation(
                             navController = navController,
-                            startDestination = Routes.MAIN_SCREEN
+                            startDestination = Routes.AUTH_SCREEN
                         )
                     }
                 }

@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
+import ru.practice.t_finance.presentation.screens.authentication.auth.AuthViewModel
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @SuppressLint("StateFlowValueCalledInComposition")

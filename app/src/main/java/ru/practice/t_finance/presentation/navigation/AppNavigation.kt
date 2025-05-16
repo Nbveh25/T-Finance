@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransactionScreen
+import ru.practice.t_finance.presentation.screens.authentication.auth.AuthScreen
+import ru.practice.t_finance.presentation.screens.authentication.consentCode.ConsentCodeScreen
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetInputScreen
 import ru.practice.t_finance.presentation.screens.goalList.GoalScreen
 import ru.practice.t_finance.presentation.screens.main.MainScreen
@@ -23,6 +25,20 @@ fun AppNavigation(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        composable(Routes.AUTH_SCREEN) {
+            AuthScreen(
+                navController = navController
+            )
+        }
+
+        composable(Routes.CONSENT_CODE_SCREEN) {
+            ConsentCodeScreen(
+                modifier = Modifier,
+                onBackClick = { navController.popBackStack() },
+                onNavigateToInputName = { /* TODO: Добавить навигацию к экрану ввода имени */ }
+            )
+        }
+
         composable(Routes.MAIN_SCREEN) {
             MainScreen(
                 navController = navController
@@ -31,7 +47,7 @@ fun AppNavigation(
 
         composable(Routes.BUDGET_SCREEN) {
             BudgetInputScreen(
-                navController = navController
+                navController = navController,
             )
         }
 

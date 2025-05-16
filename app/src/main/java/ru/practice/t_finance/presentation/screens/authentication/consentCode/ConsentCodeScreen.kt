@@ -1,4 +1,4 @@
-package ru.practice.t_finance.presentation.screens.authentication
+package ru.practice.t_finance.presentation.screens.authentication.consentCode
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -26,9 +26,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
+import ru.practice.t_finance.presentation.screens.authentication.auth.AuthViewModel
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ConsentCodeScreen(
     modifier: Modifier,
@@ -67,7 +67,7 @@ fun ConsentCodeScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
             Text(
-                text = "Код отправлен на номер\n      ${viewModel}",
+                text = "Код отправлен на номер\n      ${viewModel.phoneNumber}",
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier

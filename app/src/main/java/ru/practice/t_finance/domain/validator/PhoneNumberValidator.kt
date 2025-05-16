@@ -10,10 +10,10 @@ class PhoneNumberValidator @Inject constructor() {
 
     fun normalizePhoneNumber(phoneNumber: String): String {
         val digits = phoneNumber.replace(Regex("[^0-9]"), "")
-        return if (digits.startsWith("8")) "+7${digits.drop(1)}" else digits
+        return "+7${digits.takeLast(10)}"
     }
 
     companion object {
-        private val PHONE_REGEX = Regex("""^(\+7|8)[\s\-]?\(?9\d{2}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}${'$'}""")
+        val PHONE_REGEX = Regex("""^\+7\d{10}${'$'}""")
     }
 }

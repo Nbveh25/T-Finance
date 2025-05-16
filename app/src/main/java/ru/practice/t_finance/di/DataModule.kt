@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.repository.AuthRepositoryImpl
 import ru.practice.t_finance.data.repository.CategoryRepositoryImpl
 import ru.practice.t_finance.domain.repository.AuthRepository
@@ -17,13 +18,15 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideCategoryRepository() : CategoryRepository{
+    fun provideCategoryRepository(): CategoryRepository {
         return CategoryRepositoryImpl()
     }
-    
+
     @Provides
     @Singleton
-    fun provideAuthRepository() : AuthRepository {
-        return AuthRepositoryImpl()
+    fun provideAuthRepository(
+        apiService: ApiService,
+    ): AuthRepository {
+        return AuthRepositoryImpl(apiService)
     }
 }
