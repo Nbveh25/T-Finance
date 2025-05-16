@@ -4,10 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.practice.t_finance.BuildConfig
 import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.remote.handler.NetworkResponseAdapterFactory
 
@@ -15,7 +15,7 @@ import ru.practice.t_finance.data.remote.handler.NetworkResponseAdapterFactory
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://t-bank-finance.ru/"
+    private const val BASE_URL = BuildConfig.BASE_URL
 
     @Provides
     fun provideOkHttpClient(

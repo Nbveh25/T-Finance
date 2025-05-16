@@ -26,7 +26,7 @@ class AuthViewModel @Inject constructor(
     var errorMessage by mutableStateOf<String?>(null)
 
     private val _state = MutableStateFlow<AuthScreenState>(AuthScreenState.Initial)
-    val state: StateFlow<AuthScreenState> = _state.asStateFlow()
+    internal val state: StateFlow<AuthScreenState> = _state.asStateFlow()
 
     fun sendCode() {
         if (!phoneNumberValidator.isValid(phoneNumber)) {
