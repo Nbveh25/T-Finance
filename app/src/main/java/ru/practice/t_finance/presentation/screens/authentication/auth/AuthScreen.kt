@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import ru.practice.t_finance.R
+import ru.practice.t_finance.domain.util.PhoneNumberVisualTransformation
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.navigation.Routes
@@ -66,6 +67,7 @@ fun AuthScreen(
                     .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
                 placeholderText = stringResource(R.string.phone_number),
                 keyboardType = KeyboardType.Phone,
+                visualTransformation = PhoneNumberVisualTransformation(),
                 enabled = state !is AuthScreenState.Loading
             )
 

@@ -76,8 +76,6 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-    // MaskText
-    implementation(libs.input.mask.android)
 
 
 }

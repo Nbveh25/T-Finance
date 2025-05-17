@@ -52,7 +52,10 @@ class AuthViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(newValue: String) {
-        phoneNumber = newValue
+        // Удаляем все нецифровые символы и ограничиваем длину
+        val digitsOnly = newValue.filter { it.isDigit() }.take(11)
+        phoneNumber = digitsOnly
         errorMessage = null
     }
+
 }
