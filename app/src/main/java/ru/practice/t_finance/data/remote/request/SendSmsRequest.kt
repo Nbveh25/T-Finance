@@ -2,8 +2,8 @@ package ru.practice.t_finance.data.remote.request
 
 import com.google.gson.annotations.SerializedName
 
-data class PhoneNumberRequest(
+data class SendSmsRequest(
     @SerializedName("phoneNumber") val phoneNumber: String
 ) {
-    override fun toString(): String = "PhoneNumberRequest(phoneNumber='$phoneNumber')" // For Logging
+    override fun toString(): String = "SendSmsRequest(phoneNumber='$phoneNumber')" // For Logging
 }

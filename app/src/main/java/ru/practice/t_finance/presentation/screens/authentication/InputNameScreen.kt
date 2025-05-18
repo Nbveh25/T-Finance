@@ -22,25 +22,26 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.screens.authentication.auth.AuthViewModel
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun InputNameScreen(
-    modifier: Modifier,
-    onBackClick: () -> Unit = {},
-    onRegistrationComplete: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     Column(
         modifier = modifier.fillMaxSize()
     ) {
         IconButton(
-            onClick = onBackClick
+            onClick = {
+                navController.popBackStack()
+            }
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_back),
@@ -81,7 +82,7 @@ fun InputNameScreen(
             text = stringResource(R.string.next),
             onClick = {
                 //viewModel.getPhoneNumber()
-                onRegistrationComplete()
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,7 +100,7 @@ fun InputNameScreen(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            InputNameScreen(Modifier)
+            //InputNameScreen(Modifier)
         }
     }
 }

@@ -1,16 +1,20 @@
 package ru.practice.t_finance.data.remote.api
 
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 import ru.practice.t_finance.data.remote.exception.ApiError
 import ru.practice.t_finance.data.remote.handler.NetworkResponse
-import ru.practice.t_finance.data.remote.request.PhoneNumberRequest
+import ru.practice.t_finance.data.remote.request.SendCodeRequest
+import ru.practice.t_finance.data.remote.request.SendSmsRequest
+import ru.practice.t_finance.data.remote.response.SendSmsResponse
 
 interface ApiService {
 
     // Authentication
     @POST("api/v1/auth/send-sms")
-    suspend fun sendCode(@Body request: PhoneNumberRequest): NetworkResponse<Unit, ApiError>
+    suspend fun sendSms(@Body request: SendSmsRequest): NetworkResponse<Unit, ApiError>
+
+    @POST("/api/v1/auth/confirm-sms")
+    suspend fun sendCode(@Body request: SendCodeRequest): NetworkResponse<SendSmsResponse, ApiError>
 
 }
