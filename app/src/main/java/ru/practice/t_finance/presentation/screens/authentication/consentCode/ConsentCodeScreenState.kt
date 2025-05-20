@@ -1,6 +1,6 @@
 package ru.practice.t_finance.presentation.screens.authentication.consentCode
 
-sealed class ConsentCodeState {
+internal sealed class ConsentCodeState {
     object Initial : ConsentCodeState()
     object Loading : ConsentCodeState()
     object Success : ConsentCodeState()

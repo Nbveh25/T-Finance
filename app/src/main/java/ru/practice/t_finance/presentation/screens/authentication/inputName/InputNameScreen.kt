@@ -1,6 +1,5 @@
-package ru.practice.t_finance.presentation.screens.authentication
+package ru.practice.t_finance.presentation.screens.authentication.inputName
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +12,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -33,8 +36,10 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 fun InputNameScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: InputNameViewModel = hiltViewModel()
 ) {
+    val state by viewModel.state.collectAsState()
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -66,9 +71,9 @@ fun InputNameScreen(
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_small)))
 
             CustomTextField(
-                value = "",
-                onValueChange = { //
-                    // viewModel.updatePhoneNumber(it)
+                value = viewModel.name,
+                onValueChange = {
+                    viewModel.updateName(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -81,8 +86,7 @@ fun InputNameScreen(
         CustomButton(
             text = stringResource(R.string.next),
             onClick = {
-                //viewModel.getPhoneNumber()
-
+                viewModel.sendName()
             },
             modifier = Modifier
                 .fillMaxWidth()

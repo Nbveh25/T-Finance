@@ -45,6 +45,7 @@ class AuthViewModel @Inject constructor(
                 .onFailure { error ->
                     errorMessage = error.message ?: "Ошибка при отправке кода"
                     _state.value = AuthScreenState.Error(errorMessage!!)
+                    // Скорее всего здесь надо делать навигацию на экран ввода номера
                 }
         }
     }

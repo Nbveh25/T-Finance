@@ -77,6 +77,7 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-
-
+    // Encrypted Shared Preferences
+    implementation(libs.androidx.security.crypto.v110alpha06)
+    implementation(libs.tink.android)
 }

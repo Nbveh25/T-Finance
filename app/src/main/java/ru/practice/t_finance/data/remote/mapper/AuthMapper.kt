@@ -1,8 +1,10 @@
 package ru.practice.t_finance.data.remote.mapper
 
 import ru.practice.t_finance.data.remote.request.SendCodeRequest
+import ru.practice.t_finance.data.remote.request.SendNameRequest
 import ru.practice.t_finance.data.remote.request.SendSmsRequest
 import ru.practice.t_finance.domain.model.CodeModel
+import ru.practice.t_finance.domain.model.FirstNameModel
 import ru.practice.t_finance.domain.model.PhoneNumberModel
 
 object AuthMapper {
@@ -14,4 +16,9 @@ object AuthMapper {
         phoneNumber = phoneNumberModel.phoneNumber.toString(),
         code = codeModel.code.toString()
     )
+
+    fun toRequest(firstNameModel: FirstNameModel) = SendNameRequest(
+        firstName = firstNameModel.firstName
+    )
+
 }

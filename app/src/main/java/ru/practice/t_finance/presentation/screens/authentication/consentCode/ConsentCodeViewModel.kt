@@ -1,4 +1,5 @@
 package ru.practice.t_finance.presentation.screens.authentication.consentCode
+
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.compose.runtime.getValue
@@ -39,23 +40,21 @@ class ConsentCodeViewModel @Inject constructor(
         if (code.length != 4) {
             errorMessage = "Введите 4-значный код"
             _state.value = ConsentCodeState.Error(errorMessage.toString())
-            return
-        }
-
-        viewModelScope.launch {
-            _state.value = ConsentCodeState.Loading
-            Log.d("ConsentCodeViewModel", "Phone number: $phoneNumber")
-            authUseCase.invoke(
-                phoneNumberModel = PhoneNumberModel(phoneNumber),
-                codeModel = CodeModel(code),
-            ).onSuccess {
-                _state.value = ConsentCodeState.Success
-
-                Log.d("ConsentCodeViewModel", "Success: $it")
-            }.onFailure { error ->
-                errorMessage = error.message ?: "Ошибка при проверке кода"
-                _state.value = ConsentCodeState.Error(errorMessage!!)
-                Log.d("ConsentCodeViewModel", "Error: $error")
+        } else {
+            viewModelScope.launch {
+                _state.value = ConsentCodeState.Loading
+                Log.d("ConsentCodeViewModel", "Phone number: $phoneNumber")
+                authUseCase.invoke(
+                    phoneNumberModel = PhoneNumberModel(phoneNumber),
+                    codeModel = CodeModel(code),
+                ).onSuccess {
+                    _state.value = ConsentCodeState.Success
+                    Log.d("ConsentCodeViewModel", "Success: $it")
+                }.onFailure { error ->
+                    errorMessage = error.message ?: "Ошибка при проверке кода"
+                    _state.value = ConsentCodeState.Error(errorMessage ?: "Ошибка")
+                    Log.d("ConsentCodeViewModel", "Error: $error")
+                }
             }
         }
     }

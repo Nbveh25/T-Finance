@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransactionScreen
-import ru.practice.t_finance.presentation.screens.authentication.InputNameScreen
+import ru.practice.t_finance.presentation.screens.authentication.inputName.InputNameScreen
 import ru.practice.t_finance.presentation.screens.authentication.auth.AuthScreen
 import ru.practice.t_finance.presentation.screens.authentication.consentCode.ConsentCodeScreen
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetInputScreen
