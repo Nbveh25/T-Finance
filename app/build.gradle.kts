@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -64,8 +66,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-
+    // Navigation
     implementation(libs.androidx.hilt.navigation.compose)
+
 
     // Retrofit
     implementation(libs.retrofit)
@@ -74,5 +77,7 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-
+    // Encrypted Shared Preferences
+    implementation(libs.androidx.security.crypto.v110alpha06)
+    implementation(libs.tink.android)
 }

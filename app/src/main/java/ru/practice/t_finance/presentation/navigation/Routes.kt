@@ -5,6 +5,7 @@ object Routes {
     // Authentication
     const val AUTH_SCREEN = "auth_screen"
     const val CONSENT_CODE_SCREEN = "consent_code_screen"
+    const val INPUT_NAME_SCREEN = "input_name_screen"
 
     // BottomNavBar
     const val MAIN_SCREEN = "main_screen"

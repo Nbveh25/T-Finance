@@ -8,6 +8,7 @@ converterGson = "2.9.0"
 glideImage = "lastVersion"
 gson = "2.10.1"
 hiltAndroidCompiler = "2.56.1"
+inputMaskAndroid = "7.2.4"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -19,12 +20,18 @@ composeBom = "2024.09.00"
 hiltNavigationCompose = "1.2.0"
 navigationCompose = "2.9.0"
 retrofit = "2.11.0"
+secretsGradlePlugin = "2.0.1"
+securityCrypto = "1.1.0-alpha05"
+securityCryptoVersion = "1.1.0-alpha06"
+tinkAndroid = "1.8.0"
 
 [libraries]
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanistDrawablepainter" }
 accompanist-glide = { module = "com.google.accompanist:accompanist-glide", version.ref = "accompanistGlide" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
+androidx-security-crypto-v110alpha06 = { module = "androidx.security:security-crypto", version.ref = "securityCryptoVersion" }
 calendar-compose = { module = "com.kizitonwose.calendar:calendar-compose", version.ref = "calendarCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
@@ -32,6 +39,7 @@ glide-image = { module = "com.github.danchoo21:glide-image", version.ref = "glid
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+input-mask-android = { module = "com.github.RedMadRobot:input-mask-android", version.ref = "inputMaskAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -47,6 +55,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
+tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tinkAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

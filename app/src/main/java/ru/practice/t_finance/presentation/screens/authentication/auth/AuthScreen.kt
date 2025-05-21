@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import ru.practice.t_finance.R
+import ru.practice.t_finance.domain.util.PhoneNumberVisualTransformation
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.navigation.Routes
@@ -28,9 +29,7 @@ fun AuthScreen(
     navController: NavController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
     val state by viewModel.state.collectAsState()
-    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -66,6 +65,7 @@ fun AuthScreen(
                     .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
                 placeholderText = stringResource(R.string.phone_number),
                 keyboardType = KeyboardType.Phone,
+                visualTransformation = PhoneNumberVisualTransformation(),
                 enabled = state !is AuthScreenState.Loading
             )
 
@@ -105,27 +105,11 @@ fun AuthScreen(
     }
 
     LaunchedEffect(state) {
-        when (state) {
-            is AuthScreenState.Error -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = (state as AuthScreenState.Error).message
-                    )
-                }
-            }
-            is AuthScreenState.Success -> {
-                navController.navigate(Routes.CONSENT_CODE_SCREEN)
-            }
-            else -> {
-                /* сидим и не рыпаемся */
-            }
+        if (state is AuthScreenState.Success) {
+            navController.navigate("${Routes.CONSENT_CODE_SCREEN}?phoneNumber=+7${viewModel.phoneNumber}")
         }
     }
 
-    SnackbarHost(
-        hostState = snackbarHostState,
-        modifier = Modifier.padding(16.dp)
-    )
 }
 
 @Composable

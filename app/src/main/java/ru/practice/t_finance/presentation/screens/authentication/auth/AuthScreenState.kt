@@ -1,6 +1,6 @@
 package ru.practice.t_finance.presentation.screens.authentication.auth
 
-sealed class AuthScreenState {
+internal sealed class AuthScreenState {
     object Initial : AuthScreenState()
     object Loading : AuthScreenState()
     object Success : AuthScreenState()

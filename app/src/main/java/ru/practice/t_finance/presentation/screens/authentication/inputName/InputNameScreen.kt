@@ -1,6 +1,5 @@
-package ru.practice.t_finance.presentation.screens.authentication
+package ru.practice.t_finance.presentation.screens.authentication.inputName
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +12,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -22,25 +25,28 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
 import ru.practice.t_finance.presentation.screens.authentication.auth.AuthViewModel
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun InputNameScreen(
-    modifier: Modifier,
-    onBackClick: () -> Unit = {},
-    onRegistrationComplete: () -> Unit = {},
-    viewModel: AuthViewModel = hiltViewModel()
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: InputNameViewModel = hiltViewModel()
 ) {
+    val state by viewModel.state.collectAsState()
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
         IconButton(
-            onClick = onBackClick
+            onClick = {
+                navController.popBackStack()
+            }
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_back),
@@ -65,9 +71,9 @@ fun InputNameScreen(
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_small)))
 
             CustomTextField(
-                value = "",
-                onValueChange = { //
-                    // viewModel.updatePhoneNumber(it)
+                value = viewModel.name,
+                onValueChange = {
+                    viewModel.updateName(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -80,8 +86,7 @@ fun InputNameScreen(
         CustomButton(
             text = stringResource(R.string.next),
             onClick = {
-                //viewModel.getPhoneNumber()
-                onRegistrationComplete()
+                viewModel.sendName()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,7 +104,7 @@ fun InputNameScreen(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            InputNameScreen(Modifier)
+            //InputNameScreen(Modifier)
         }
     }
 }
