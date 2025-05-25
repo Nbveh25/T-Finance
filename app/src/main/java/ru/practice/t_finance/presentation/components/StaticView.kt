@@ -472,7 +472,7 @@ fun GoalCard(
     modifier: Modifier = Modifier,
     name: String,
     description: String,
-    maxValue: Int,
+    amount: Double,
     onClick: () -> Unit
 ) {
     Card(
@@ -501,7 +501,7 @@ fun GoalCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${maxValue} ₽",
+                    text = "${amount} ₽",
                     style = MaterialTheme.typography.titleLarge
                 )
             }
@@ -783,7 +783,7 @@ private fun Preview() {
             GoalCard(
                 name = "Dodge Challenger",
                 description = "wrooom wroom",
-                maxValue = 5555555,
+                amount = 5555555.0,
                 onClick = {}
             )
         }

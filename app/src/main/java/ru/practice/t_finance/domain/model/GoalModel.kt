@@ -1,11 +1,13 @@
 package ru.practice.t_finance.domain.model
 
 import androidx.compose.runtime.Immutable
+import java.io.Serializable
 
 @Immutable
 data class GoalModel(
     val name: String,
-    val description: String,
-    val currentValue: Int,
-    val maxValue: Int
-)
+    val term: String,
+    val amount: Double,
+    val accumulatedAmount: Double,
+    val description: String
+) : Serializable

@@ -1,4 +1,4 @@
-package ru.practice.t_finance.presentation.screens.goalEdit
+package ru.practice.t_finance.presentation.screens.goal.goalEdit
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -16,7 +16,10 @@ import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -25,8 +28,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CalendarBottomSheet
 import ru.practice.t_finance.presentation.components.CustomButton
@@ -36,12 +43,16 @@ import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GoalEditScreen(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    viewModel: GoalEditViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+    val state = viewModel.state.collectAsState()
+
     var showCalendar by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
 
@@ -50,6 +61,7 @@ fun GoalEditScreen(
         CalendarBottomSheet(
             onDateSelected = { millis ->
                 selectedDate = formatter.format(millis)
+                viewModel.updateTerm(selectedDate)
                 showCalendar = false
             },
             selectableDates = object : SelectableDates {
@@ -73,7 +85,7 @@ fun GoalEditScreen(
         ) {
             IconButton(
                 modifier = Modifier,
-                onClick = onBackClick
+                onClick = { navController.popBackStack() }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
@@ -87,7 +99,7 @@ fun GoalEditScreen(
             }
 
             Text(
-                text = "Редактирование цели",
+                text = stringResource(R.string.goal_edit),
                 style = MaterialTheme.typography.displayLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium))
@@ -97,34 +109,46 @@ fun GoalEditScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium)),
-                value = "",
+                value = viewModel.name,
                 onValueChange = {
-
+                    viewModel.updateName(it)
                 },
-                placeholderText = "Название"
+                placeholderText = stringResource(R.string.naming)
             )
 
             CustomTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium)),
-                value = "",
+                value = viewModel.description,
                 onValueChange = {
-
+                    viewModel.updateDescription(it)
                 },
-                placeholderText = "Описание"
+                placeholderText = stringResource(R.string.description)
             )
 
             CustomTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium)),
-                value = "",
+                value = viewModel.amount.toString(),
                 onValueChange = {
-
+                    viewModel.updateAmount(it)
                 },
-                placeholderText = "Сумма"
+                placeholderText = stringResource(R.string.summa),
+                keyboardType = KeyboardType.Number
             )
+
+            if (viewModel.errorMessage != null) {
+                Text(
+                    text = viewModel.errorMessage ?: "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding))
+                        .padding(top = 4.dp)
+                )
+            }
 
             CustomTextField(
                 modifier = Modifier
@@ -133,8 +157,8 @@ fun GoalEditScreen(
                     .clickable { showCalendar = true },
                 value = selectedDate,
                 onValueChange = {},
-                placeholderText = "Срок",
-                enabled = false // Отключаем ручной ввод
+                placeholderText = stringResource(R.string.term),
+                enabled = false
             )
         }
         CustomButton(
@@ -143,10 +167,18 @@ fun GoalEditScreen(
                 .fillMaxWidth()
                 .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
             onClick = {
-
-            }
+                viewModel.createGoal()
+            },
         )
     }
+
+    LaunchedEffect(state.value) {
+        if (state.value is GoalEditScreenState.Success) {
+            navController.popBackStack()
+        }
+    }
+
+
 }
 
 @Composable
@@ -154,7 +186,7 @@ fun GoalEditScreen(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            GoalEditScreen(onBackClick = {})
+            //GoalEditScreen(onBackClick = {})
         }
     }
 }

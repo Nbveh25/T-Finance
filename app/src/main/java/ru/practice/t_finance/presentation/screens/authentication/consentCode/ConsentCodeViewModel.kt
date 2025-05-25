@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practice.t_finance.domain.model.CodeModel
 import ru.practice.t_finance.domain.model.PhoneNumberModel
-import ru.practice.t_finance.domain.usecases.AuthUseCase
+import ru.practice.t_finance.domain.usecases.auth.SendSmsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ConsentCodeViewModel @Inject constructor(
-    private val authUseCase: AuthUseCase,
+    private val sendSmsUseCase: SendSmsUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -44,7 +44,7 @@ class ConsentCodeViewModel @Inject constructor(
             viewModelScope.launch {
                 _state.value = ConsentCodeState.Loading
                 Log.d("ConsentCodeViewModel", "Phone number: $phoneNumber")
-                authUseCase.invoke(
+                sendSmsUseCase.invoke(
                     phoneNumberModel = PhoneNumberModel(phoneNumber),
                     codeModel = CodeModel(code),
                 ).onSuccess {

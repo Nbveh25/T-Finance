@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,9 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import okhttp3.Route
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
+import ru.practice.t_finance.presentation.navigation.Routes
 import ru.practice.t_finance.presentation.screens.authentication.auth.AuthViewModel
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
@@ -96,6 +99,12 @@ fun InputNameScreen(
                 ),
             //enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
         )
+    }
+
+    LaunchedEffect(state) {
+        if (state is InputNameScreenState.Success) {
+            navController.navigate(Routes.MAIN_SCREEN)
+        }
     }
 }
 

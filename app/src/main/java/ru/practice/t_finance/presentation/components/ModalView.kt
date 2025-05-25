@@ -3,8 +3,6 @@ package ru.practice.t_finance.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,29 +12,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,26 +37,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.google.gson.Gson
 import ru.practice.t_finance.R
 import ru.practice.t_finance.domain.model.GoalModel
-import ru.practice.t_finance.presentation.theme.TfinanceTheme
+import ru.practice.t_finance.presentation.navigation.Routes
+
 
 @Composable
 fun CustomProgressBar(
     modifier: Modifier,
-    currentValue: Int,
-    maxValue: Int = 3556,
+    accumulatedAmount: Double,
+    amount: Double = 3556.0,
     height: Dp = dimensionResource(R.dimen.padding_medium),
     cornerRadius: Dp = 12.dp
 ) {
-    val progress = remember(currentValue, maxValue) {
-        (currentValue.toFloat() / maxValue.toFloat()).coerceIn(0f, 1f)
+    val progress = remember(accumulatedAmount, amount) {
+        (accumulatedAmount / amount).coerceIn(0.0, 1.0)
     }
 
     Row(
@@ -87,7 +76,7 @@ fun CustomProgressBar(
         Box(
             modifier = Modifier
                 .padding(height / 8)
-                .fillMaxWidth(progress)
+                .fillMaxWidth(progress.toFloat())
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(cornerRadius))
                 .background(MaterialTheme.colorScheme.secondary)
@@ -96,7 +85,7 @@ fun CustomProgressBar(
 }
 
 @Composable
-fun Goal(name: String, currentValue: Int, maxValue: Int, modifier: Modifier) {
+fun Goal(name: String, accumulatedAmount: Double, amount: Double, modifier: Modifier) {
     Column {
         Row(
             modifier = modifier
@@ -107,14 +96,14 @@ fun Goal(name: String, currentValue: Int, maxValue: Int, modifier: Modifier) {
                 modifier = Modifier.weight(1f)
             )
             Text(
-                text = maxValue.toString(),
+                text = amount.toString(),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
         CustomProgressBar(
             modifier = modifier,
-            currentValue = currentValue,
-            maxValue = maxValue
+            accumulatedAmount = accumulatedAmount,
+            amount = amount
         )
     }
 }
@@ -142,8 +131,8 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
         )
         Goal(
             name = goalModelList[0].name,
-            currentValue = goalModelList[0].currentValue,
-            maxValue = goalModelList[0].maxValue,
+            accumulatedAmount = goalModelList[0].accumulatedAmount,
+            amount = goalModelList[0].amount,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.padding_medium),
                 vertical = dimensionResource(R.dimen.padding_small)
@@ -151,8 +140,8 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
         )
         Goal(
             name = goalModelList[1].name,
-            currentValue = goalModelList[1].currentValue,
-            maxValue = goalModelList[1].maxValue,
+            accumulatedAmount = goalModelList[1].accumulatedAmount,
+            amount = goalModelList[1].amount,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.padding_medium),
                 vertical = dimensionResource(R.dimen.padding_small)
@@ -160,8 +149,8 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
         )
         Goal(
             name = goalModelList[2].name,
-            currentValue = goalModelList[2].currentValue,
-            maxValue = goalModelList[2].maxValue,
+            accumulatedAmount = goalModelList[2].accumulatedAmount,
+            amount = goalModelList[2].amount,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.padding_medium),
                 vertical = dimensionResource(R.dimen.padding_small)
@@ -264,7 +253,8 @@ fun CustomSpinner(
 @Composable
 fun GoalsList(
     modifier: Modifier = Modifier,
-    goals: List<GoalModel>
+    goals: List<GoalModel>,
+    navController: NavController
 ) {
     LazyColumn(
         modifier = modifier
@@ -290,22 +280,14 @@ fun GoalsList(
                 ),
                 name = goal.name,
                 description = goal.description,
-                maxValue = goal.currentValue,
-                onClick = {}
-            )
-        }
-
-        item {
-            CustomButton(
-                text = stringResource(R.string.add_goal),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
+                amount = goal.amount,
                 onClick = {
-
+                    val goalJson = Gson().toJson(goal)
+                    navController.navigate("${Routes.GOALS_DETAIL_SCREEN}/$goalJson")
                 }
             )
         }
+
     }
 }
 

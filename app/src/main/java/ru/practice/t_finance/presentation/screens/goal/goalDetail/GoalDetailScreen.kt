@@ -1,4 +1,4 @@
-package ru.practice.t_finance.presentation.screens.goalDetail
+package ru.practice.t_finance.presentation.screens.goal.goalDetail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import ru.practice.t_finance.R
+import ru.practice.t_finance.domain.model.GoalModel
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomProgressBar
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
@@ -32,7 +34,8 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 @Composable
 fun GoalDetailScreen(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    navController: NavController,
+    goalModel: GoalModel
 ) {
     Column {
         Column(
@@ -41,7 +44,9 @@ fun GoalDetailScreen(
         ) {
             IconButton(
                 modifier = Modifier,
-                onClick = onBackClick
+                onClick = {
+                    navController.popBackStack()
+                }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
@@ -54,7 +59,7 @@ fun GoalDetailScreen(
             }
 
             Text(
-                text = "Dodge Challenger", // здесь нужно ставить текст взависимости от нажатого слота
+                text = goalModel.name, // здесь нужно ставить текст взависимости от нажатого слота
                 style = MaterialTheme.typography.displayLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium))
@@ -83,7 +88,7 @@ fun GoalDetailScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = "${500_000_000} Р", // Меняем на текущую сумму
+                            text = "${goalModel.amount} Р", // Меняем на текущую сумму
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -98,7 +103,7 @@ fun GoalDetailScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = "${120} Р", // Это подгружаем
+                            text = "${goalModel.accumulatedAmount} Р", // Это подгружаем
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -113,15 +118,15 @@ fun GoalDetailScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = "31.12.2025", // Дату подгружаем
+                            text = goalModel.term, // Дату подгружаем
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
                     Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_extra_small)))
                     CustomProgressBar(
                         modifier = Modifier,
-                        currentValue = 50,
-                        maxValue = 100,
+                        accumulatedAmount = 50.0,
+                        amount = 100.0,
                     )
                 }
             }
@@ -145,7 +150,7 @@ fun GoalDetailScreen(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "ффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффф", // описание тоже подгружаем,
+                        text = goalModel.description, // описание тоже подгружаем,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -170,7 +175,7 @@ fun GoalDetailScreen(
 private fun Preview() {
     TfinanceTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            GoalDetailScreen(onBackClick = {})
+            //GoalDetailScreen(onBackClick = {})
         }
     }
 }

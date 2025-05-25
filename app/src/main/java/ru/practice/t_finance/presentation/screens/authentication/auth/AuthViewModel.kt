@@ -1,8 +1,8 @@
 package ru.practice.t_finance.presentation.screens.authentication.auth
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practice.t_finance.domain.model.PhoneNumberModel
-import ru.practice.t_finance.domain.usecases.AuthUseCase
+import ru.practice.t_finance.domain.usecases.auth.SendPhoneUseCase
 import ru.practice.t_finance.domain.validator.PhoneNumberValidator
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authUseCase: AuthUseCase,
+    private val sendPhoneUseCase: SendPhoneUseCase,
     private val phoneNumberValidator: PhoneNumberValidator
 ) : ViewModel() {
 
@@ -38,7 +38,7 @@ class AuthViewModel @Inject constructor(
 
         viewModelScope.launch {
             _state.value = AuthScreenState.Loading
-            authUseCase(PhoneNumberModel(normalized))
+            sendPhoneUseCase(PhoneNumberModel(normalized))
                 .onSuccess {
                     _state.value = AuthScreenState.Success
                 }
