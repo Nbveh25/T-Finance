@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -283,7 +284,7 @@ fun GoalsList(
                 amount = goal.amount,
                 onClick = {
                     val goalJson = Gson().toJson(goal)
-                    navController.navigate("${Routes.GOALS_DETAIL_SCREEN}/$goalJson")
+                    navController.navigate(Routes.GOALS_DETAIL_SCREEN + "/$goalJson")
                 }
             )
         }

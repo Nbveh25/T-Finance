@@ -46,4 +46,8 @@ interface ApiService {
     //@DELETE("/api/v1/goals/{goalId}")
     //suspend fun deleteGoal()
 
+    // Transactions
+    @POST("/api/v1/transactions")
+    suspend fun addTransaction(@Body request: TransactionRequest): NetworkResponse<Unit, ApiError>
+
 }

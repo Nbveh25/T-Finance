@@ -59,7 +59,7 @@ fun GoalDetailScreen(
             }
 
             Text(
-                text = goalModel.name, // здесь нужно ставить текст взависимости от нажатого слота
+                text = goalModel.name,
                 style = MaterialTheme.typography.displayLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium))
@@ -88,7 +88,7 @@ fun GoalDetailScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = "${goalModel.amount} Р", // Меняем на текущую сумму
+                            text = stringResource(R.string.amount, goalModel.amount),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -103,7 +103,10 @@ fun GoalDetailScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = "${goalModel.accumulatedAmount} Р", // Это подгружаем
+                            text = stringResource(
+                                R.string.accumulated_amount,
+                                goalModel.accumulatedAmount
+                            ),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -118,15 +121,15 @@ fun GoalDetailScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = goalModel.term, // Дату подгружаем
+                            text = goalModel.term,
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
                     Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_extra_small)))
                     CustomProgressBar(
                         modifier = Modifier,
-                        accumulatedAmount = 50.0,
-                        amount = 100.0,
+                        accumulatedAmount = goalModel.accumulatedAmount,
+                        amount = goalModel.amount,
                     )
                 }
             }
@@ -150,7 +153,7 @@ fun GoalDetailScreen(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = goalModel.description, // описание тоже подгружаем,
+                        text = goalModel.description,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

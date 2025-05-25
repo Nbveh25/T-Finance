@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -111,6 +112,7 @@ fun AppNavigation(
         ) { backStackEntry ->
             val goalJson = backStackEntry.arguments?.getString("goal") ?: ""
             val goalModel = Gson().fromJson(goalJson, GoalModel::class.java)
+            Log.d("GoalScreen", "GoalModel: $goalModel")
             GoalDetailScreen(
                 navController = navController,
                 goalModel = goalModel

@@ -4,7 +4,6 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -30,7 +29,6 @@ class GoalEditViewModel @Inject constructor(
 
     internal var errorMessage by mutableStateOf<String?>(null)
 
-    // Валидацию надо
     var name by mutableStateOf("")
     var description by mutableStateOf("")
     var term by mutableStateOf("")

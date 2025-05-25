@@ -41,4 +41,6 @@
     <string name="code">Код</string>
     <string name="goal_edit">Редактирование цели</string>
     <string name="naming">Название</string>
+    <string name="accumulated_amount">%1$s ₽</string>
+    <string name="amount">%1$s ₽</string>
 </resources>

@@ -16,9 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.practice.t_finance.presentation.components.CustomButton
 
 @Composable
-fun ErrorScreen(message: String) {
+fun ErrorScreen(message: String, onRetry: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -37,6 +38,10 @@ fun ErrorScreen(message: String) {
                 text = message,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.error
+            )
+            CustomButton(
+                text = "Повторить",
+                onClick = onRetry
             )
         }
     }

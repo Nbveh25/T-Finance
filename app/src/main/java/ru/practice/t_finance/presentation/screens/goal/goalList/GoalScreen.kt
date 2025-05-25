@@ -17,7 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
-import ru.practice.t_finance.presentation.components.GoalsList
 import ru.practice.t_finance.presentation.navigation.Routes
 
 @Composable
@@ -42,14 +41,24 @@ fun GoalScreen(
                 is GoalListScreenState.Initial -> {
                     Unit
                 }
+
                 is GoalListScreenState.Loading -> {
                     LoadingScreen()
                 }
+
                 is GoalListScreenState.Error -> {
-                    ErrorScreen(currentState.message)
+                    ErrorScreen(
+                        message = currentState.message,
+                        onRetry = {
+                            viewModel.getGoals()
+                        })
                 }
+
                 is GoalListScreenState.Success -> {
-                    ContentScreen(goals = viewModel.goalList, navController = navController)
+                    ContentScreen(
+                        goals = viewModel.goalList,
+                        navController = navController
+                    )
                 }
 
             }

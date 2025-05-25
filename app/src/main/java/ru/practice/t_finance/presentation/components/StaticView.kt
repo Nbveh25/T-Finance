@@ -93,7 +93,7 @@ fun BudgetDiagram(
     thickness: Dp = 35.dp,
     data: List<Category>
 ) {
-    val thicknessPx = with(LocalDensity.current) { thickness.toPx() } //
+    val thicknessPx = with(LocalDensity.current) { thickness.toPx() }
 
     Canvas(
         modifier = modifier
@@ -382,7 +382,6 @@ fun CalendarBottomSheet(
                     selectedDayContainerColor = MaterialTheme.colorScheme.primary,
                     selectedDayContentColor = MaterialTheme.colorScheme.onBackground,
                     disabledDayContentColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
-                    //disabledDayContainerColor = Color.Transparent
                 )
             )
         }
@@ -478,17 +477,17 @@ fun GoalCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(100.dp),
+            .height(100.dp)
+            .clickable(
+                onClick = onClick
+            ),
         shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
-        ),
-        onClick = {
-
-        }
+        )
     ) {
         Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
             Row(
