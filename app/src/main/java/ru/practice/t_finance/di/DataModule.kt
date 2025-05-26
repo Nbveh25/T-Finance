@@ -8,8 +8,10 @@ import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.remote.token.TokenService
 import ru.practice.t_finance.data.repository.AuthRepositoryImpl
 import ru.practice.t_finance.data.repository.CategoryRepositoryImpl
+import ru.practice.t_finance.data.repository.GoalRepositoryImpl
 import ru.practice.t_finance.domain.repository.AuthRepository
 import ru.practice.t_finance.domain.repository.CategoryRepository
+import ru.practice.t_finance.domain.repository.GoalRepository
 import javax.inject.Singleton
 
 
@@ -30,5 +32,13 @@ class DataModule {
         tokenService: TokenService
     ): AuthRepository {
         return AuthRepositoryImpl(apiService, tokenService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGoalRepository(
+        apiService: ApiService,
+    ): GoalRepository {
+        return GoalRepositoryImpl(apiService)
     }
 }

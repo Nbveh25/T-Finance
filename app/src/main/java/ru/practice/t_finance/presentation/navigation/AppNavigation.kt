@@ -1,5 +1,6 @@
 package ru.practice.t_finance.presentation.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -8,14 +9,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.gson.Gson
+import ru.practice.t_finance.domain.model.GoalModel
 import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransactionScreen
 import ru.practice.t_finance.presentation.screens.authentication.inputName.InputNameScreen
 import ru.practice.t_finance.presentation.screens.authentication.auth.AuthScreen
 import ru.practice.t_finance.presentation.screens.authentication.consentCode.ConsentCodeScreen
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetInputScreen
-import ru.practice.t_finance.presentation.screens.goalList.GoalScreen
+import ru.practice.t_finance.presentation.screens.goal.goalDetail.GoalDetailScreen
+import ru.practice.t_finance.presentation.screens.goal.goalEdit.GoalEditScreen
+import ru.practice.t_finance.presentation.screens.goal.goalList.GoalScreen
 import ru.practice.t_finance.presentation.screens.main.MainScreen
 import ru.practice.t_finance.presentation.screens.more.MoreScreen
+import kotlin.jvm.java
+
 
 @Composable
 fun AppNavigation(
@@ -26,6 +33,7 @@ fun AppNavigation(
         navController = navController,
         startDestination = startDestination,
     ) {
+        // Authentication
         composable(route = Routes.AUTH_SCREEN) {
             AuthScreen(
                 navController = navController
@@ -47,16 +55,16 @@ fun AppNavigation(
                 navController = navController
             )
         }
-        
+
         composable(
             route = Routes.INPUT_NAME_SCREEN
-        ) { 
+        ) {
             InputNameScreen(
                 navController = navController,
             )
         }
-        
 
+        // BottomNavBar
         composable(route = Routes.MAIN_SCREEN) {
             MainScreen(
                 navController = navController
@@ -86,6 +94,33 @@ fun AppNavigation(
                 navController = navController
             )
         }
+
+        // Goals
+        composable(route = Routes.GOALS_EDIT_SCREEN) {
+            GoalEditScreen(
+                navController = navController,
+            )
+        }
+
+        composable(
+            route = "${Routes.GOALS_DETAIL_SCREEN}/{goal}",
+            arguments = listOf(
+                navArgument("goal") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val goalJson = backStackEntry.arguments?.getString("goal") ?: ""
+            val goalModel = Gson().fromJson(goalJson, GoalModel::class.java)
+            Log.d("GoalScreen", "GoalModel: $goalModel")
+            GoalDetailScreen(
+                navController = navController,
+                goalModel = goalModel
+            )
+        }
+
+
+
 
     }
 } 

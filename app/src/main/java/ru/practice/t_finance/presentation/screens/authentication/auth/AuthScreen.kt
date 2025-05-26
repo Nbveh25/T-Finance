@@ -1,27 +1,26 @@
 package ru.practice.t_finance.presentation.screens.authentication.auth
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import ru.practice.t_finance.R
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.material3.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.Image
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
-import ru.practice.t_finance.R
-import ru.practice.t_finance.domain.util.PhoneNumberVisualTransformation
-import ru.practice.t_finance.presentation.components.CustomButton
-import ru.practice.t_finance.presentation.components.CustomTextField
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.practice.t_finance.presentation.navigation.Routes
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
+import ru.practice.t_finance.presentation.components.CustomButton
+import ru.practice.t_finance.presentation.components.CustomTextField
+import ru.practice.t_finance.domain.util.PhoneNumberVisualTransformation
 
 @Composable
 fun AuthScreen(

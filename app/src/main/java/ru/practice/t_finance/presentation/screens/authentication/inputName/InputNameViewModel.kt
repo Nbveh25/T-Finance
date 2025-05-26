@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practice.t_finance.domain.model.FirstNameModel
-import ru.practice.t_finance.domain.usecases.AuthUseCase
+import ru.practice.t_finance.domain.usecases.auth.SendNameUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class InputNameViewModel @Inject constructor(
-    val authUseCase: AuthUseCase
+    val sendNameUseCase: SendNameUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<InputNameScreenState>(InputNameScreenState.Initial)
@@ -37,7 +37,7 @@ class InputNameViewModel @Inject constructor(
             viewModelScope.launch {
                 _state.value = InputNameScreenState.Loading
                 Log.d("InputNameViewModel", "First name: $name")
-                authUseCase.invoke(
+                sendNameUseCase.invoke(
                     firstNameModel = FirstNameModel(name)
                 ).onSuccess {
                     _state.value = InputNameScreenState.Success

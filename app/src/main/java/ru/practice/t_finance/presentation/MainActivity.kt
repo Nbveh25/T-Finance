@@ -31,7 +31,13 @@ class MainActivity : ComponentActivity() {
                 val currentRoute =
                     navController.currentBackStackEntryAsState().value?.destination?.route
                 val showBottomBar =
-                    currentRoute in listOf("mainScreen", "budget_screen", "goals_screen", "more_screen", "add_screen")
+                    currentRoute in listOf(
+                        Routes.MAIN_SCREEN,
+                        Routes.BUDGET_SCREEN,
+                        Routes.GOALS_SCREEN,
+                        Routes.MORE_SCREEN,
+                        Routes.ADD_SCREEN
+                    )
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
@@ -52,6 +58,7 @@ class MainActivity : ComponentActivity() {
                         AppNavigation(
                             navController = navController,
                             startDestination = Routes.AUTH_SCREEN
+                            //startDestination = Routes.MAIN_SCREEN
                         )
                     }
                 }

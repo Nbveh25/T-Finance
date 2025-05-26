@@ -82,9 +82,27 @@ fun MainScreen(
         )
         GoalSlot(
             goalModelList = listOf(
-                GoalModel("Dodge Challenger", currentValue = 1_200_000, maxValue = 7_500_00, description = ""),
-                GoalModel("Ford Ferrari", currentValue = 12_000_000, maxValue = 14_900_000, description = ""),
-                GoalModel("Lamborghini Countach", currentValue = 12_000_000, maxValue = 77_500_000, description = "")
+                GoalModel(
+                    "Dodge Challenger",
+                    accumulatedAmount = 1_200_000.0,
+                    amount = 7_500_00.0,
+                    description = "",
+                    term = ""
+                ),
+                GoalModel(
+                    "Ford Ferrari",
+                    accumulatedAmount = 12_000_000.0,
+                    amount = 14_900_000.0,
+                    description = "",
+                    term = ""
+                ),
+                GoalModel(
+                    "Lamborghini Countach",
+                    accumulatedAmount = 12_000_000.0,
+                    amount = 77_500_000.0,
+                    description = "",
+                    term = ""
+                )
             )
         )
     }
