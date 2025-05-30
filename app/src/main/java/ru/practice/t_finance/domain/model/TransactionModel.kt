@@ -4,9 +4,9 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class TransactionModel(
-    val iconUrl: String,
-    val transactionName: String,
-    val categoryName: String,
-    val summa: Int,
+    val amount: Double,
+    val categoryId: Int,
+    val date: String,
+    val description: String
 ) {
 }

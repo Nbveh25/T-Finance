@@ -112,7 +112,7 @@ fun AddingTransactionScreen(
             )
         }
         CustomButton(
-            text = "Добавить",
+            text = stringResource(R.string.add),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
