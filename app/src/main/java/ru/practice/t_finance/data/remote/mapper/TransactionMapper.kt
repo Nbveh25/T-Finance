@@ -7,10 +7,11 @@ object TransactionMapper {
 
     fun toRequest(transactionModel: TransactionModel): TransactionRequest {
         return TransactionRequest(
-            amount = transactionModel.,
+            amount = transactionModel.amount,
             categoryId = transactionModel.categoryId,
             date = transactionModel.date,
             description = transactionModel.description
+        )
     }
 
 }
