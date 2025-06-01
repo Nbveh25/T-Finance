@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <resources>
+        <string name="app_name">T-finance</string>
+        <string name="t_finance">T - Finance</string>
+        <string name="input_phone_number">Введите\nномер телефона</string>
+        <string name="phone_number">Номер телефона</string>
+        <string name="next">Далее</string>
+        <string name="send_code_again">Отправить код заново</string>
+        <string name="confirmation">Подтверждение</string>
+        <string name="input_your_name">Введите ваше имя</string>
+        <string name="name">Имя</string>
+        <string name="code">Код</string>
+        <string name="allocate_budget">Распределите бюджет</string>
+        <string name="input_budget">Введите сумму вашего дохода</string>
+        <string name="rubles">Рубли</string>
+        <string name="more">Подробнее</string>
+        <string name="on_this_week">На этой неделе</string>
+        <string name="goals">Цели</string>
+        <string name="adding_transaction">Добавление транзакции</string>
+        <string name="category">Категория</string>
+        <string name="summa">Сумма</string>
+        <string name="select">Выбрать</string>
+        <string name="cancel">Отмена</string>
+        <string name="another_day">Другой день</string>
+        <string name="yesterday">Вчера</string>
+        <string name="today">Сегодня</string>
+        <string name="add_goal">Добавить цель</string>
+        <string name="goal">Цель</string>
+        <string name="accumulate">Накоплено</string>
+        <string name="term">Срок</string>
+        <string name="description">Описание</string>
+        <string name="edit">Редактировать</string>
+        <string name="save">Сохранить</string>
+        <string name="t">T</string>
+        <string name="pro">PRO</string>
+        <string name="lock_stock_2_smoking_barrels">Больше кэшбэка и бонусов</string>
+
+        <!--   Экран расходов доходов -->
+        <string name="expenses_screen_title">Расходы</string>
+        <string name="choose_period">Выберите период</string>
+        <string name="DateRangePickerStartHeadline">Начало периода</string>
+        <string name="DateRangePickerEndHeadline">Конец периода</string>
+    <string name="main">Главная</string>
+    <string name="budget">Главная</string>
+    <string name="echo">Бюджет</string>
+    <string name="t_finance_rus">Т-ФИНАНСЫ</string>
+    <string name="send">Отправить</string>
+    <string name="code_send_to">Код отправлен на номер %1$s</string>
+    <string name="amount_of_income">Сумма дохода</string>
+    <string name="choose_percent">Укажите процент категории:</string>
+    <string name="enter_value">Введите значение</string>
+    <string name="enter_number">Введите число</string>
+    <string name="value_must_be_greater_than_zero">Значение должно быть больше 0</string>
+    <string name="max_percent">Максимум %1$s%%</string>
+    <string name="this_string">Это</string>
+    <string name="remaining_string">Остается</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+    <string name="goal_edit">Редактирование цели</string>
+    <string name="naming">Название</string>
+    <string name="accumulated_amount">%1$s ₽</string>
+    <string name="amount">%1$s ₽</string>
+    <string name="add">Добавить</string>
+</resources>

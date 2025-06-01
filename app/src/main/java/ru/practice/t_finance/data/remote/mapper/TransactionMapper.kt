@@ -6,12 +6,17 @@ import ru.practice.t_finance.domain.model.TransactionModel
 object TransactionMapper {
 
     fun toRequest(transactionModel: TransactionModel): TransactionRequest {
+
+        val categoryId = when (transactionModel.category){
+            "Products" -> 3
+            else -> {1}
+        }
+
         return TransactionRequest(
             amount = transactionModel.amount,
-            categoryId = transactionModel.categoryId,
+            categoryId = categoryId,
             date = transactionModel.date,
-            description = transactionModel.description
-        )
+            description = "" )
     }
 
 }

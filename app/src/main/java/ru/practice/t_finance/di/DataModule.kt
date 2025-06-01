@@ -8,9 +8,11 @@ import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.remote.token.TokenService
 import ru.practice.t_finance.data.repository.AuthRepositoryImpl
 import ru.practice.t_finance.data.repository.CategoryRepositoryImpl
+import ru.practice.t_finance.data.repository.ExpensesRepositoryImpl
 import ru.practice.t_finance.data.repository.GoalRepositoryImpl
 import ru.practice.t_finance.domain.repository.AuthRepository
 import ru.practice.t_finance.domain.repository.CategoryRepository
+import ru.practice.t_finance.domain.repository.ExpensesRepository
 import ru.practice.t_finance.domain.repository.GoalRepository
 import javax.inject.Singleton
 
@@ -24,6 +26,13 @@ class DataModule {
     fun provideCategoryRepository(): CategoryRepository {
         return CategoryRepositoryImpl()
     }
+
+    @Provides
+    @Singleton
+    fun provideExpensesRepositoryImpl(apiService: ApiService) : ExpensesRepository {
+        return ExpensesRepositoryImpl(apiService)
+    }
+
 
     @Provides
     @Singleton

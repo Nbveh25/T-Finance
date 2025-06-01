@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">T-finance</string>
+    <string name="t_finance">T - Finance</string>
+    <string name="input_phone_number">Enter your\nphone number</string>
+    <string name="phone_number">Phone number</string>
+    <string name="next">Next</string>
+    <string name="send_code_again">Resend code</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="input_your_name">Enter your name</string>
+    <string name="name">Name</string>
+    <string name="code">CODE</string>
+    <string name="allocate_budget">Allocate your budget</string>
+    <string name="input_budget">Enter the amount of your income</string>
+    <string name="rubles">Rubles</string>
+    <string name="more">More</string>
+    <string name="on_this_week">This week</string>
+    <string name="goals">Goals</string>
+    <string name="adding_transaction">Add transaction</string>
+    <string name="category">Category</string>
+    <string name="summa">Amount</string>
+    <string name="select">Select</string>
+    <string name="cancel">Cancel</string>
+    <string name="another_day">Another day</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+    <string name="add_goal">Add goal</string>
+    <string name="goal">Goal</string>
+    <string name="accumulate">Accumulated</string>
+    <string name="term">Term</string>
+    <string name="description">Description</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="t">T</string>
+    <string name="pro">PRO</string>
+    <string name="lock_stock_2_smoking_barrels">More cashback and bonuses</string>
+
+    <!-- Expenses and Income Screen -->
+    <string name="expenses_screen_title">Expenses</string>
+    <string name="choose_period">Choose period</string>
+
+    <string name="DateRangePickerStartHeadline">Start Period</string>
+    <string name="DateRangePickerEndHeadline">End Period</string>
+    <string name="main">Main</string>
+    <string name="budget">Budget</string>
+    <string name="echo">Else</string>
+    <string name="t_finance_rus">T-Finace</string>
+    <string name="send">Send</string>
+    <string name="code_send_to">Code send to %1$s</string>
+    <string name="amount_of_income">Amount of income</string>
+    <string name="choose_percent">Choose percent</string>
+    <string name="enter_value">Введите значение</string>
+    <string name="enter_number">Enter number</string>
+    <string name="value_must_be_greater_than_zero">The value must be greater than 0</string>
+    <string name="max_percent">Maximum %1$s%%</string>
+    <string name="this_string">This</string>
+    <string name="remaining_string">Remaining</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="goal_edit">Editing a goal</string>
+    <string name="naming">Name</string>
+    <string name="accumulated_amount">%1$s ₽</string>
+    <string name="amount">%1$s ₽</string>
+    <string name="add">Add</string>
+</resources>

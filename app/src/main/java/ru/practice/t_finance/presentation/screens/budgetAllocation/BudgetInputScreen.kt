@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import androidx.navigation.NavController
 import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.CustomTextField
+import ru.practice.t_finance.presentation.navigation.Routes
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 
@@ -33,10 +35,9 @@ import ru.practice.t_finance.presentation.theme.TfinanceTheme
 fun BudgetInputScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: BudgetViewModel = hiltViewModel()
 ){
 
-    var budget by remember { mutableStateOf("")}
+    var budget by rememberSaveable { mutableStateOf("")}
     val isButtonEnabled = budget.isNotBlank()
 
 
@@ -57,7 +58,7 @@ fun BudgetInputScreen(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(),
-            placeholderText = "Сумма дохода",
+            placeholderText = stringResource(R.string.amount_of_income),
             keyboardType = KeyboardType.Number,
             singleLine = true,
         )
@@ -66,8 +67,7 @@ fun BudgetInputScreen(
             text = stringResource(R.string.next),
             onClick = {
                 val amount = budget.toLongOrNull() ?: 0L
-                viewModel.setBudgetAmount(amount)
-//                navController.navigate("budget_allocation_screen")
+                navController.navigate("${Routes.BUDGET_ALLOCATION}?budget=$amount")
             },
             modifier = Modifier.fillMaxWidth(),
             enabled = isButtonEnabled
@@ -77,15 +77,15 @@ fun BudgetInputScreen(
 }
 
 
-@Preview
-@Composable
-private fun Preview(){
-    TfinanceTheme {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            containerColor = MaterialTheme.colorScheme.background
-        ){ padding ->
-            //BudgetInputScreen(Modifier.padding(padding))
-        }
-    }
-}
+//@Preview
+//@Composable
+//private fun Preview(){
+//    TfinanceTheme {
+//        Scaffold(
+//            modifier = Modifier.fillMaxSize(),
+//            containerColor = MaterialTheme.colorScheme.background
+//        ){ padding ->
+////            BudgetInputScreen(Modifier.padding(padding), navController = NavController)
+//        }
+//    }
+//}

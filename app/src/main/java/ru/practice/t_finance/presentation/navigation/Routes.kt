@@ -7,6 +7,10 @@ object Routes {
     const val CONSENT_CODE_SCREEN = "consent_code_screen"
     const val INPUT_NAME_SCREEN = "input_name_screen"
 
+    //Budget Allocation
+    const val BUDGET_INPUT = "budget_input_screen"
+    const val BUDGET_ALLOCATION = "budget_allocation_screen"
+
     // BottomNavBar
     const val MAIN_SCREEN = "main_screen"
     const val BUDGET_SCREEN = "budget_screen"
@@ -17,4 +21,6 @@ object Routes {
     // Goals
     const val GOALS_EDIT_SCREEN = "goals_edit_screen"
     const val GOALS_DETAIL_SCREEN = "goals_detail_screen"
+
+    const val EXPENSES_SCREEN = "expenses_screen"
 }

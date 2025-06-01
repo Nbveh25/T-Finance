@@ -21,6 +21,7 @@ import ru.practice.t_finance.domain.model.GoalModel
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.presentation.components.GoalSlot
 import ru.practice.t_finance.presentation.components.TransactionSlot
+import ru.practice.t_finance.presentation.model.TransactionListItem
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @Composable
@@ -60,24 +61,13 @@ fun MainScreen(
         TransactionSlot(
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium)),
             transactionModelList = listOf(
-                TransactionModel(
-                    iconUrl = "https://avatars.mds.yandex.net/i?id=ce9759b87fb0b2f7276b28e34f0c1ff4e2499d3d-3919804-images-thumbs&n=13",
-                    transactionName = "Меган Фокс",
-                    categoryName = "Бордель",
-                    summa = 55_000_000
+                TransactionListItem(
+                    imageUrl = "https://avatars.mds.yandex.net/i?id=ce9759b87fb0b2f7276b28e34f0c1ff4e2499d3d-3919804-images-thumbs&n=13",
+                    name = "Меган Фокс",
+                    category = "Бордель",
+                    amountFormatted = "5000"
                 ),
-                TransactionModel(
-                    iconUrl = "https://avatars.mds.yandex.net/i?id=de31ce5f68663b3c96e2c129b26db7f7057723a0-5243188-images-thumbs&n=13",
-                    transactionName = "Марго Робби",
-                    categoryName = "Бордель",
-                    summa = 55_000_000
-                ),
-                TransactionModel(
-                    iconUrl = "https://avatars.mds.yandex.net/i?id=d3bc9dcac62f4320d08112a3f53d1209b4a17e6b-13061308-images-thumbs&n=13",
-                    transactionName = "Ана де Армас",
-                    categoryName = "Бордель",
-                    summa = 55_000_000
-                ),
+
             )
         )
         GoalSlot(

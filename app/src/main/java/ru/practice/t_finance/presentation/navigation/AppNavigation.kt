@@ -15,7 +15,9 @@ import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransa
 import ru.practice.t_finance.presentation.screens.authentication.inputName.InputNameScreen
 import ru.practice.t_finance.presentation.screens.authentication.auth.AuthScreen
 import ru.practice.t_finance.presentation.screens.authentication.consentCode.ConsentCodeScreen
+import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetAllocationScreen
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetInputScreen
+import ru.practice.t_finance.presentation.screens.expenses.ExpensesScreen
 import ru.practice.t_finance.presentation.screens.goal.goalDetail.GoalDetailScreen
 import ru.practice.t_finance.presentation.screens.goal.goalEdit.GoalEditScreen
 import ru.practice.t_finance.presentation.screens.goal.goalList.GoalScreen
@@ -26,7 +28,7 @@ import kotlin.jvm.java
 
 @Composable
 fun AppNavigation(
-    startDestination: String = Routes.MAIN_SCREEN,
+    startDestination: String = Routes.EXPENSES_SCREEN,
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
@@ -89,6 +91,27 @@ fun AppNavigation(
             )
         }
 
+        composable(route = Routes.BUDGET_INPUT){
+            BudgetInputScreen(
+                navController = navController
+            )
+        }
+
+        composable(
+            route = "${Routes.BUDGET_ALLOCATION}?budget={budget}",
+            arguments = listOf(
+                navArgument("budget")
+                {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ){
+            BudgetAllocationScreen(
+                navController = navController
+            )
+        }
+
         composable(route = Routes.ADD_SCREEN) {
             AddingTransactionScreen(
                 navController = navController
@@ -120,7 +143,11 @@ fun AppNavigation(
         }
 
 
-
+        composable(route = Routes.EXPENSES_SCREEN){
+            ExpensesScreen(
+                navController = navController,
+            )
+        }
 
     }
 } 
