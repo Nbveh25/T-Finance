@@ -8,8 +8,6 @@
     <string name="confirmation">Подтверждение</string>
     <string name="input_your_name">Введите ваше имя</string>
     <string name="name">Имя</string>
-    <string name="allocate_budget">Распределите бюджет</string>
-    <string name="input_budget">Введите сумму вашего дохода</string>
     <string name="rubles">Рубли</string>
     <string name="more">Подробнее</string>
     <string name="on_this_week">На этой неделе</string>
@@ -39,6 +37,29 @@
     <string name="send">Отправить</string>
     <string name="code_send_to">Код отправлен на номер %1$s</string>
     <string name="code">Код</string>
+    <string name="allocate_budget">Распределите бюджет</string>
+    <string name="input_budget">Введите сумму вашего дохода</string>
+
+
+    <!--   Экран расходов доходов -->
+    <string name="expenses_screen_title">Расходы</string>
+    <string name="choose_period">Выберите период</string>
+
+    <string name="DateRangePickerStartHeadline">Начало периода</string>
+    <string name="DateRangePickerEndHeadline">Конец периода</string>
+    <string name="amount_of_income">Сумма дохода</string>
+    <string name="choose_percent">Укажите процент категории:</string>
+    <string name="enter_value">Введите значение</string>
+    <string name="enter_number">Введите число</string>
+    <string name="value_must_be_greater_than_zero">Значение должно быть больше 0</string>
+    <string name="max_percent">Максимум %1$s%%</string>
+    <string name="this_string">Это</string>
+    <string name="remaining_string">Остается</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+
     <string name="goal_edit">Редактирование цели</string>
     <string name="naming">Название</string>
     <string name="accumulated_amount">%1$s ₽</string>

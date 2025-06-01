@@ -78,4 +78,9 @@ dependencies {
     // Encrypted Shared Preferences
     implementation(libs.androidx.security.crypto.v110alpha06)
     implementation(libs.tink.android)
+
+    //для получения даты текущей
+    implementation(libs.threetenabp)
+
+    implementation("com.google.accompanist:accompanist-flowlayout:0.28.0")
 }

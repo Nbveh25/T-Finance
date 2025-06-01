@@ -1,5 +1,6 @@
 package ru.practice.t_finance.data.remote.mapper
 
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import ru.practice.t_finance.data.remote.request.GoalRequest
@@ -27,4 +28,3 @@ object GoalMapper {
     )
 
 }
-

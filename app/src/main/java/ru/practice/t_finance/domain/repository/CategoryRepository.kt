@@ -6,4 +6,5 @@ interface CategoryRepository {
 
     suspend fun getCategories() : List<Category>
 
+
 }

@@ -12,6 +12,7 @@ import ru.practice.t_finance.data.remote.request.SendCodeRequest
 import ru.practice.t_finance.data.remote.request.SendNameRequest
 import ru.practice.t_finance.data.remote.request.SendSmsRequest
 import ru.practice.t_finance.data.remote.request.TransactionRequest
+import ru.practice.t_finance.data.remote.response.ExpensesResponse
 import ru.practice.t_finance.data.remote.response.GoalResponse
 import ru.practice.t_finance.data.remote.response.RefreshTokenResponse
 import ru.practice.t_finance.data.remote.response.SendSmsResponse
@@ -49,5 +50,8 @@ interface ApiService {
     // Transactions
     @POST("/api/v1/transactions")
     suspend fun addTransaction(@Body request: TransactionRequest): NetworkResponse<Unit, ApiError>
+
+    @GET("/api/v1/transactions/by-category")
+    suspend fun getExpenses(@Body startDate: String, endDate: String ) : NetworkResponse<ExpensesResponse, ApiError>
 
 }
