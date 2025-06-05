@@ -57,8 +57,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         AppNavigation(
                             navController = navController,
-                            startDestination = Routes.EXPENSES_SCREEN
+                            //startDestination = Routes.EXPENSES_SCREEN
                             //startDestination = Routes.MAIN_SCREEN
+                            startDestination = Routes.AUTH_SCREEN
                         )
                     }
                 }

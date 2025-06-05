@@ -14,11 +14,9 @@ import androidx.compose.ui.Modifier
 import ru.practice.t_finance.R
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ru.practice.t_finance.domain.model.GoalModel
-import ru.practice.t_finance.domain.model.TransactionModel
+import ru.practice.t_finance.domain.model.CreateGoalModel
 import ru.practice.t_finance.presentation.components.GoalSlot
 import ru.practice.t_finance.presentation.components.TransactionSlot
 import ru.practice.t_finance.presentation.model.TransactionListItem
@@ -71,22 +69,22 @@ fun MainScreen(
             )
         )
         GoalSlot(
-            goalModelList = listOf(
-                GoalModel(
+            createGoalModelList = listOf(
+                CreateGoalModel(
                     "Dodge Challenger",
                     accumulatedAmount = 1_200_000.0,
                     amount = 7_500_00.0,
                     description = "",
                     term = ""
                 ),
-                GoalModel(
+                CreateGoalModel(
                     "Ford Ferrari",
                     accumulatedAmount = 12_000_000.0,
                     amount = 14_900_000.0,
                     description = "",
                     term = ""
                 ),
-                GoalModel(
+                CreateGoalModel(
                     "Lamborghini Countach",
                     accumulatedAmount = 12_000_000.0,
                     amount = 77_500_000.0,

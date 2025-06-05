@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.gson.Gson
-import ru.practice.t_finance.domain.model.GoalModel
+import ru.practice.t_finance.domain.model.CreateGoalModel
 import ru.practice.t_finance.presentation.screens.addingTransaction.AddingTransactionScreen
 import ru.practice.t_finance.presentation.screens.authentication.inputName.InputNameScreen
 import ru.practice.t_finance.presentation.screens.authentication.auth.AuthScreen
@@ -18,6 +18,7 @@ import ru.practice.t_finance.presentation.screens.authentication.consentCode.Con
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetAllocationScreen
 import ru.practice.t_finance.presentation.screens.budgetAllocation.BudgetInputScreen
 import ru.practice.t_finance.presentation.screens.expenses.ExpensesScreen
+import ru.practice.t_finance.presentation.screens.goal.goalCreate.GoalCreateScreen
 import ru.practice.t_finance.presentation.screens.goal.goalDetail.GoalDetailScreen
 import ru.practice.t_finance.presentation.screens.goal.goalEdit.GoalEditScreen
 import ru.practice.t_finance.presentation.screens.goal.goalList.GoalScreen
@@ -119,26 +120,40 @@ fun AppNavigation(
         }
 
         // Goals
-        composable(route = Routes.GOALS_EDIT_SCREEN) {
-            GoalEditScreen(
+        composable(route = Routes.GOALS_CREATE_SCREEN) {
+            GoalCreateScreen(
                 navController = navController,
             )
         }
 
         composable(
-            route = "${Routes.GOALS_DETAIL_SCREEN}/{goal}",
+            route = "${Routes.GOALS_EDIT_SCREEN}/{goalId}",
             arguments = listOf(
-                navArgument("goal") {
-                    type = NavType.StringType
+                navArgument("goalId") {
+                    type = NavType.IntType
                 }
             )
         ) { backStackEntry ->
-            val goalJson = backStackEntry.arguments?.getString("goal") ?: ""
-            val goalModel = Gson().fromJson(goalJson, GoalModel::class.java)
-            Log.d("GoalScreen", "GoalModel: $goalModel")
+            val goalId = backStackEntry.arguments?.getInt("goalId") ?: -1
+            GoalEditScreen(
+                navController = navController,
+                goalId = goalId
+            )
+        }
+
+
+        composable(
+            route = "${Routes.GOALS_DETAIL_SCREEN}/{goalId}",
+            arguments = listOf(
+                navArgument("goalId") {
+                    type = NavType.IntType  // Используем IntType для ID
+                }
+            )
+        ) { backStackEntry ->
+            val goalId = backStackEntry.arguments?.getInt("goalId") ?: -1
             GoalDetailScreen(
                 navController = navController,
-                goalModel = goalModel
+                goalId = goalId
             )
         }
 

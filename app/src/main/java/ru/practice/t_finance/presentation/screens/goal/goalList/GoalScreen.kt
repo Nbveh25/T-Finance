@@ -1,6 +1,5 @@
 package ru.practice.t_finance.presentation.screens.goal.goalList
 
-import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.compose.material3.Surface
@@ -18,12 +17,14 @@ import ru.practice.t_finance.R
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 import ru.practice.t_finance.presentation.navigation.Routes
+import ru.practice.t_finance.presentation.screens.states.ErrorScreen
+import ru.practice.t_finance.presentation.screens.states.LoadingScreen
 
 @Composable
 fun GoalScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: GoalViewModel = hiltViewModel()
+    viewModel: GoalListViewModel = hiltViewModel()
 ) {
 
     val state = viewModel.state.collectAsState()
@@ -74,7 +75,9 @@ fun GoalScreen(
                     vertical = dimensionResource(R.dimen.padding_extra_small)
                 ),
             onClick = {
-                navController.navigate(Routes.GOALS_EDIT_SCREEN)
+                navController.navigate(
+                    route = Routes.GOALS_CREATE_SCREEN,
+                )
             }
         )
     }

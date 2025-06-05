@@ -9,18 +9,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ru.practice.t_finance.domain.model.GoalModel
 import ru.practice.t_finance.domain.usecases.goal.GetGoalsUseCase
+import ru.practice.t_finance.presentation.mapper.toItem
+import ru.practice.t_finance.presentation.model.GoalItem
 
 @HiltViewModel
-class GoalViewModel @Inject constructor(
+class GoalListViewModel @Inject constructor(
     private val getGoalsUseCase: GetGoalsUseCase,
 ) : ViewModel() {
 
     private  val _state = MutableStateFlow<GoalListScreenState>(GoalListScreenState.Initial)
     internal val state: StateFlow<GoalListScreenState> = _state.asStateFlow()
 
-    var goalList = mutableListOf<GoalModel>()
+    var goalList: List<GoalItem> = emptyList()
 
     init {
         Log.d("GoalViewModel", "init")
@@ -31,7 +32,9 @@ class GoalViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = GoalListScreenState.Loading
             getGoalsUseCase.invoke().onSuccess { data ->
-                goalList = data.toMutableList()
+                goalList = data.map { goal ->
+                    goal.toItem()
+                }
                 _state.value = GoalListScreenState.Success()
             }.onFailure { error ->
                 _state.value = GoalListScreenState.Error(error.message ?: "Ошибка")

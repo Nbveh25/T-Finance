@@ -1,4 +1,4 @@
-package ru.practice.t_finance.presentation.screens.goal.goalList
+package ru.practice.t_finance.presentation.screens.states
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

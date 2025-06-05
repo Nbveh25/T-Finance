@@ -1,6 +1,5 @@
 package ru.practice.t_finance.presentation.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,9 +42,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.gson.Gson
 import ru.practice.t_finance.R
-import ru.practice.t_finance.domain.model.GoalModel
+import ru.practice.t_finance.domain.model.CreateGoalModel
+import ru.practice.t_finance.presentation.model.GoalItem
 import ru.practice.t_finance.presentation.navigation.Routes
 
 
@@ -110,7 +109,7 @@ fun Goal(name: String, accumulatedAmount: Double, amount: Double, modifier: Modi
 }
 
 @Composable
-fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
+fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoalModel>) {
     Card(
         modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
@@ -131,27 +130,27 @@ fun GoalSlot(modifier: Modifier = Modifier, goalModelList: List<GoalModel>) {
             )
         )
         Goal(
-            name = goalModelList[0].name,
-            accumulatedAmount = goalModelList[0].accumulatedAmount,
-            amount = goalModelList[0].amount,
+            name = createGoalModelList[0].name,
+            accumulatedAmount = createGoalModelList[0].accumulatedAmount,
+            amount = createGoalModelList[0].amount,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.padding_medium),
                 vertical = dimensionResource(R.dimen.padding_small)
             ),
         )
         Goal(
-            name = goalModelList[1].name,
-            accumulatedAmount = goalModelList[1].accumulatedAmount,
-            amount = goalModelList[1].amount,
+            name = createGoalModelList[1].name,
+            accumulatedAmount = createGoalModelList[1].accumulatedAmount,
+            amount = createGoalModelList[1].amount,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.padding_medium),
                 vertical = dimensionResource(R.dimen.padding_small)
             ),
         )
         Goal(
-            name = goalModelList[2].name,
-            accumulatedAmount = goalModelList[2].accumulatedAmount,
-            amount = goalModelList[2].amount,
+            name = createGoalModelList[2].name,
+            accumulatedAmount = createGoalModelList[2].accumulatedAmount,
+            amount = createGoalModelList[2].amount,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.padding_medium),
                 vertical = dimensionResource(R.dimen.padding_small)
@@ -254,7 +253,7 @@ fun CustomSpinner(
 @Composable
 fun GoalsList(
     modifier: Modifier = Modifier,
-    goals: List<GoalModel>,
+    goals: List<GoalItem>,
     navController: NavController
 ) {
     LazyColumn(
@@ -283,8 +282,7 @@ fun GoalsList(
                 description = goal.description,
                 amount = goal.amount,
                 onClick = {
-                    val goalJson = Gson().toJson(goal)
-                    navController.navigate(Routes.GOALS_DETAIL_SCREEN + "/$goalJson")
+                    navController.navigate("${Routes.GOALS_DETAIL_SCREEN}/${goal.id}")
                 }
             )
         }

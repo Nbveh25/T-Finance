@@ -4,9 +4,12 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 import ru.practice.t_finance.data.remote.exception.ApiError
 import ru.practice.t_finance.data.remote.handler.NetworkResponse
+import ru.practice.t_finance.data.remote.request.EditGoalRequest
 import ru.practice.t_finance.data.remote.request.GoalRequest
 import ru.practice.t_finance.data.remote.request.SendCodeRequest
 import ru.practice.t_finance.data.remote.request.SendNameRequest
@@ -43,6 +46,12 @@ interface ApiService {
 
     @POST("/api/v1/goals")
     suspend fun createGoal(@Body request: GoalRequest): NetworkResponse<Unit, ApiError>
+
+    @PATCH("/api/v1/goals")
+    suspend fun editGoal(@Body request: EditGoalRequest): NetworkResponse<Unit, ApiError>
+
+    @GET("/api/v1/goals/{goalId}")
+    suspend fun getGoalById(@Path("goalId") id: Int): NetworkResponse<GoalResponse, ApiError>
 
     //@DELETE("/api/v1/goals/{goalId}")
     //suspend fun deleteGoal()
