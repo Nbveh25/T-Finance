@@ -14,14 +14,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ru.practice.t_finance.domain.model.GoalModel
-import ru.practice.t_finance.domain.usecases.goal.CreateGoalUseCase
+import ru.practice.t_finance.domain.model.EditGoalModel
+import ru.practice.t_finance.domain.model.GetGoalModel
+import ru.practice.t_finance.domain.usecases.goal.EditGoalUseCase
+import ru.practice.t_finance.domain.usecases.goal.GetGoalByIdUseCase
 import ru.practice.t_finance.domain.util.DateFormatter
 import ru.practice.t_finance.domain.validator.GoalEditValidator
 
 @HiltViewModel
 class GoalEditViewModel @Inject constructor(
-    private val createGoalUseCase: CreateGoalUseCase,
+    private val editGoalUseCase: EditGoalUseCase,
+    private val getGoalByIdUseCase: GetGoalByIdUseCase,
     private val goalEditValidator: GoalEditValidator
 ): ViewModel() {
     private  val _state = MutableStateFlow<GoalEditScreenState>(GoalEditScreenState.Initial)
@@ -33,10 +36,10 @@ class GoalEditViewModel @Inject constructor(
     var description by mutableStateOf("")
     var term by mutableStateOf("")
     var amount by mutableStateOf("")
-
+    var accumulatedAmount by mutableStateOf("")
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createGoal() {
+    fun editGoal(goalId: Int) {
         if (!goalEditValidator.amountValid(amount)) {
             errorMessage = "Неверный формат суммы"
             return
@@ -44,18 +47,20 @@ class GoalEditViewModel @Inject constructor(
 
         viewModelScope.launch {
             _state.value = GoalEditScreenState.Loading
-            Log.d("GoalEditViewModel", DateFormatter.format(term))
-            createGoalUseCase.invoke(
-                GoalModel(
+            Log.d("GoalEditViewModel", term)
+            Log.d("GoalEditViewModel", accumulatedAmount)
+            //Log.d("GoalEditViewModel", DateFormatter.reverseFormat(term))
+            editGoalUseCase.invoke(
+                EditGoalModel(
+                    id = goalId,
                     name = name,
-                    term = term,
+                    term = DateFormatter.format(term),
                     amount = amount.toDouble(),
                     description = description,
-                    accumulatedAmount = 0.0
                 )
-            ).onSuccess {
+            ).onSuccess { data ->
 
-                _state.value = GoalEditScreenState.Success
+                _state.value = GoalEditScreenState.Success(navigation = true)
             }.onFailure { error ->
 
                 _state.value = GoalEditScreenState.Error(error.message ?: "Ошибка")
@@ -63,6 +68,24 @@ class GoalEditViewModel @Inject constructor(
         }
     }
 
+    fun getGoal(goalId: Int) {
+
+        viewModelScope.launch {
+            _state.value = GoalEditScreenState.Loading
+
+            getGoalByIdUseCase.invoke(id = goalId).onSuccess { data ->
+                name = data.name
+                description = data.description
+                term = DateFormatter.reverseFormat(data.term)
+                amount = data.amount.toString()
+
+                _state.value = GoalEditScreenState.Success(navigation = false)
+            }.onFailure { message ->
+
+                _state.value = GoalEditScreenState.Error(message = "Ошибка: $message")
+            }
+        }
+    }
 
     fun updateName(newName: String) {
         name = newName

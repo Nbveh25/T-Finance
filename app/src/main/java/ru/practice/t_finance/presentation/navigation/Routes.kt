@@ -19,6 +19,7 @@ object Routes {
     const val ADD_SCREEN = "add_screen"
 
     // Goals
+    const val GOALS_CREATE_SCREEN = "goals_create_screen"
     const val GOALS_EDIT_SCREEN = "goals_edit_screen"
     const val GOALS_DETAIL_SCREEN = "goals_detail_screen"
 

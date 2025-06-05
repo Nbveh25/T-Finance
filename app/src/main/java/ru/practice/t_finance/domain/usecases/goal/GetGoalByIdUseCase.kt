@@ -5,15 +5,13 @@ import ru.practice.t_finance.domain.model.GetGoalModel
 import ru.practice.t_finance.domain.repository.GoalRepository
 import javax.inject.Inject
 
-class GetGoalsUseCase @Inject constructor(
+class GetGoalByIdUseCase @Inject constructor(
     private val repository: GoalRepository
 ) {
 
-    suspend operator fun invoke(): Result<List<GetGoalModel>> {
-        return repository.getGoals().map { goals ->
-            goals.map { goal ->
-                GoalMapper.toGetGoalModel(goal)
-            }
+    suspend operator fun invoke(id: Int) : Result<GetGoalModel> {
+        return repository.getGoalById(id).map { goal ->
+            GoalMapper.toGetGoalModel(goal)
         }
     }
 

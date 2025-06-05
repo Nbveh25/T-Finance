@@ -16,4 +16,10 @@ object DateFormatter {
         val parsedDate = LocalDate.parse(dateString, inputFormatter)
         return parsedDate.format(outputFormatter)
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun reverseFormat(dateString: String): String {
+        val parsedDate = LocalDate.parse(dateString, outputFormatter)
+        return parsedDate.format(inputFormatter)
+    }
 }
