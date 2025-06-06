@@ -6,5 +6,5 @@ data class CategoryResponse(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("color") val color: String,
-    @SerializedName("icon") val icon: String
+    @SerializedName("iconPath") val iconPath: String
 )
