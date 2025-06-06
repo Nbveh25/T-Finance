@@ -8,6 +8,7 @@ import ru.practice.t_finance.data.remote.handler.NetworkResponse
 import ru.practice.t_finance.data.remote.mapper.TransactionMapper
 import ru.practice.t_finance.data.remote.response.InnerTransactionsResponse
 import ru.practice.t_finance.data.remote.response.TransactionsResponse
+import ru.practice.t_finance.domain.model.AddingTransactionModel
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.domain.repository.TransactionRepository
 
@@ -66,6 +67,8 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
+
+
     override suspend fun getTransactionsListByDate(
         startDate: String,
         endDate: String
@@ -112,6 +115,7 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
+
 }
 
 fun InnerTransactionsResponse.toModel(): TransactionModel {
@@ -120,6 +124,6 @@ fun InnerTransactionsResponse.toModel(): TransactionModel {
         category = category.name,
         amount = amount,
         date = date,
-        imageUrl = category.icon
+        imageUrl = category.iconPath
     )
 }
