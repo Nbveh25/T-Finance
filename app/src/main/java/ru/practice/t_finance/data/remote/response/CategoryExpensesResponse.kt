@@ -14,6 +14,9 @@ data class CategoryExpensesResponse(
 )
 
 data class CategoryInnerResponse(
+    @SerializedName("id")
+    val id: String,
+
     @SerializedName("name")
     val name: String,
 

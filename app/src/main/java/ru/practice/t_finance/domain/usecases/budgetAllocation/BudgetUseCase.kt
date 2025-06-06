@@ -1,15 +1,13 @@
-package ru.practice.t_finance.domain.usecases
+package ru.practice.t_finance.domain.usecases.budgetAllocation
 
 import ru.practice.t_finance.data.remote.response.CategoryResponse
-import ru.practice.t_finance.domain.model.Category
 import ru.practice.t_finance.domain.repository.CategoryRepository
 import javax.inject.Inject
-
 
 class BudgetUseCase @Inject constructor(
     private val repository: CategoryRepository
 ) {
-    suspend fun getCategories() : Result<List<CategoryResponse>> {
+    suspend fun invoke() : Result<List<CategoryResponse>> {
         return repository.getCategories()
     }
 }

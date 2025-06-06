@@ -1,11 +1,13 @@
 package ru.practice.t_finance.data.repository
 
 import android.util.Log
+import android.util.Log.e
 import jakarta.inject.Inject
 import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.remote.handler.NetworkResponse
 import ru.practice.t_finance.data.remote.mapper.TransactionMapper
-import ru.practice.t_finance.domain.model.AddingTransactionModel
+import ru.practice.t_finance.data.remote.response.InnerTransactionsResponse
+import ru.practice.t_finance.data.remote.response.TransactionsResponse
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.domain.repository.TransactionRepository
 
@@ -64,4 +66,60 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getTransactionsListByDate(
+        startDate: String,
+        endDate: String
+    ): Result<List<TransactionModel>> {
+        return try {
+            when (val response = apiService.getTransactionsByDate(startDate,endDate)){
+                is NetworkResponse.Success -> {
+                    Result.success(response.data.transactions.map{
+                        it.toModel()
+                    })
+                }
+
+                is NetworkResponse.EmptySuccess -> {
+                    Result.success(emptyList())
+                }
+
+                is NetworkResponse.ApiError -> {
+                    when(response.code) {
+                        400 -> {
+                            Result.failure(Exception("Incorrect parameters value (blank name, negative categoryId or pages, incorrect date format or other format problem)"))
+                        }
+
+                        401 -> {
+                            Result.failure(Exception("Неавторизованный пользователь"))
+                        }
+
+
+                        else -> {
+                            Result.failure(Exception("Неизвестнаzj ошибка  ${response}"))
+                        }
+                    }
+                }
+
+                is NetworkResponse.NetworkError -> {
+                    Result.failure(Exception("Ошибка сети"))
+                }
+
+                is NetworkResponse.UnknownError -> {
+                    Result.failure(Exception("Неизвестная ошибкаk ${response.error}"))
+                }
+            }
+        } catch (e: Exception){
+            return Result.failure(e)
+        }
+    }
+
+}
+
+fun InnerTransactionsResponse.toModel(): TransactionModel {
+    return TransactionModel(
+        name = name,
+        category = category.name,
+        amount = amount,
+        date = date,
+        imageUrl = category.icon
+    )
 }

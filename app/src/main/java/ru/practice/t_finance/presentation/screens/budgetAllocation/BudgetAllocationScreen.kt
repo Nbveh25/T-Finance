@@ -1,26 +1,27 @@
 package ru.practice.t_finance.presentation.screens.budgetAllocation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,16 +39,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import okhttp3.Route
 import ru.practice.t_finance.presentation.components.AvailableCategories
 import ru.practice.t_finance.presentation.components.BudgetAllocationInputField
 import ru.practice.t_finance.presentation.components.CustomButton
 import ru.practice.t_finance.presentation.components.SelectedCategories
+import ru.practice.t_finance.presentation.navigation.Routes
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +66,11 @@ fun BudgetAllocationScreen(
     val elementaryBudget by viewModel.elementaryBudget.collectAsState()
 
     val isBudgetFullyAllocated by viewModel.isBudgetFullyAllocated
+
+    var isShowAlert by rememberSaveable {
+        mutableStateOf(false)
+    }
+
 
 
     val arguments = navController.currentBackStackEntry?.arguments
@@ -93,10 +100,12 @@ fun BudgetAllocationScreen(
 
     when(categoryState){
         is CategoryState.Loading -> {
-            Text(text = "Loading")
+            Box(Modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
         }
-        is CategoryState.Success -> {
-            val allCategories = (categoryState as CategoryState.Success).categories
+        is CategoryState.SuccessCategories -> {
+            val allCategories = (categoryState as CategoryState.SuccessCategories).categories
             Column(
                 modifier = modifier
                     .verticalScroll(scrollState)
@@ -141,20 +150,36 @@ fun BudgetAllocationScreen(
                 CustomButton(
                     text = stringResource(R.string.next),
                     onClick = {
-
+                        if (!isBudgetFullyAllocated){
+                            isShowAlert = true
+                        } else {
+                            viewModel.sendData()
+                        }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = isBudgetFullyAllocated
+                    enabled = true
                 )
             }
         }
         is CategoryState.Error -> {
             val errorMessage = (categoryState as CategoryState.Error).message
-            Text(text = "Error: $errorMessage", color = Color.Red)
+            ErrorScreen(
+                errorMessage = errorMessage,
+                onRetryClick = { viewModel.getCategories() }
+            )
+        }
+
+        CategoryState.SuccessNetwork -> {
+            navController.navigate(Routes.MAIN_SCREEN)
         }
     }
 
-
+    if (isShowAlert){
+        AlertBudgetDialog(onDismiss = {isShowAlert = false}, onConfirm = {
+            viewModel.sendData()
+            isShowAlert = false
+        })
+    }
 
     if (showBottomSheet && categoryForEdit != null){
 
@@ -178,6 +203,43 @@ fun BudgetAllocationScreen(
     }
 
 }
+
+@Composable
+fun AlertBudgetDialog(onDismiss: () -> Unit, onConfirm: () -> Unit){
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface,
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Warning"
+            )
+        },
+        title = {
+            Text(text = "Внимание")
+        },
+        text = {
+            Text("Обратите внимание! Вы распределили не все проценты! Оставшаяся часть будет перенесена в категорию \"Другое\".")
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm, colors = androidx.compose.material3.ButtonDefaults.textButtonColors(
+                contentColor = MaterialTheme.colorScheme.secondary
+            )
+                ) {
+                Text("Продолжить")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss,
+                colors = androidx.compose.material3.ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.secondary
+                )) {
+                Text("Отмена")
+            }
+        }
+    )
+}
+
 
 fun calculateAllocatedAmount(budget: Int, percent: Int): Int {
     return kotlin.math.ceil((budget * percent) / 100.0).toInt()
