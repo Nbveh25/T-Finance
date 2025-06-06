@@ -7,23 +7,33 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +44,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,8 +54,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImage
 import ru.practice.t_finance.R
 import ru.practice.t_finance.domain.model.CreateGoalModel
+import ru.practice.t_finance.domain.model.GetCategoryModel
 import ru.practice.t_finance.presentation.model.GoalItem
 import ru.practice.t_finance.presentation.navigation.Routes
 
@@ -172,84 +187,133 @@ fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoal
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class)
 @Composable
 fun CustomSpinner(
     value: String = "",
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholderText: String = "",
-    items: List<String> = emptyList()
+    items: List<GetCategoryModel> = emptyList(),
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val selectedCategory = items.find { it.name == value }
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Box(
-            contentAlignment = Alignment.CenterStart,
+    Box(modifier = modifier.fillMaxWidth()) {
+        // Основное поле спиннера
+        Surface(
+            shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium)),
+            color = MaterialTheme.colorScheme.surfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = true }
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium))
-                )
-                .padding(
-                    horizontal = dimensionResource(R.dimen.padding_medium),
-                    vertical = dimensionResource(R.dimen.padding_medium)
-                )
+                .clickable { showBottomSheet = true }
         ) {
-            if (value.isEmpty()) {
-                Text(
-                    text = placeholderText,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            } else {
-                Text(
-                    text = value,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = dimensionResource(R.dimen.padding_medium),
+                        vertical = dimensionResource(R.dimen.padding_medium)
+                    )
+            ) {
+                // Иконка выбранной категории
+                selectedCategory?.let { category ->
+                    AsyncImage(
+                        model = category.icon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape),
+                        colorFilter = ColorFilter.tint(category.color),
+                        //placeholder = painterResource(R.drawable.ic_category_placeholder),
+                        //error = painterResource(R.drawable.ic_category_placeholder),
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
 
-            Icon(
-                imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = "Dropdown arrow",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.align(Alignment.CenterEnd)
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_medium))
-            )
-        ) {
-            items.forEach { item ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = item,
-                            textAlign = TextAlign.Start,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                // Текст (выбранное значение или плейсхолдер)
+                Text(
+                    text = selectedCategory?.name ?: placeholderText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (selectedCategory != null) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
                     },
-                    onClick = {
-                        onValueChange(item)
-                        expanded = false
-                    }
+                    modifier = Modifier.weight(1f)
+                )
+
+                // Стрелка вниз
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "Dropdown arrow",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
-}
 
+    // BottomSheet для выбора категории
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showBottomSheet = false },
+            sheetState = rememberModalBottomSheetState(),
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                item {
+                    Text(
+                        text = placeholderText,
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
+                }
+
+                items(items.size) { category ->
+                    Surface(
+                        color = Color.Transparent,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onValueChange(items[category].name)
+                            showBottomSheet = false
+                        }
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp)
+                        ) {
+                            // Иконка категории
+                            AsyncImage(
+                                model = items[category].icon,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(CircleShape),
+                                colorFilter = ColorFilter.tint(items[category].color),
+                                //placeholder = painterResource(R.drawable.ic_category_placeholder),
+                                //error = painterResource(R.drawable.ic_category_placeholder),
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                text = items[category].name,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                    Divider(modifier = Modifier.padding(start = 48.dp))
+                }
+            }
+        }
+    }
+}
 @Composable
 fun GoalsList(
     modifier: Modifier = Modifier,
@@ -290,23 +354,3 @@ fun GoalsList(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CustomSpinnerPreview() {
-    var selectedValue by remember { mutableStateOf("") }
-    val items = listOf("Option 1", "Option 2", "Option 3", "Option 4")
-
-    MaterialTheme {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            CustomSpinner(
-                value = selectedValue,
-                onValueChange = { selectedValue = it },
-                items = items,
-                placeholderText = "Select an option",
-            )
-        }
-    }
-}

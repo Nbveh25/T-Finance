@@ -1,82 +1,56 @@
 package ru.practice.t_finance.data.repository
 
-import androidx.compose.ui.graphics.Color
-import ru.practice.t_finance.domain.model.Category
+import android.util.Log
+import ru.practice.t_finance.data.remote.api.ApiService
+import ru.practice.t_finance.data.remote.handler.NetworkResponse
+import ru.practice.t_finance.data.remote.response.CategoryResponse
 import ru.practice.t_finance.domain.repository.CategoryRepository
 import javax.inject.Inject
 
-class CategoryRepositoryImpl @Inject constructor() : CategoryRepository {
-    override suspend fun getCategories() : List<Category>{
-        val list = listOf(
-            Category(
-                name = "a",
-                color = Color(0xFF0000FF),
-                value = 0
-            ),
-            Category(
-                name = "aa",
-                color = Color(0xFFFF0099),
-                value = 0
-            )
-            ,Category(
-                name = "aaa",
-                color = Color(0xFFEAA114),
-                value = 0
-            )
-            ,Category(
-                name = "aaaaa",
-                color = Color(0xFF00D2C9),
-                value = 0
-            )
-            ,Category(
-                name = "aaaaa",
-                color = Color(0xFFFF0000),
-                value = 0
-            ),Category(
-                name = "aaaaaa",
-                color = Color(0xFFEAA114),
-                value = 0
-            )
-            ,Category(
-                name = "aaaaaaa",
-                color = Color(0xFF00D2C9),
-                value = 0
-            )
-            ,Category(
-                name = "bbbbbbbbb",
-                color = Color(0xFFFF0000),
-                value = 0
-            ),Category(
-                name = "bbb",
-                color = Color(0xFFEAA114),
-                value = 0
-            )
-            ,Category(
-                name = "cccc",
-                color = Color(0xFF00D2C9),
-                value = 0
-            )
-            ,Category(
-                name = "cccccc",
-                color = Color(0xFFFF0000),
-                value = 0
-            ),Category(
-                name = "vvvvvvvv",
-                color = Color(0xFFEAA114),
-                value = 0
-            )
-            ,Category(
-                name = "fff",
-                color = Color(0xFF00D2C9),
-                value = 0
-            )
-            ,Category(
-                name = "oooo",
-                color = Color(0xFFFF0000),
-                value = 0
-            )
-        )
-        return list
+class CategoryRepositoryImpl @Inject constructor(
+    private val apiService: ApiService
+) : CategoryRepository {
+
+    override suspend fun getCategories() : Result<List<CategoryResponse>>{
+        return try {
+            when (val response = apiService.getCategories()) {
+                is NetworkResponse.Success -> {
+                    Log.d("CategoryRepositoryImpl", "Success: ${response.data}")
+                    Result.success(response.data)
+                }
+
+                is NetworkResponse.EmptySuccess -> {
+                    Log.d("CategoryRepositoryImpl", "Empty success (${response.code})")
+                    Result.success(emptyList())
+                }
+
+                is NetworkResponse.ApiError -> {
+                    when(response.code) {
+                        401 -> {
+                            Log.d("CategoryRepositoryImpl", "${response.code}")
+                            Result.failure(Exception("Неавторизованный пользователь"))
+                        }
+                        else -> {
+                            Log.d("CategoryRepositoryImpl", "${response.code}")
+                            Result.failure(Exception("Ошибка API: ${response.code}"))
+                        }
+                    }
+                }
+
+                is NetworkResponse.NetworkError -> {
+                    Log.e("CategoryRepositoryImpl", "Network Error", response.error)
+                    Result.failure(response.error)
+                }
+
+                is NetworkResponse.UnknownError -> {
+                    Log.e("CategoryRepositoryImpl", "Unknown Error", response.error)
+                    Result.failure(response.error)
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("CategoryRepositoryImpl", "Unknown Error", e)
+            Result.failure(e)
+        }
     }
 
 }

@@ -15,6 +15,7 @@ import ru.practice.t_finance.data.remote.request.SendCodeRequest
 import ru.practice.t_finance.data.remote.request.SendNameRequest
 import ru.practice.t_finance.data.remote.request.SendSmsRequest
 import ru.practice.t_finance.data.remote.request.TransactionRequest
+import ru.practice.t_finance.data.remote.response.CategoryResponse
 import ru.practice.t_finance.data.remote.response.ExpensesResponse
 import ru.practice.t_finance.data.remote.response.GoalResponse
 import ru.practice.t_finance.data.remote.response.RefreshTokenResponse
@@ -38,7 +39,9 @@ interface ApiService {
     @POST("/api/v1/auth/refresh-token")
     suspend fun refreshToken(@Header("Authorization") refreshToken: String): NetworkResponse<RefreshTokenResponse, ApiError>
 
-
+    // Category
+    @GET("/api/v1/categories")
+    suspend fun getCategories(): NetworkResponse<List<CategoryResponse>, ApiError>
 
     // Goals
     @GET("/api/v1/goals")
