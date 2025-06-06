@@ -12,38 +12,64 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ru.practice.t_finance.data.remote.api.ApiService
+import ru.practice.t_finance.data.remote.token.TokenService
 import ru.practice.t_finance.presentation.navigation.AppNavigation
 import ru.practice.t_finance.presentation.navigation.Routes
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var apiService: ApiService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TfinanceTheme {
                 val navController = rememberNavController()
-                val currentRoute =
-                    navController.currentBackStackEntryAsState().value?.destination?.route
-                val showBottomBar =
-                    currentRoute in listOf(
-                        Routes.MAIN_SCREEN,
-                        Routes.BUDGET_SCREEN,
-                        Routes.GOALS_SCREEN,
-                        Routes.MORE_SCREEN,
-                        Routes.ADD_SCREEN
-                    )
+                val tokenService = remember { TokenService(apiService = apiService, context = applicationContext) }
+                val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
+                // Проверяем наличие активного токена
+                val hasValidToken = remember {
+                    tokenService.getAccessToken() != null
+                }
+
+                val showBottomBar = currentRoute in listOf(
+                    Routes.MAIN_SCREEN,
+                    Routes.BUDGET_SCREEN,
+                    Routes.GOALS_SCREEN,
+                    Routes.MORE_SCREEN,
+                    Routes.ADD_SCREEN
+                )
+
+                LaunchedEffect(hasValidToken) {
+                    // Навигация в зависимости от наличия токена
+                    if (!hasValidToken) {
+                        navController.navigate(Routes.AUTH_SCREEN) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                }
+
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                     bottomBar = {
-                        if (showBottomBar) {
+                        if (showBottomBar && hasValidToken) {
                             CustomBottomAppBar(
                                 navController = navController
                             )
@@ -57,15 +83,11 @@ class MainActivity : ComponentActivity() {
                     ) {
                         AppNavigation(
                             navController = navController,
-                            //startDestination = Routes.EXPENSES_SCREEN
-                            startDestination = Routes.MAIN_SCREEN
-                            //startDestination = Routes.AUTH_SCREEN
+                            startDestination = if (hasValidToken) Routes.MAIN_SCREEN else Routes.AUTH_SCREEN
                         )
                     }
                 }
-
             }
         }
     }
 }
-
