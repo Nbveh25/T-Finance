@@ -12,14 +12,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practice.t_finance.domain.model.Category
-import ru.practice.t_finance.domain.usecases.BudgetUseCase
+import ru.practice.t_finance.domain.usecases.budgetAllocation.BudgetUseCase
 import javax.inject.Inject
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.graphics.Color
+import org.threeten.bp.LocalDateTime
+import ru.practice.t_finance.domain.usecases.budgetAllocation.SendCategoriesToNetworkUseCase
+import ru.practice.t_finance.domain.usecases.budgetAllocation.SendSumBudgetUseCase
 
 @HiltViewModel
 class BudgetViewModel @Inject constructor(
-    private val useCase: BudgetUseCase
+    private val useCase: BudgetUseCase,
+    private val sendCategoriesToNetworkUseCase: SendCategoriesToNetworkUseCase,
+    private val sendSumBudgetUseCase: SendSumBudgetUseCase
 ): ViewModel(){
 
 
@@ -39,6 +45,7 @@ class BudgetViewModel @Inject constructor(
 
     private val _remainingBudget = MutableStateFlow<Int>(0)
     val remainingBudget = _remainingBudget
+
 
     val isBudgetFullyAllocated: State<Boolean> = derivedStateOf {
 //        val totalAllocated = selectedCategories.value.values.sumOf { category ->
@@ -95,13 +102,26 @@ class BudgetViewModel @Inject constructor(
 
     fun getCategories(){
          viewModelScope.launch{
-            runCatching {
-                useCase.getCategories()
-            }.onSuccess { categories ->
-                //_categoryStateFlow.value = CategoryState.Success(categories)
-            }.onFailure { throwable ->
-                //_categoryStateFlow.value = CategoryState.Error(throwable.message ?: "Unknown error")
-            }
+             _categoryStateFlow.emit(CategoryState.Loading)
+             useCase.invoke().onSuccess { data ->
+                 val categories = data.map { category ->
+                     Category(
+                         id = category.id,
+                         name = category.name,
+                         color = category.color.toColor()
+                     )
+                 }
+                 _categoryStateFlow.emit(
+                     CategoryState.SuccessCategories(
+                         categories = categories
+                     )
+                 )
+             }.onFailure { error ->
+                 _categoryStateFlow.emit(
+                     CategoryState.Error(error.message ?: "Error")
+                 )
+             }
+
         }
     }
 
@@ -136,10 +156,52 @@ class BudgetViewModel @Inject constructor(
         return result
     }
 
+    fun sendData(){
+        viewModelScope.launch {
+            _categoryStateFlow.emit(CategoryState.Loading)
+            val categories = _selectedCategories.value.values.toList()
+            val budget = _elementaryBudget.value
+            val now = LocalDateTime.now()
+            val dayOfMonth = now.dayOfMonth
+            sendSumBudgetUseCase.invoke(budget.toString(),dayOfMonth.toString()).onSuccess {
+                sendCategoriesToNetworkUseCase.invoke(categories).onSuccess {
+                    _categoryStateFlow.emit(
+                        CategoryState.SuccessNetwork
+                    )
+                }.onFailure { data ->
+                    _categoryStateFlow.emit(
+                        CategoryState.Error(data.message ?: "Error")
+                    )
+                }
+            }.onFailure { data ->
+                _categoryStateFlow.emit(
+                    CategoryState.Error(data.message ?: "Error")
+                )
+            }
+        }
+    }
+
+}
+
+
+fun String.toColor(): Color {
+    var colorString = this
+    // Удаляем # если есть
+    if (colorString.startsWith("#")) {
+        colorString = colorString.substring(1)
+    }
+    // Добавляем альфа-канал если его нет (FF - полностью непрозрачный)
+    if (colorString.length == 6) {
+        colorString = "FF$colorString"
+    }
+    // Конвертируем в long и создаем Color
+    return Color(colorString.toLong(16))
 }
 
 sealed class CategoryState{
-    data class Success(val categories: List<Category>) : CategoryState()
+    data class SuccessCategories(val categories: List<Category>) : CategoryState()
     data class Error(val message: String) : CategoryState()
     object Loading : CategoryState()
+    object SuccessNetwork : CategoryState()
+
 }

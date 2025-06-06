@@ -7,5 +7,5 @@ interface CategoryRepository {
 
     suspend fun getCategories() : Result<List<CategoryResponse>>
 
-
+    suspend fun sendCategories(data: List<Category>) : Result<Unit>
 }

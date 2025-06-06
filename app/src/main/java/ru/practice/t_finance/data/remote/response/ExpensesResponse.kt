@@ -5,7 +5,7 @@ import ru.practice.t_finance.domain.model.Category
 
 data class ExpensesResponse(
     @SerializedName("sumOfAllTransactions")
-    val amount: Int,
+    val amount: String,
     @SerializedName("categories")
     val categories: List<CategoryExpensesResponse>
 )

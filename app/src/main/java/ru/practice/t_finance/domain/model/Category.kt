@@ -5,18 +5,18 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class Category(
+    val id: Int,
     val name: String,
     val color: Color,
     val value: Int = 0,
 ){
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
         if (other !is Category) return false
-        return name == other.name
+        return id == other.id
     }
 
     override fun hashCode(): Int {
-    return name.hashCode()
+    return id.hashCode()
     }
 }

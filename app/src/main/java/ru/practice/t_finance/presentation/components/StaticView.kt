@@ -71,6 +71,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CheckboxDefaults.colors
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
@@ -110,6 +111,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.internal.updateLiveLiteralValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.drawWithContent
@@ -566,7 +568,15 @@ fun ExpensesDateRangePicker(
 ){
 
 
-    val dateRangePickerState = rememberDateRangePickerState()
+    val dateRangePickerState = rememberDateRangePickerState(initialDisplayMode = DisplayMode.Picker)
+
+    val isRangeSelected = remember {
+        derivedStateOf {
+            dateRangePickerState.selectedStartDateMillis != null &&
+                    dateRangePickerState.selectedEndDateMillis != null
+        }
+    }
+
 
 
     MaterialTheme(typography = CalendarTypography) {
@@ -584,7 +594,9 @@ fun ExpensesDateRangePicker(
                     onClick = {
                         val start = dateRangePickerState.selectedStartDateMillis
                         val end = dateRangePickerState.selectedEndDateMillis
-                        onDateRangeSelected(Pair<Long,Long>(start as Long, end as Long))
+                        if (isRangeSelected.value) {
+                            onDateRangeSelected(Pair(start, end))
+                        }
                     },
                 )
             },
@@ -849,7 +861,7 @@ fun TransactionsSlotExpenses(modifier: Modifier = Modifier, transactionModelList
 
 
 @Composable
-fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<TransactionListItem>) {
+fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<TransactionListItem>, onClick: () -> Unit) {
     Card(
         modifier = modifier
             .shadow(
@@ -887,7 +899,9 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
         ) {
             CustomButton(
                 text = stringResource(R.string.more),
-                onClick = {},
+                onClick = {
+                    onClick.invoke()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium))

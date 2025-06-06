@@ -1,32 +1,19 @@
 package ru.practice.t_finance.presentation.screens.expenses
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresExtension
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.ChronoUnit
 import ru.practice.t_finance.domain.model.Category
-import ru.practice.t_finance.domain.model.TransactionModel
-import ru.practice.t_finance.domain.usecases.ExpenseSumUseCase
-import ru.practice.t_finance.domain.usecases.ExpensesUseCase
-import ru.practice.t_finance.domain.usecases.TransactionsByCategoryUseCase
-import ru.practice.t_finance.presentation.mapper.toListItem
+import ru.practice.t_finance.domain.usecases.expenses.GetTransactionsListByDateUseCase
+import ru.practice.t_finance.domain.usecases.expenses.TransactionsByCategoryUseCase
 import ru.practice.t_finance.presentation.model.TransactionListItem
 import java.util.Locale
 import javax.inject.Inject
@@ -35,8 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ExpensesViewModel @Inject constructor(
     private val getTransactionsUseCase: TransactionsByCategoryUseCase,
-    private val getExpenseUseCase: ExpensesUseCase,
-    private val getExpensesSumUseCase : ExpenseSumUseCase
+    private val getExpenseUseCase: GetTransactionsListByDateUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ExpensesUiState>(ExpensesUiState.Loading)
@@ -83,12 +69,11 @@ class ExpensesViewModel @Inject constructor(
         }
     }
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun loadData(startDate: String, endDate: String){
         Log.d("MyLog", "$startDate $endDate аавыа")
         viewModelScope.launch {
-            var parsedStart = LocalDateTime.parse(startDate, formatter)
-            var parsedEnd = LocalDateTime.parse(endDate, formatter)
+            var parsedStart = LocalDateTime.parse(startDate, formatter).with(LocalTime.MIN)
+            var parsedEnd = LocalDateTime.parse(endDate, formatter).with ( LocalTime.MAX )
             val now = LocalDateTime.now()
 
             // Если endDate больше текущей даты — корректируем его
@@ -96,7 +81,7 @@ class ExpensesViewModel @Inject constructor(
                 parsedEnd = now
                 Log.d("MyLog", "Конечная дата скорректирована до текущей: $now")
             }
-            _startDate.emit(startDate)
+            _startDate.emit(parsedStart.format(formatter))
             _endDate.emit(parsedEnd.format(formatter))
             val start = LocalDateTime.parse(_startDate.value, formatter)
             val end = LocalDateTime.parse(_endDate.value, formatter)
@@ -105,24 +90,28 @@ class ExpensesViewModel @Inject constructor(
             changePeriodTypeByDiff(daysDiff)
             Log.d("MyLog", _periodType.value.toString())
             runCatching {
-                _uiState.value = ExpensesUiState.Loading
-                val categories = getTransactionsUseCase.invoke(startDate, endDate).toList()
-                val expenses = (getExpenseUseCase.invoke(startDate, endDate)).map {
-                    it.toListItem()
+                val transactionsResult = getTransactionsUseCase.invoke(_startDate.value,_endDate.value)
+                val expensesResult = getExpenseUseCase.invoke(_startDate.value,_endDate.value).getOrThrow()
+                val dataTransactions = transactionsResult.getOrThrow()
+
+                val transactionsList = expensesResult.map {
+                    TransactionListItem(
+                        name = it.name,
+                        category = it.category,
+                        imageUrl = it.imageUrl,
+                        amountFormatted = it.amount.toString()
+                    )
                 }
-                val expense = getExpensesSumUseCase.invoke(startDate, endDate)
-                val refreshedList = categories.map { it.copy() }
                 _uiState.emit(
                     ExpensesUiState.Success(
-                        categories = refreshedList.map { it.copy() },
-                        totalExpenses = expense,
-                        transactions = expenses
+                        categories = dataTransactions.categories,
+                        totalExpenses = dataTransactions.amount,
+                        transactions = transactionsList
                     )
                 )
-
-            }.onFailure {
+            }.onFailure { message ->
                 _uiState.value = ExpensesUiState.Error(
-                    message = "Error"
+                    message = message.message ?: "Ошибка"
                 )
             }
         }
