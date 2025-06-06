@@ -217,30 +217,13 @@ fun CustomSpinner(
                         vertical = dimensionResource(R.dimen.padding_medium)
                     )
             ) {
-                // Иконка выбранной категории
-                selectedCategory?.let { category ->
-                    AsyncImage(
-                        model = category.icon,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clip(CircleShape),
-                        colorFilter = ColorFilter.tint(category.color),
-                        //placeholder = painterResource(R.drawable.ic_category_placeholder),
-                        //error = painterResource(R.drawable.ic_category_placeholder),
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                }
+
 
                 // Текст (выбранное значение или плейсхолдер)
                 Text(
                     text = selectedCategory?.name ?: placeholderText,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = if (selectedCategory != null) {
-                        MaterialTheme.colorScheme.onSurface
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
                 )
 
@@ -290,7 +273,7 @@ fun CustomSpinner(
                         ) {
                             // Иконка категории
                             AsyncImage(
-                                model = items[category].icon,
+                                model = items[category].iconPath,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(32.dp)

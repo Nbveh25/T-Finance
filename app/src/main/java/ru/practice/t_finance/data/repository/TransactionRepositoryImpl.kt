@@ -5,6 +5,7 @@ import jakarta.inject.Inject
 import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.remote.handler.NetworkResponse
 import ru.practice.t_finance.data.remote.mapper.TransactionMapper
+import ru.practice.t_finance.domain.model.AddingTransactionModel
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.domain.repository.TransactionRepository
 
@@ -12,9 +13,9 @@ class TransactionRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : TransactionRepository {
 
-    override suspend fun addTransaction(transactionModel: TransactionModel): Result<Unit> {
+    override suspend fun addTransaction(addingTransactionModel: AddingTransactionModel): Result<Unit> {
         return try {
-            when (val response = apiService.addTransaction(TransactionMapper.toRequest(transactionModel))) {
+            when (val response = apiService.addTransaction(TransactionMapper.toRequest(addingTransactionModel))) {
 
                 is NetworkResponse.Success -> {
                     Log.d("TransactionRepositoryImpl", "Success: ${response.data}")

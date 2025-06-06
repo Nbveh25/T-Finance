@@ -8,6 +8,6 @@ data class GetCategoryModel(
     val id: Int,
     val name: String,
     val color: Color,
-    val icon: String?
+    val iconPath: String?
 ) {
 }

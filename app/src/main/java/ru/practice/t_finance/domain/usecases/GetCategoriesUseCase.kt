@@ -15,7 +15,7 @@ class GetCategoriesUseCase @Inject constructor(
                     id = category.id,
                     name = category.name,
                     color = category.color.toColor(),
-                    icon = category.icon,
+                    iconPath = category.iconPath,
                 )
             }
         }

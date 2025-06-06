@@ -1,7 +1,6 @@
 package ru.practice.t_finance.data.remote.api
 
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -14,7 +13,7 @@ import ru.practice.t_finance.data.remote.request.GoalRequest
 import ru.practice.t_finance.data.remote.request.SendCodeRequest
 import ru.practice.t_finance.data.remote.request.SendNameRequest
 import ru.practice.t_finance.data.remote.request.SendSmsRequest
-import ru.practice.t_finance.data.remote.request.TransactionRequest
+import ru.practice.t_finance.data.remote.request.AddingTransactionRequest
 import ru.practice.t_finance.data.remote.response.CategoryResponse
 import ru.practice.t_finance.data.remote.response.ExpensesResponse
 import ru.practice.t_finance.data.remote.response.GoalResponse
@@ -61,7 +60,7 @@ interface ApiService {
 
     // Transactions
     @POST("/api/v1/transactions")
-    suspend fun addTransaction(@Body request: TransactionRequest): NetworkResponse<Unit, ApiError>
+    suspend fun addTransaction(@Body request: AddingTransactionRequest): NetworkResponse<Unit, ApiError>
 
     @GET("/api/v1/transactions/by-category")
     suspend fun getExpenses(@Body startDate: String, endDate: String ) : NetworkResponse<ExpensesResponse, ApiError>

@@ -684,13 +684,19 @@ fun DatePicker(
         PickerButton(
             text = stringResource(R.string.yesterday),
             isSelected = selectedButton == 0,
-            onClick = { selectedButton = 0 }
+            onClick = {
+                selectedButton = 0
+                onAnotherDayClick(System.currentTimeMillis() - 86400000)
+            }
         )
         Spacer(modifier = Modifier.width(8.dp))
         PickerButton(
             text = stringResource(R.string.today),
             isSelected = selectedButton == 1,
-            onClick = { selectedButton = 1 }
+            onClick = {
+                selectedButton = 1
+                onAnotherDayClick(System.currentTimeMillis())
+            }
         )
         Spacer(modifier = Modifier.width(8.dp))
         PickerButton(

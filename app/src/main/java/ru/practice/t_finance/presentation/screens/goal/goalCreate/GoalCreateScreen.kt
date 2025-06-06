@@ -138,17 +138,6 @@ fun GoalCreateScreen(
                 keyboardType = KeyboardType.Number
             )
 
-            if (viewModel.errorMessage != null) {
-                Text(
-                    text = viewModel.errorMessage ?: "",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding))
-                        .padding(top = 4.dp)
-                )
-            }
-
             CustomTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -159,6 +148,17 @@ fun GoalCreateScreen(
                 placeholderText = stringResource(R.string.term),
                 enabled = false
             )
+
+            if (viewModel.errorMessage != null) {
+                Text(
+                    text = viewModel.errorMessage ?: "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding))
+                        .padding(top = 4.dp)
+                )
+            }
         }
         CustomButton(
             text = stringResource(R.string.save),
