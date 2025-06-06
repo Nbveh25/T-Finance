@@ -5,7 +5,7 @@ import jakarta.inject.Inject
 import ru.practice.t_finance.domain.model.TransactionModel
 import ru.practice.t_finance.domain.repository.TransactionRepository
 
-class AddTransactionUseCase @Inject constructor(
+class AddingTransactionUseCase @Inject constructor(
     private val repository: TransactionRepository
 ) {
     suspend operator fun invoke(transactionModel: TransactionModel): Result<Unit> {

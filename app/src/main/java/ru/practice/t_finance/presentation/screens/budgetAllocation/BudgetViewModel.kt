@@ -98,9 +98,9 @@ class BudgetViewModel @Inject constructor(
             runCatching {
                 useCase.getCategories()
             }.onSuccess { categories ->
-                _categoryStateFlow.value = CategoryState.Success(categories)
+                //_categoryStateFlow.value = CategoryState.Success(categories)
             }.onFailure { throwable ->
-                _categoryStateFlow.value = CategoryState.Error(throwable.message ?: "Unknown error")
+                //_categoryStateFlow.value = CategoryState.Error(throwable.message ?: "Unknown error")
             }
         }
     }
