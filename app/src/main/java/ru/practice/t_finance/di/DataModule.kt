@@ -10,11 +10,13 @@ import ru.practice.t_finance.data.repository.AuthRepositoryImpl
 import ru.practice.t_finance.data.repository.CategoryRepositoryImpl
 import ru.practice.t_finance.data.repository.ExpensesRepositoryImpl
 import ru.practice.t_finance.data.repository.GoalRepositoryImpl
+import ru.practice.t_finance.data.repository.InitialBudgetRepositoryImpl
 import ru.practice.t_finance.data.repository.TransactionRepositoryImpl
 import ru.practice.t_finance.domain.repository.AuthRepository
 import ru.practice.t_finance.domain.repository.CategoryRepository
 import ru.practice.t_finance.domain.repository.ExpensesRepository
 import ru.practice.t_finance.domain.repository.GoalRepository
+import ru.practice.t_finance.domain.repository.InitialBudgetRepository
 import ru.practice.t_finance.domain.repository.TransactionRepository
 import javax.inject.Singleton
 
@@ -57,5 +59,13 @@ class DataModule {
         apiService: ApiService,
     ): GoalRepository {
         return GoalRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInitialRepository(
+        apiService: ApiService
+    ) : InitialBudgetRepository {
+        return InitialBudgetRepositoryImpl(apiService)
     }
 }

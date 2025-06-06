@@ -14,19 +14,21 @@ import androidx.compose.ui.Modifier
 import ru.practice.t_finance.R
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.practice.t_finance.domain.model.CreateGoalModel
 import ru.practice.t_finance.presentation.components.GoalSlot
 import ru.practice.t_finance.presentation.components.TransactionSlot
 import ru.practice.t_finance.presentation.model.TransactionListItem
+import ru.practice.t_finance.presentation.navigation.Routes
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    //viewModel: MainViewModel = hiltViewModel(),
+    viewModel: MainVewModel = hiltViewModel(),
 ) {
     Column(
         modifier = modifier
@@ -65,8 +67,8 @@ fun MainScreen(
                     category = "Бордель",
                     amountFormatted = "5000"
                 ),
-
-            )
+            ),
+            onClick = {navController.navigate(Routes.EXPENSES_SCREEN)}
         )
         GoalSlot(
             createGoalModelList = listOf(

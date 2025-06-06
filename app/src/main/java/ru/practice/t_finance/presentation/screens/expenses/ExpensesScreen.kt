@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -174,7 +175,7 @@ fun ExpensesScreen(
                         is ExpensesUiState.Error -> {
                             Text(
                                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 32.sp),
-                                text = "Ошибка"
+                                text = "0 ₽"
                             )
                         }
 
@@ -222,7 +223,7 @@ fun ExpensesScreen(
                                         thickness = 40.dp
                                     )
                                 } else {
-                                    Box(modifier = Modifier.fillMaxWidth())
+                                    EmptyDiagram()
                                 }
                             }
                         }
@@ -274,7 +275,35 @@ fun ExpensesScreen(
             Spacer(modifier = Modifier.padding(8.dp))
             when (val state = uiState.value){
                 is ExpensesUiState.Success -> {
-                    TransactionsSlotExpenses(modifier = Modifier.padding(horizontal = 8.dp).height(250.dp),transactionModelList = state.transactions)
+                    if (state.transactions.isEmpty()){
+                        Card(
+                            modifier = modifier
+                                .padding(horizontal = 8.dp)
+                                .height(250.dp)
+                                .fillMaxWidth()
+                                .shadow(
+                                    elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+                                ),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "Транзакций пока нет...",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else {
+                    TransactionsSlotExpenses(modifier = Modifier.padding(horizontal = 8.dp).height(250.dp).fillMaxWidth(),transactionModelList = state.transactions)
+                    }
                 }
                 is ExpensesUiState.Error -> {
                     Card(
@@ -292,7 +321,7 @@ fun ExpensesScreen(
 
                     ){
                         Text(
-                            text = "Ошибка",
+                            text = uiState.value.toString(),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
@@ -324,6 +353,7 @@ fun ExpensesScreen(
                         Instant.ofEpochMilli(range.second!!),
                         ZoneId.systemDefault()
                     ).format(formatter)
+
                     viewModel.loadData(start, end)
                     showDatePicker = false
                 },
