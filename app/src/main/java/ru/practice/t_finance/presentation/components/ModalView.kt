@@ -1,5 +1,7 @@
 package ru.practice.t_finance.presentation.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,15 +26,12 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,20 +43,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
 import ru.practice.t_finance.R
-import ru.practice.t_finance.domain.model.CreateGoalModel
 import ru.practice.t_finance.domain.model.GetCategoryModel
 import ru.practice.t_finance.presentation.model.GoalItem
 import ru.practice.t_finance.presentation.navigation.Routes
@@ -124,7 +118,7 @@ fun Goal(name: String, accumulatedAmount: Double, amount: Double, modifier: Modi
 }
 
 @Composable
-fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoalModel>) {
+fun GoalSlot(modifier: Modifier = Modifier, goalItemList: List<GoalItem>, onClick: () -> Unit) {
     Card(
         modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
@@ -144,33 +138,19 @@ fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoal
                 vertical = dimensionResource(R.dimen.padding_small)
             )
         )
-        Goal(
-            name = createGoalModelList[0].name,
-            accumulatedAmount = createGoalModelList[0].accumulatedAmount,
-            amount = createGoalModelList[0].amount,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_small)
-            ),
-        )
-        Goal(
-            name = createGoalModelList[1].name,
-            accumulatedAmount = createGoalModelList[1].accumulatedAmount,
-            amount = createGoalModelList[1].amount,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_small)
-            ),
-        )
-        Goal(
-            name = createGoalModelList[2].name,
-            accumulatedAmount = createGoalModelList[2].accumulatedAmount,
-            amount = createGoalModelList[2].amount,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_small)
-            ),
-        )
+
+        goalItemList.take(3).forEach { goal ->
+            Goal(
+                name = goal.name,
+                accumulatedAmount = goal.accumulatedAmount,
+                amount = goal.amount,
+                modifier = Modifier.padding(
+                    horizontal = dimensionResource(R.dimen.padding_medium),
+                    vertical = dimensionResource(R.dimen.padding_small)
+                ),
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -178,7 +158,7 @@ fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoal
         ) {
             CustomButton(
                 text = stringResource(R.string.more),
-                onClick = {},
+                onClick = onClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium))
@@ -278,7 +258,7 @@ fun CustomSpinner(
                                 modifier = Modifier
                                     .size(32.dp)
                                     .clip(CircleShape),
-                                colorFilter = ColorFilter.tint(items[category].color),
+
                                 //placeholder = painterResource(R.drawable.ic_category_placeholder),
                                 //error = painterResource(R.drawable.ic_category_placeholder),
                             )
@@ -297,6 +277,7 @@ fun CustomSpinner(
         }
     }
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun GoalsList(
     modifier: Modifier = Modifier,
@@ -328,6 +309,7 @@ fun GoalsList(
                 name = goal.name,
                 description = goal.description,
                 amount = goal.amount,
+                term = goal.term, // Передаем срок цели
                 onClick = {
                     navController.navigate("${Routes.GOALS_DETAIL_SCREEN}/${goal.id}")
                 }

@@ -1,6 +1,5 @@
 package ru.practice.t_finance.data.remote.api
 
-import com.google.gson.annotations.SerializedName
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -18,6 +17,7 @@ import ru.practice.t_finance.data.remote.request.SendInitialBudgetRequest
 import ru.practice.t_finance.data.remote.request.SendNameRequest
 import ru.practice.t_finance.data.remote.request.SendSmsRequest
 import ru.practice.t_finance.data.remote.request.AddingTransactionRequest
+import ru.practice.t_finance.data.remote.response.BudgetBalanceResponse
 import ru.practice.t_finance.data.remote.response.CategoryResponse
 import ru.practice.t_finance.data.remote.response.ExpensesResponse
 import ru.practice.t_finance.data.remote.response.GoalResponse
@@ -36,8 +36,6 @@ interface ApiService {
 
     @POST("/api/v1/user")
     suspend fun sendName(@Body request: SendNameRequest): NetworkResponse<Unit, ApiError>
-
-
 
     // JWT Authorization
     @POST("/api/v1/auth/refresh-token")
@@ -68,14 +66,23 @@ interface ApiService {
     suspend fun addTransaction(@Body request: AddingTransactionRequest): NetworkResponse<Unit, ApiError>
 
     @GET("/api/v1/transactions/by-category")
-    suspend fun getExpenses(@Query("startDate") startDate: String, @Query("endDate")endDate: String ) : NetworkResponse<ExpensesResponse, ApiError>
+    suspend fun getExpenses(
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String
+    ): NetworkResponse<ExpensesResponse, ApiError>
 
     @POST("/api/v1/budget/distributions")
-    suspend fun sendCategories(@Body request: List<CategoryRequest>) : NetworkResponse<Unit, ApiError>
+    suspend fun sendCategories(@Body request: List<CategoryRequest>): NetworkResponse<Unit, ApiError>
 
     @POST("/api/v1/budget")
-    suspend fun sendBudget(@Body request : SendInitialBudgetRequest) : NetworkResponse<Unit, ApiError>
+    suspend fun sendBudget(@Body request: SendInitialBudgetRequest): NetworkResponse<Unit, ApiError>
 
     @GET("/api/v1/transactions")
-    suspend fun getTransactionsByDate(@Query("startDate") startDate: String, @Query("endDate") endDate: String) : NetworkResponse<TransactionsResponse, ApiError >
+    suspend fun getTransactionsByDate(
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String
+    ): NetworkResponse<TransactionsResponse, ApiError>
+
+    @GET("/api/v1/budget/balance")
+    suspend fun getBudget(): NetworkResponse<BudgetBalanceResponse, ApiError>
 }
