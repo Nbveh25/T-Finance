@@ -1,6 +1,5 @@
 package ru.practice.t_finance.presentation.components
 
-import android.graphics.BlendMode
 import android.graphics.BlurMaskFilter
 import android.graphics.Paint
 import android.graphics.RectF
@@ -40,23 +39,18 @@ import androidx.compose.ui.unit.sp
 import ru.practice.t_finance.domain.model.Category
 import kotlin.collections.forEach
 import android.os.Build
-import android.util.Log
-import android.view.animation.Animation
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -65,7 +59,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxHeight
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -76,12 +69,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CheckboxDefaults.colors
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 
@@ -101,23 +92,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import ru.practice.t_finance.R
-import ru.practice.t_finance.domain.model.TransactionModel
-import ru.practice.t_finance.presentation.theme.TfinanceTheme
 import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDefaults.dateFormatter
 import androidx.compose.material3.DateRangePicker
-import androidx.compose.material3.DateRangePickerDefaults
-import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.internal.updateLiveLiteralValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
@@ -127,12 +111,10 @@ import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import kotlinx.coroutines.launch
-import org.threeten.bp.Instant
 import ru.practice.t_finance.presentation.model.TransactionListItem
 
 import ru.practice.t_finance.presentation.theme.CalendarTypography
-import java.nio.file.WatchEvent
-import java.sql.Time
+import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.math.ceil
 import kotlin.math.cos
@@ -737,24 +719,28 @@ fun DatePicker(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun GoalCard(
     modifier: Modifier = Modifier,
     name: String,
     description: String,
     amount: Double,
+    term: String, // Добавляем параметр срока цели
     onClick: () -> Unit
 ) {
+    // Проверяем, просрочена ли цель
+    val isOverdue = term?.let { it < LocalDate.now().toString() } ?: false
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .clickable(
-                onClick = onClick
-            ),
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large)),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
+
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(R.dimen.card_shadow_elevation_medium)
@@ -768,23 +754,25 @@ fun GoalCard(
                 Text(
                     text = name,
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = if (isOverdue) Color.Red else MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = "${amount} ₽",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    color = if (isOverdue) Color.Red else MaterialTheme.colorScheme.onSurface
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small)))
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = if (isOverdue) Color.Red else MaterialTheme.colorScheme.onSurfaceVariant
             )
+
         }
     }
 }
-
 @Composable
 fun Transaction(
     iconUrl: String,
@@ -1415,34 +1403,4 @@ fun ContentDrawScope.drawWithLayer(block: ContentDrawScope.() -> Unit) {
 }
 
 
-//
-//@Preview
-//@Composable
-//private fun Preview() {
-//    TfinanceTheme {
-//        Surface(modifier = Modifier.fillMaxSize()) {
-//            GoalCard(
-//                name = "Dodge Challenger",
-//                description = "wrooom wroom",
-//                maxValue = 5555555,
-//                onClick = {}
-//            )
-//        }
-//    }
-//}
 
-
-@Preview
-@Composable
-private fun Preview() {
-    TfinanceTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            GoalCard(
-                name = "Dodge Challenger",
-                description = "wrooom wroom",
-                amount = 5555555.0,
-                onClick = {}
-            )
-        }
-    }
-}

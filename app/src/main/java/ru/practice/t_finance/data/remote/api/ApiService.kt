@@ -17,7 +17,7 @@ import ru.practice.t_finance.data.remote.request.SendInitialBudgetRequest
 import ru.practice.t_finance.data.remote.request.SendNameRequest
 import ru.practice.t_finance.data.remote.request.SendSmsRequest
 import ru.practice.t_finance.data.remote.request.AddingTransactionRequest
-import ru.practice.t_finance.data.remote.response.BudgetResponse
+import ru.practice.t_finance.data.remote.response.BudgetBalanceResponse
 import ru.practice.t_finance.data.remote.response.CategoryResponse
 import ru.practice.t_finance.data.remote.response.ExpensesResponse
 import ru.practice.t_finance.data.remote.response.GoalResponse
@@ -83,6 +83,6 @@ interface ApiService {
         @Query("endDate") endDate: String
     ): NetworkResponse<TransactionsResponse, ApiError>
 
-    @GET("/api/v1/budget")
-    suspend fun getBudget(): NetworkResponse<BudgetResponse, ApiError>
+    @GET("/api/v1/budget/balance")
+    suspend fun getBudget(): NetworkResponse<BudgetBalanceResponse, ApiError>
 }

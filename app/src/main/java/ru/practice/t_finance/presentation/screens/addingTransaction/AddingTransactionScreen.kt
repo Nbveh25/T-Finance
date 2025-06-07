@@ -93,14 +93,6 @@ fun AddingTransactionScreen(
             .padding(vertical = dimensionResource(R.dimen.vertical_screen_padding))
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_back),
-                    contentDescription = "Назад",
-                    modifier = Modifier.size(24.dp),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
 
             Text(
                 text = stringResource(R.string.adding_transaction),

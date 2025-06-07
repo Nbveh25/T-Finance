@@ -65,7 +65,7 @@ fun MainScreen(
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(
-                            text = "${(budgetState.value as BudgetUIState.Success).data.amount}",
+                            text = "${(budgetState.value as BudgetUIState.Success).data.balance}",
                             style = MaterialTheme.typography.bodyLarge
                         )
                         // Круговая диграмма
