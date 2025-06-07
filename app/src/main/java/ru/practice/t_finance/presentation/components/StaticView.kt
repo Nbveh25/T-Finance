@@ -2,6 +2,7 @@ package ru.practice.t_finance.presentation.components
 
 import android.graphics.BlendMode
 import android.graphics.BlurMaskFilter
+import android.graphics.Paint
 import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -45,8 +46,12 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 
 import androidx.compose.foundation.border
@@ -116,6 +121,7 @@ import androidx.compose.runtime.internal.updateLiveLiteralValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.nativeCanvas
@@ -128,6 +134,7 @@ import ru.practice.t_finance.presentation.theme.CalendarTypography
 import java.nio.file.WatchEvent
 import java.sql.Time
 import java.time.YearMonth
+import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -164,10 +171,16 @@ fun BudgetDiagram(
             val targetPercent = category.value * 1f
 
             launch {
-                sweepAngles[index].animateTo(targetAngle, animationSpec = tween(1000, easing = FastOutSlowInEasing))
+                sweepAngles[index].animateTo(
+                    targetAngle,
+                    animationSpec = tween(1000, easing = FastOutSlowInEasing)
+                )
             }
             launch {
-                percentValues[index].animateTo(targetPercent, animationSpec = tween(1000, easing = FastOutSlowInEasing))
+                percentValues[index].animateTo(
+                    targetPercent,
+                    animationSpec = tween(1000, easing = FastOutSlowInEasing)
+                )
             }
         }
     }
@@ -188,7 +201,7 @@ fun BudgetDiagram(
             useCenter = false,
             style = Stroke(thicknessPx),
             topLeft = Offset(centerX - outerRadius, centerY - outerRadius),
-            size = androidx.compose.ui.geometry.Size(outerRadius * 2, outerRadius * 2)
+            size = Size(outerRadius * 2, outerRadius * 2)
         )
 
         var startAngle = 270F
@@ -213,18 +226,18 @@ fun BudgetDiagram(
                 "${animatedPercent.toInt()}%",
                 textX,
                 textY,
-                android.graphics.Paint().apply {
+                Paint().apply {
                     textSize = 12.sp.toPx()
                     color = textColor.toArgb()
-                    textAlign = android.graphics.Paint.Align.CENTER
+                    textAlign = Paint.Align.CENTER
                     isAntiAlias = true
                 }
             )
 
 
             drawContext.canvas.nativeCanvas.apply {
-                val paint = android.graphics.Paint()
-                paint.style = android.graphics.Paint.Style.STROKE
+                val paint = Paint()
+                paint.style = Paint.Style.STROKE
                 paint.strokeWidth = thicknessPx
                 paint.color = category.color.toArgb()
                 paint.maskFilter = BlurMaskFilter(thicknessPx / 4, BlurMaskFilter.Blur.SOLID)
@@ -265,7 +278,7 @@ fun BudgetDiagram(
 fun EmptyDiagram(
     modifier: Modifier = Modifier,
     thickness: Dp = 35.dp,
-){
+) {
     val thicknessPx = with(LocalDensity.current) { thickness.toPx() } //
 
 
@@ -285,21 +298,21 @@ fun EmptyDiagram(
             useCenter = false,
             style = Stroke(thicknessPx),
             topLeft = Offset(centerX - outerRadius, centerY - outerRadius),
-            size = androidx.compose.ui.geometry.Size(outerRadius * 2, outerRadius * 2)
+            size = Size(outerRadius * 2, outerRadius * 2)
         )
 
     }
 }
 
 @Composable
-fun CategoryTile(category: Category, onClick: () -> Unit, isSelected: Boolean){
-    Box (
+fun CategoryTile(category: Category, onClick: () -> Unit, isSelected: Boolean) {
+    Box(
         modifier = Modifier
             .clip(RoundedCornerShape(100))
             .background(category.color)
             .clickable { onClick() }
             .padding(vertical = 4.dp, horizontal = 8.dp),
-    ){
+    ) {
         Row(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically
@@ -565,7 +578,7 @@ fun CalendarBottomSheet(
 fun ExpensesDateRangePicker(
     onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
     onDismiss: () -> Unit
-){
+) {
 
 
     val dateRangePickerState = rememberDateRangePickerState(initialDisplayMode = DisplayMode.Picker)
@@ -608,7 +621,7 @@ fun ExpensesDateRangePicker(
                     },
                 )
             },
-        ){
+        ) {
             DateRangePicker(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -630,10 +643,10 @@ fun ExpensesDateRangePicker(
                     Text(
                         stringResource(R.string.choose_period),
                         modifier = Modifier.padding(16.dp)
-                        )
+                    )
                 },
 
-            )
+                )
         }
 
     }
@@ -722,7 +735,6 @@ fun DatePicker(
         )
     }
 }
-
 
 
 @Composable
@@ -837,7 +849,10 @@ fun Transaction(
 }
 
 @Composable
-fun TransactionsSlotExpenses(modifier: Modifier = Modifier, transactionModelList: List<TransactionListItem>) {
+fun TransactionsSlotExpenses(
+    modifier: Modifier = Modifier,
+    transactionModelList: List<TransactionListItem>
+) {
     Card(
         modifier = modifier
             .shadow(
@@ -851,12 +866,12 @@ fun TransactionsSlotExpenses(modifier: Modifier = Modifier, transactionModelList
     ) {
         LazyColumn(modifier = Modifier.padding(16.dp)) {
             transactionModelList.forEach { data ->
-                item{
+                item {
                     Transaction(
                         iconUrl = data.imageUrl.toString(),
                         transactionName = data.name,
                         categoryName = data.category,
-                        summa = kotlin.math.ceil(data.amountFormatted.toDouble()).toInt()
+                        summa = ceil(data.amountFormatted.toDouble()).toInt()
                     )
                 }
             }
@@ -867,7 +882,11 @@ fun TransactionsSlotExpenses(modifier: Modifier = Modifier, transactionModelList
 
 
 @Composable
-fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<TransactionListItem>, onClick: () -> Unit) {
+fun TransactionSlot(
+    modifier: Modifier = Modifier,
+    transactionModelList: List<TransactionListItem>,
+    onClick: () -> Unit
+) {
     Card(
         modifier = modifier
             .shadow(
@@ -890,8 +909,28 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
         Transaction(
             iconUrl = transactionModelList[0].imageUrl.toString(),
             transactionName = transactionModelList[0].name,
-            categoryName = transactionModelList[0].name,
-            summa = transactionModelList[0].amountFormatted.toInt(),
+            categoryName = transactionModelList[0].category,
+            summa = ceil(transactionModelList[0].amountFormatted.toDouble()).toInt(),
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(R.dimen.padding_medium),
+                vertical = dimensionResource(R.dimen.padding_extra_small)
+            )
+        )
+        Transaction(
+            iconUrl = transactionModelList[1].imageUrl.toString(),
+            transactionName = transactionModelList[1].name,
+            categoryName = transactionModelList[1].category,
+            summa = ceil(transactionModelList[1].amountFormatted.toDouble()).toInt(),
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(R.dimen.padding_medium),
+                vertical = dimensionResource(R.dimen.padding_extra_small)
+            )
+        )
+        Transaction(
+            iconUrl = transactionModelList[2].imageUrl.toString(),
+            transactionName = transactionModelList[2].name,
+            categoryName = transactionModelList[2].category,
+            summa = ceil(transactionModelList[2].amountFormatted.toDouble()).toInt(),
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.padding_medium),
                 vertical = dimensionResource(R.dimen.padding_extra_small)
@@ -913,6 +952,117 @@ fun TransactionSlot(modifier: Modifier = Modifier, transactionModelList: List<Tr
                     .padding(dimensionResource(R.dimen.padding_medium))
             )
         }
+    }
+}
+
+@Composable
+fun MainScreenSlotShimmer(
+    modifier: Modifier = Modifier.padding(vertical = 16.dp)
+) {
+    val shimmerColors = listOf(
+        Color.LightGray.copy(alpha = 0.6f),
+        Color.LightGray.copy(alpha = 0.2f),
+        Color.LightGray.copy(alpha = 0.6f),
+    )
+
+    val transition =rememberInfiniteTransition()
+    val translateAnim = transition.animateFloat(
+        0f, 1000f, infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1200,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    val brush = Brush.linearGradient(
+        colors = shimmerColors,
+        start = Offset(translateAnim.value - 500, translateAnim.value - 500),
+        end = Offset(translateAnim.value, translateAnim.value)
+    )
+
+    Card(
+        modifier = modifier.fillMaxWidth().padding(horizontal = dimensionResource(R.dimen.padding_medium))
+            .shadow(
+                elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        // Title shimmer
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(24.dp)
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_medium),
+                    vertical = dimensionResource(R.dimen.padding_small)
+                )
+                .background(brush)
+        )
+
+        // Three transaction items
+        repeat(3) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = dimensionResource(R.dimen.padding_medium),
+                        vertical = dimensionResource(R.dimen.padding_extra_small)
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Icon placeholder
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(brush)
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    // Transaction name
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(fraction = 0.7f)
+                            .height(16.dp)
+                            .background(brush)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Category name
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(fraction = 0.5f)
+                            .height(14.dp)
+                            .background(brush)
+                    )
+                }
+
+                // Amount placeholder
+                Box(
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(20.dp)
+                        .background(brush)
+                )
+            }
+        }
+
+        // Button shimmer
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .padding(dimensionResource(R.dimen.padding_medium))
+                .background(brush)
+        )
     }
 }
 
@@ -969,7 +1119,7 @@ fun CashbackBonusCard(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.Bold,
                         fontSize = 26.sp,
 
-                    )
+                        )
                 }
             }
             Card(
@@ -1174,7 +1324,6 @@ fun TextSwitch(
     ) {
 
 
-
         if (items.isNotEmpty()) {
 
             val maxWidth = this.maxWidth
@@ -1196,34 +1345,35 @@ fun TextSwitch(
 
 
 
-            Row(modifier = Modifier
-                .fillMaxWidth()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
 
 
-                .drawWithContent {
+                    .drawWithContent {
 
-                    // This is for setting black tex while drawing on white background
-                    val padding = 8.dp.toPx()
-                    drawRoundRect(
-                        topLeft = Offset(x = indicatorOffset.toPx() + padding, padding),
-                        size = Size(size.width / 4 - padding * 2, size.height - padding * 2),
-                        color = textColor,
-                        cornerRadius = CornerRadius(x = 32.dp.toPx(), y = 32.dp.toPx()),
-                    )
-                    drawWithLayer {
-                        drawContent()
-
-                        // This is white top rounded rectangle
+                        // This is for setting black tex while drawing on white background
+                        val padding = 8.dp.toPx()
                         drawRoundRect(
-                            topLeft = Offset(x = indicatorOffset.toPx(), 0f),
-                            size = Size(size.width / 4, size.height),
-                            color = backgroundColor,
+                            topLeft = Offset(x = indicatorOffset.toPx() + padding, padding),
+                            size = Size(size.width / 4 - padding * 2, size.height - padding * 2),
+                            color = textColor,
                             cornerRadius = CornerRadius(x = 32.dp.toPx(), y = 32.dp.toPx()),
-                            blendMode = androidx.compose.ui.graphics.BlendMode.SrcOut
                         )
-                    }
+                        drawWithLayer {
+                            drawContent()
 
-                }
+                            // This is white top rounded rectangle
+                            drawRoundRect(
+                                topLeft = Offset(x = indicatorOffset.toPx(), 0f),
+                                size = Size(size.width / 4, size.height),
+                                color = backgroundColor,
+                                cornerRadius = CornerRadius(x = 32.dp.toPx(), y = 32.dp.toPx()),
+                                blendMode = androidx.compose.ui.graphics.BlendMode.SrcOut
+                            )
+                        }
+
+                    }
             ) {
                 items.forEachIndexed { index, text ->
                     Box(
@@ -1263,9 +1413,6 @@ fun ContentDrawScope.drawWithLayer(block: ContentDrawScope.() -> Unit) {
         restoreToCount(checkPoint)
     }
 }
-
-
-
 
 
 //

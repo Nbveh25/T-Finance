@@ -7,12 +7,14 @@ import dagger.hilt.components.SingletonComponent
 import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.remote.token.TokenService
 import ru.practice.t_finance.data.repository.AuthRepositoryImpl
+import ru.practice.t_finance.data.repository.BudgetRepositoryImpl
 import ru.practice.t_finance.data.repository.CategoryRepositoryImpl
 import ru.practice.t_finance.data.repository.ExpensesRepositoryImpl
 import ru.practice.t_finance.data.repository.GoalRepositoryImpl
 import ru.practice.t_finance.data.repository.InitialBudgetRepositoryImpl
 import ru.practice.t_finance.data.repository.TransactionRepositoryImpl
 import ru.practice.t_finance.domain.repository.AuthRepository
+import ru.practice.t_finance.domain.repository.BudgetRepository
 import ru.practice.t_finance.domain.repository.CategoryRepository
 import ru.practice.t_finance.domain.repository.ExpensesRepository
 import ru.practice.t_finance.domain.repository.GoalRepository
@@ -24,6 +26,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class DataModule {
+
+    @Provides
+    @Singleton
+    fun provideBudgetRepository(apiService: ApiService): BudgetRepository {
+        return BudgetRepositoryImpl(apiService)
+    }
 
     @Provides
     @Singleton

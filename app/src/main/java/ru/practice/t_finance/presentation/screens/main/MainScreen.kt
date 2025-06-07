@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import ru.practice.t_finance.R
 import androidx.compose.ui.res.dimensionResource
@@ -17,10 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ru.practice.t_finance.domain.model.CreateGoalModel
 import ru.practice.t_finance.presentation.components.GoalSlot
+import ru.practice.t_finance.presentation.components.MainScreenSlotShimmer
 import ru.practice.t_finance.presentation.components.TransactionSlot
-import ru.practice.t_finance.presentation.model.TransactionListItem
 import ru.practice.t_finance.presentation.navigation.Routes
 import ru.practice.t_finance.presentation.theme.TfinanceTheme
 
@@ -30,6 +30,10 @@ fun MainScreen(
     navController: NavHostController,
     viewModel: MainVewModel = hiltViewModel(),
 ) {
+    val budgetState = viewModel.budgetState.collectAsState()
+    val transactionsState = viewModel.transactionsState.collectAsState()
+    val goalsState = viewModel.goalsState.collectAsState()
+
     Column(
         modifier = modifier
             .padding(
@@ -44,57 +48,78 @@ fun MainScreen(
                 vertical = dimensionResource(R.dimen.padding_small)
             )
         ) {
-            Column {
-                Text(
-                    text = "Доступно",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Text(
-                    text = "3 556 Р",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                // Круговая диграмма
+            when(budgetState.value) {
+                is BudgetUIState.Initial -> {
+                    Unit
+                }
+                is BudgetUIState.Loading -> {
+                    Unit
+                }
+                is BudgetUIState.Error -> {
+                    Unit
+                }
+                is BudgetUIState.Success -> {
+                    Column {
+                        Text(
+                            text = "Доступно",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                            text = "${(budgetState.value as BudgetUIState.Success).data.amount}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        // Круговая диграмма
+                    }
+                }
             }
+
         }
         //.....................
 
-        TransactionSlot(
-            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium)),
-            transactionModelList = listOf(
-                TransactionListItem(
-                    imageUrl = "https://avatars.mds.yandex.net/i?id=ce9759b87fb0b2f7276b28e34f0c1ff4e2499d3d-3919804-images-thumbs&n=13",
-                    name = "Меган Фокс",
-                    category = "Бордель",
-                    amountFormatted = "5000"
-                ),
-            ),
-            onClick = {navController.navigate(Routes.EXPENSES_SCREEN)}
-        )
-        GoalSlot(
-            createGoalModelList = listOf(
-                CreateGoalModel(
-                    "Dodge Challenger",
-                    accumulatedAmount = 1_200_000.0,
-                    amount = 7_500_00.0,
-                    description = "",
-                    term = ""
-                ),
-                CreateGoalModel(
-                    "Ford Ferrari",
-                    accumulatedAmount = 12_000_000.0,
-                    amount = 14_900_000.0,
-                    description = "",
-                    term = ""
-                ),
-                CreateGoalModel(
-                    "Lamborghini Countach",
-                    accumulatedAmount = 12_000_000.0,
-                    amount = 77_500_000.0,
-                    description = "",
-                    term = ""
+        when (transactionsState.value) {
+            is TransactionUIState.Initial -> {
+                Unit
+            }
+
+            is TransactionUIState.Loading -> {
+                MainScreenSlotShimmer()
+            }
+
+            is TransactionUIState.Error -> {
+                MainScreenSlotShimmer()
+            }
+
+            is TransactionUIState.Success -> {
+                TransactionSlot(
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium)),
+                    transactionModelList = (transactionsState.value as TransactionUIState.Success).data,
+                    onClick = { navController.navigate(Routes.EXPENSES_SCREEN) }
                 )
-            )
-        )
+            }
+        }
+
+        when (goalsState.value) {
+            is GoalUIState.Initial -> {
+                Unit
+            }
+
+            is GoalUIState.Loading -> {
+                MainScreenSlotShimmer()
+            }
+
+            is GoalUIState.Error -> {
+                MainScreenSlotShimmer()
+            }
+
+            is GoalUIState.Success -> {
+                GoalSlot(
+                    goalItemList = (goalsState.value as GoalUIState.Success).data,
+                    onClick = { navController.navigate(Routes.GOALS_SCREEN) }
+                )
+            }
+        }
+
+
     }
 }
 

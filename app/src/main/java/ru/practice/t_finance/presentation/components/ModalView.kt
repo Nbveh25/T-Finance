@@ -124,7 +124,7 @@ fun Goal(name: String, accumulatedAmount: Double, amount: Double, modifier: Modi
 }
 
 @Composable
-fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoalModel>) {
+fun GoalSlot(modifier: Modifier = Modifier, goalItemList: List<GoalItem>, onClick: () -> Unit) {
     Card(
         modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
@@ -144,33 +144,19 @@ fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoal
                 vertical = dimensionResource(R.dimen.padding_small)
             )
         )
-        Goal(
-            name = createGoalModelList[0].name,
-            accumulatedAmount = createGoalModelList[0].accumulatedAmount,
-            amount = createGoalModelList[0].amount,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_small)
-            ),
-        )
-        Goal(
-            name = createGoalModelList[1].name,
-            accumulatedAmount = createGoalModelList[1].accumulatedAmount,
-            amount = createGoalModelList[1].amount,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_small)
-            ),
-        )
-        Goal(
-            name = createGoalModelList[2].name,
-            accumulatedAmount = createGoalModelList[2].accumulatedAmount,
-            amount = createGoalModelList[2].amount,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_small)
-            ),
-        )
+
+        goalItemList.take(3).forEach { goal ->
+            Goal(
+                name = goal.name,
+                accumulatedAmount = goal.accumulatedAmount,
+                amount = goal.amount,
+                modifier = Modifier.padding(
+                    horizontal = dimensionResource(R.dimen.padding_medium),
+                    vertical = dimensionResource(R.dimen.padding_small)
+                ),
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -178,7 +164,7 @@ fun GoalSlot(modifier: Modifier = Modifier, createGoalModelList: List<CreateGoal
         ) {
             CustomButton(
                 text = stringResource(R.string.more),
-                onClick = {},
+                onClick = onClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium))
