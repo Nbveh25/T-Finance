@@ -42,8 +42,8 @@
         <string name="DateRangePickerStartHeadline">Начало периода</string>
         <string name="DateRangePickerEndHeadline">Конец периода</string>
     <string name="main">Главная</string>
-    <string name="budget">Главная</string>
-    <string name="echo">Бюджет</string>
+    <string name="budget">Бюджет</string>
+    <string name="echo">Еще</string>
     <string name="t_finance_rus">Т-ФИНАНСЫ</string>
     <string name="send">Отправить</string>
     <string name="code_send_to">Код отправлен на номер %1$s</string>

@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                     bottomBar = {
-                        if (showBottomBar && hasValidToken) {
+                        if (showBottomBar) {
                             CustomBottomAppBar(
                                 navController = navController
                             )
