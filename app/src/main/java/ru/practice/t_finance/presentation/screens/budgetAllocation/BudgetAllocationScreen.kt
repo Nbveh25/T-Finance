@@ -216,17 +216,17 @@ fun AlertBudgetDialog(onDismiss: () -> Unit, onConfirm: () -> Unit){
             )
         },
         title = {
-            Text(text = "Внимание")
+            Text(text = stringResource(R.string.Attention))
         },
         text = {
-            Text("Обратите внимание! Вы распределили не все проценты! Оставшаяся часть будет перенесена в категорию \"Другое\".")
+            Text(stringResource(R.string.budget_allocation_message_attention))
         },
         confirmButton = {
             TextButton(onClick = onConfirm, colors = androidx.compose.material3.ButtonDefaults.textButtonColors(
                 contentColor = MaterialTheme.colorScheme.secondary
             )
                 ) {
-                Text("Продолжить")
+                Text(stringResource(R.string.continue_button))
             }
         },
         dismissButton = {
@@ -234,7 +234,7 @@ fun AlertBudgetDialog(onDismiss: () -> Unit, onConfirm: () -> Unit){
                 colors = androidx.compose.material3.ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.secondary
                 )) {
-                Text("Отмена")
+                Text(stringResource(R.string.cancel_button))
             }
         }
     )
@@ -319,7 +319,7 @@ fun PercentageBottomSheet(
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            placeholderText = "Введите число",
+            placeholderText = stringResource(R.string.enter_value),
             keyboardType = KeyboardType.Number,
             remainedText = remainingPercent.toString()
         )

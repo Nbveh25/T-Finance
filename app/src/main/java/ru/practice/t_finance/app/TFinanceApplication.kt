@@ -1,4 +1,4 @@
-package ru.practice.t_finance
+package ru.practice.t_finance.app
 
 import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen

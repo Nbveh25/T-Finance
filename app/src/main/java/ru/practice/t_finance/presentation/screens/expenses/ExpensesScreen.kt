@@ -136,7 +136,8 @@ fun ExpensesScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()){
-        Column(modifier = modifier.fillMaxSize()
+        Column(modifier = modifier
+            .fillMaxSize()
             .verticalScroll(scrollState)) {
             Column(
                 modifier = Modifier
@@ -168,7 +169,7 @@ fun ExpensesScreen(
                         is ExpensesUiState.Loading -> {
                             Text(
                                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 32.sp),
-                                text = "Загрузка..."
+                                text = stringResource(R.string.loading)
                             )
                         }
 
@@ -243,7 +244,7 @@ fun ExpensesScreen(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_chevron_left_24),
-                        contentDescription = "Назад",
+                        contentDescription = stringResource(R.string.back),
                         modifier = Modifier.size(112.dp),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
@@ -294,7 +295,7 @@ fun ExpensesScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "Транзакций пока нет...",
+                                    text = stringResource(R.string.transactions_is_empty),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     textAlign = TextAlign.Center
@@ -302,7 +303,10 @@ fun ExpensesScreen(
                             }
                         }
                     } else {
-                    TransactionsSlotExpenses(modifier = Modifier.padding(horizontal = 8.dp).height(250.dp).fillMaxWidth(),transactionModelList = state.transactions)
+                    TransactionsSlotExpenses(modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .height(250.dp)
+                        .fillMaxWidth(),transactionModelList = state.transactions)
                     }
                 }
                 is ExpensesUiState.Error -> {
@@ -326,8 +330,8 @@ fun ExpensesScreen(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .padding(
-                                vertical = dimensionResource(R.dimen.padding_small)
-                            ),
+                                    vertical = dimensionResource(R.dimen.padding_small)
+                                ),
                         )
                     }
                 }
