@@ -120,9 +120,5 @@ class MainActivity : ComponentActivity() {
             key("userId","$id")
         }
 
-        lifecycleScope.launch {
-            delay(5000L)
-            throw IllegalStateException("error")
-        }
     }
 }
