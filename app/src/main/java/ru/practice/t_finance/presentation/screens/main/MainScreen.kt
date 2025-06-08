@@ -1,20 +1,32 @@
 package ru.practice.t_finance.presentation.screens.main
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import ru.practice.t_finance.R
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -40,6 +52,7 @@ fun MainScreen(
                 horizontal = dimensionResource(R.dimen.padding_extra_small),
                 vertical = dimensionResource(R.dimen.padding_medium)
             )
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
         Row(
@@ -90,11 +103,50 @@ fun MainScreen(
             }
 
             is TransactionUIState.Success -> {
-                TransactionSlot(
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium)),
-                    transactionModelList = (transactionsState.value as TransactionUIState.Success).data,
-                    onClick = { navController.navigate(Routes.EXPENSES_SCREEN) }
-                )
+                if ((transactionsState.value as TransactionUIState.Success).data.isEmpty()){
+                    Card(
+                        modifier = modifier
+                            .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+                            .height(240.dp)
+                            .fillMaxWidth()
+                            .shadow(
+                                elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+                            ),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        )
+                    ) {
+                        Column {
+                            Text(
+                                text = stringResource(R.string.on_this_week),
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(
+                                    horizontal = dimensionResource(R.dimen.padding_medium),
+                                    vertical = dimensionResource(R.dimen.padding_small)
+                                )
+                            )
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.transactions_is_empty),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(8.dp))
+                } else {
+                    TransactionSlot(
+                        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium)),
+                        transactionModelList = (transactionsState.value as TransactionUIState.Success).data,
+                        onClick = { navController.navigate(Routes.EXPENSES_SCREEN) }
+                    )
+                }
             }
         }
 
@@ -112,10 +164,49 @@ fun MainScreen(
             }
 
             is GoalUIState.Success -> {
-                GoalSlot(
-                    goalItemList = (goalsState.value as GoalUIState.Success).data,
-                    onClick = { navController.navigate(Routes.GOALS_SCREEN) }
-                )
+                if ((goalsState.value as GoalUIState.Success).data.isEmpty()){
+                    Card(
+                        modifier = modifier
+                            .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+                            .height(240.dp)
+                            .fillMaxWidth()
+                            .shadow(
+                                elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
+                                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+                            ),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        )
+                    ) {
+                        Column {
+                            Text(
+                                text = stringResource(R.string.on_this_week),
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(
+                                    horizontal = dimensionResource(R.dimen.padding_medium),
+                                    vertical = dimensionResource(R.dimen.padding_small)
+                                )
+                            )
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.distributions_empty),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                } else {
+                    GoalSlot(
+                        goalItemList = (goalsState.value as GoalUIState.Success).data,
+                        onClick = { navController.navigate(Routes.GOALS_SCREEN) }
+                    )
+                }
             }
         }
 
