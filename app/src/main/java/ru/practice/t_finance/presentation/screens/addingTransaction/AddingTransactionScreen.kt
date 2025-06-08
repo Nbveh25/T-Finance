@@ -199,7 +199,8 @@ fun CategorySelectionBottomSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState()
+        sheetState = rememberModalBottomSheetState(),
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         LazyColumn(modifier = Modifier.padding(16.dp)) {
             items(categories.size) { category ->

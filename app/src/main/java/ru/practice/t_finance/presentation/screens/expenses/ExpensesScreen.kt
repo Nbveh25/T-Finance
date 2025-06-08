@@ -280,7 +280,7 @@ fun ExpensesScreen(
                         Card(
                             modifier = modifier
                                 .padding(horizontal = 8.dp)
-                                .height(250.dp)
+                                .height(200.dp)
                                 .fillMaxWidth()
                                 .shadow(
                                     elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
@@ -305,7 +305,7 @@ fun ExpensesScreen(
                     } else {
                     TransactionsSlotExpenses(modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .height(250.dp)
+                        .height(180.dp)
                         .fillMaxWidth(),transactionModelList = state.transactions)
                     }
                 }

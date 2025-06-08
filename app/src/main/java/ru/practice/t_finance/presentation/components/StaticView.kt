@@ -845,7 +845,7 @@ fun TransactionsSlotExpenses(
         modifier = modifier
             .shadow(
                 elevation = dimensionResource(R.dimen.card_shadow_elevation_medium),
-                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_large))
+                shape = RoundedCornerShape(dimensionResource(R.dimen.corner_shape_small))
             ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
