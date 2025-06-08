@@ -124,7 +124,7 @@ class ExpensesViewModel @Inject constructor(
                     when (dif) {
                         in 0..1 -> PeriodType.DAY
                         in 2..7 -> PeriodType.WEEK
-                        in 8..30 -> PeriodType.MONTH
+                        in 8..34 -> PeriodType.MONTH
                         else -> PeriodType.YEAR
                     }
                 )
