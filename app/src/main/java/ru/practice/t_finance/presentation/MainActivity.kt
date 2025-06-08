@@ -7,14 +7,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -42,6 +48,9 @@ class MainActivity : ComponentActivity() {
     lateinit var apiService: ApiService
 
     @Inject
+    lateinit var tokenService: TokenService
+
+    @Inject
     lateinit var notificationHandler: NotificationHandler
 
     @Inject
@@ -53,12 +62,31 @@ class MainActivity : ComponentActivity() {
         setContent {
             TfinanceTheme {
                 val navController = rememberNavController()
-                val tokenService = remember { TokenService(apiService = apiService, context = applicationContext) }
                 val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
-                // Проверяем наличие активного токена
-                val hasValidToken = remember {
-                    tokenService.getAccessToken() != null
+                // Создаем состояние для отслеживания валидности токена
+                var hasValidToken by remember { mutableStateOf(false) }
+                var isInitialized by remember { mutableStateOf(false) }
+
+                // Проверяем токен только один раз при инициализации
+                LaunchedEffect(Unit) {
+                    android.util.Log.d("MainActivity", "Starting token validation")
+                    try {
+                        hasValidToken = tokenService.hasValidTokens()
+                        android.util.Log.d("MainActivity", "Token validation completed. Has valid tokens: $hasValidToken")
+                    } catch (e: Exception) {
+                        android.util.Log.e("MainActivity", "Token validation failed: ${e.message}", e)
+                        // При критических ошибках выполняем принудительную очистку
+                        if (e.message?.contains("EncryptedSharedPreferences") == true || 
+                            e.message?.contains("AEADBadTagException") == true) {
+                            android.util.Log.w("MainActivity", "Performing force cleanup due to encryption errors")
+                            tokenService.forceCleanup()
+                        }
+                        hasValidToken = false
+                    } finally {
+                        isInitialized = true
+                        android.util.Log.d("MainActivity", "Initialization completed")
+                    }
                 }
 
                 val showBottomBar = currentRoute in listOf(
@@ -69,42 +97,50 @@ class MainActivity : ComponentActivity() {
                     Routes.ADD_SCREEN
                 )
 
-                LaunchedEffect(hasValidToken) {
-                    // Навигация в зависимости от наличия токена
-                    if (!hasValidToken) {
-                        navController.navigate(Routes.AUTH_SCREEN) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                inclusive = true
-                            }
-                        }
-                    }
-                }
 
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background),
-                    bottomBar = {
-                        if (showBottomBar) {
-                            CustomBottomAppBar(
-                                navController = navController
+
+                // Показываем интерфейс только после инициализации
+                if (isInitialized) {
+                    Scaffold(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background),
+                        bottomBar = {
+                            if (showBottomBar) {
+                                CustomBottomAppBar(
+                                    navController = navController
+                                )
+                            }
+                        },
+                        containerColor = MaterialTheme.colorScheme.background
+                    ) { paddingValues ->
+                        Surface(
+                            modifier = Modifier.padding(paddingValues),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            AppNavigation(
+                                navController = navController,
+                                startDestination = if (hasValidToken) Routes.MAIN_SCREEN else Routes.AUTH_SCREEN
                             )
                         }
-                    },
-                    containerColor = MaterialTheme.colorScheme.background
-                ) { paddingValues ->
+                    }
+                } else {
+                    // Показываем экран загрузки пока идет инициализация
                     Surface(
-                        modifier = Modifier.padding(paddingValues),
+                        modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        AppNavigation(
-                            navController = navController,
-                            startDestination = if (hasValidToken) Routes.MAIN_SCREEN else Routes.AUTH_SCREEN
-                        )
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }
         }
+        
         if (!permissionHandler.isNotificationPermissionGranted()) {
             permissionHandler.requestNotificationPermission(this) { granted ->
                 if (granted) {

@@ -47,6 +47,7 @@ object NetworkModule {
     }
 
     @Provides
+    @javax.inject.Singleton
     fun provideTokenService(
         apiService: ApiService,
         @ApplicationContext context: Context,
@@ -58,6 +59,7 @@ object NetworkModule {
     }
 
     @Provides
+    @javax.inject.Singleton
     fun provideTokenInterceptor(
         tokenServiceProvider: Provider<TokenService>
     ): TokenInterceptor {

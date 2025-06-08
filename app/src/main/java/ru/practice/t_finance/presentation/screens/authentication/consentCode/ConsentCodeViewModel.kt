@@ -14,12 +14,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practice.t_finance.domain.model.CodeModel
 import ru.practice.t_finance.domain.model.PhoneNumberModel
+import ru.practice.t_finance.domain.usecases.auth.GetUserUseCase
 import ru.practice.t_finance.domain.usecases.auth.SendSmsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ConsentCodeViewModel @Inject constructor(
     private val sendSmsUseCase: SendSmsUseCase,
+    private val getUserUseCase: GetUserUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -30,6 +32,9 @@ class ConsentCodeViewModel @Inject constructor(
 
     private val _state = MutableStateFlow<ConsentCodeState>(ConsentCodeState.Initial)
     internal val state: StateFlow<ConsentCodeState> = _state.asStateFlow()
+
+    private val _userState = MutableStateFlow<UserState>(UserState.Initial)
+    internal val userState: StateFlow<UserState> = _userState.asStateFlow()
 
     fun updateCode(newValue: String) {
         code = newValue.take(4)
@@ -48,6 +53,7 @@ class ConsentCodeViewModel @Inject constructor(
                     phoneNumberModel = PhoneNumberModel(phoneNumber),
                     codeModel = CodeModel(code),
                 ).onSuccess {
+
                     _state.value = ConsentCodeState.Success
                     Log.d("ConsentCodeViewModel", "Success: $it")
                 }.onFailure { error ->
@@ -55,6 +61,20 @@ class ConsentCodeViewModel @Inject constructor(
                     _state.value = ConsentCodeState.Error(errorMessage ?: "Ошибка")
                     Log.d("ConsentCodeViewModel", "Error: $error")
                 }
+            }
+        }
+    }
+
+    fun getUser() {
+        viewModelScope.launch {
+            _userState.value = UserState.Initial
+
+            getUserUseCase.invoke().onSuccess {
+
+                _userState.value = UserState.Success(isRegistered = true)
+            }.onFailure {
+
+                _userState.value = UserState.Error(it.message ?: "Ошибка")
             }
         }
     }

@@ -4,6 +4,7 @@ import ru.practice.t_finance.data.remote.response.SendSmsResponse
 import ru.practice.t_finance.domain.model.CodeModel
 import ru.practice.t_finance.domain.model.FirstNameModel
 import ru.practice.t_finance.domain.model.PhoneNumberModel
+import ru.practice.t_finance.domain.model.UserModel
 
 interface AuthRepository {
 
@@ -12,5 +13,8 @@ interface AuthRepository {
     suspend fun sendCode(phoneNumberModel: PhoneNumberModel, codeModel: CodeModel): Result<SendSmsResponse>
 
     suspend fun sendName(firstNameModel: FirstNameModel): Result<Unit>
+
+    suspend fun getUser(): Result<UserModel>
+
 
 }

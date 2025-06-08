@@ -39,6 +39,7 @@ fun ConsentCodeScreen(
     viewModel: ConsentCodeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val userState by viewModel.userState.collectAsState()
 
     Column(
         modifier = modifier
