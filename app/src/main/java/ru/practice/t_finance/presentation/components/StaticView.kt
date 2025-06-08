@@ -894,36 +894,19 @@ fun TransactionSlot(
                 vertical = dimensionResource(R.dimen.padding_small)
             )
         )
-        Transaction(
-            iconUrl = transactionModelList[0].imageUrl.toString(),
-            transactionName = transactionModelList[0].name,
-            categoryName = transactionModelList[0].category,
-            summa = ceil(transactionModelList[0].amountFormatted.toDouble()).toInt(),
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_extra_small)
+
+        transactionModelList.take(3).forEach { data ->
+            Transaction(
+                iconUrl = data.imageUrl.toString(),
+                transactionName = data.name,
+                categoryName = data.category,
+                summa = ceil(data.amountFormatted.toDouble()).toInt(),
+                modifier = Modifier.padding(
+                    horizontal = dimensionResource(R.dimen.padding_medium),
+                    vertical = dimensionResource(R.dimen.padding_extra_small)
+                )
             )
-        )
-        Transaction(
-            iconUrl = transactionModelList[1].imageUrl.toString(),
-            transactionName = transactionModelList[1].name,
-            categoryName = transactionModelList[1].category,
-            summa = ceil(transactionModelList[1].amountFormatted.toDouble()).toInt(),
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_extra_small)
-            )
-        )
-        Transaction(
-            iconUrl = transactionModelList[2].imageUrl.toString(),
-            transactionName = transactionModelList[2].name,
-            categoryName = transactionModelList[2].category,
-            summa = ceil(transactionModelList[2].amountFormatted.toDouble()).toInt(),
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.padding_medium),
-                vertical = dimensionResource(R.dimen.padding_extra_small)
-            )
-        )
+        }
 
         Row(
             modifier = Modifier
