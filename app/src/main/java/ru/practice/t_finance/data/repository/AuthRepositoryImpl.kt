@@ -186,7 +186,7 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Result.failure(Exception("Неизвестная ошибка"))
+            Result.failure(Exception("Неизвестная ошибка: ${e.message}"))
         }
     }
 

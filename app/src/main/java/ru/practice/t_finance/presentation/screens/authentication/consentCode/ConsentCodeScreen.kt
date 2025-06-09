@@ -103,7 +103,7 @@ fun ConsentCodeScreen(
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
-                        .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding))
+                        .padding(horizontal = 80.dp)
                         .padding(top = 4.dp)
                 )
             }
@@ -118,6 +118,7 @@ fun ConsentCodeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 80.dp),
+                enabled = viewModel.code.length == 4
             )
 
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_extra_small)))
@@ -125,12 +126,29 @@ fun ConsentCodeScreen(
         }
     }
 
-    LaunchedEffect(state) {
+    LaunchedEffect(state, userState) {
         if (state is ConsentCodeState.Success) {
-            navController.navigate(Routes.INPUT_NAME_SCREEN)
+
+            when (userState) {
+                is UserState.Initial -> {
+                    Unit
+                }
+
+                is UserState.Loading -> {
+                    Unit
+                }
+
+                is UserState.Error -> {
+                    navController.navigate(Routes.INPUT_NAME_SCREEN)
+                }
+
+                is UserState.Success -> {
+                    navController.navigate(Routes.MAIN_SCREEN)
+                }
+
+            }
         }
     }
-
 }
 
 @Composable

@@ -54,6 +54,7 @@ class ConsentCodeViewModel @Inject constructor(
                     codeModel = CodeModel(code),
                 ).onSuccess {
 
+                    getUser()
                     _state.value = ConsentCodeState.Success
                     Log.d("ConsentCodeViewModel", "Success: $it")
                 }.onFailure { error ->
@@ -71,9 +72,11 @@ class ConsentCodeViewModel @Inject constructor(
 
             getUserUseCase.invoke().onSuccess {
 
-                _userState.value = UserState.Success(isRegistered = true)
+                Log.d("ConsentCodeViewModel", "User: $it")
+                _userState.value = UserState.Success
             }.onFailure {
 
+                Log.d("ConsentCodeViewModel", "Error: ${it.message}")
                 _userState.value = UserState.Error(it.message ?: "Ошибка")
             }
         }
