@@ -85,10 +85,10 @@ fun AuthScreen(
             CustomButton(
                 text = stringResource(R.string.next),
                 onClick = { viewModel.sendCode() },
-                enabled = state !is AuthScreenState.Loading,
+                enabled = viewModel.phoneNumber.length == 10,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding))
+                    .padding(horizontal = dimensionResource(R.dimen.horizontal_screen_padding)),
             )
 
             Spacer(modifier = Modifier.padding(vertical = 6.dp))

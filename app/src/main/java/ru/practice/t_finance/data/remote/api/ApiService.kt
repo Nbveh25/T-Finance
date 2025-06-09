@@ -24,6 +24,7 @@ import ru.practice.t_finance.data.remote.response.GoalResponse
 import ru.practice.t_finance.data.remote.response.RefreshTokenResponse
 import ru.practice.t_finance.data.remote.response.SendSmsResponse
 import ru.practice.t_finance.data.remote.response.TransactionsResponse
+import ru.practice.t_finance.data.remote.response.UserResponse
 
 interface ApiService {
 
@@ -36,6 +37,9 @@ interface ApiService {
 
     @POST("/api/v1/user")
     suspend fun sendName(@Body request: SendNameRequest): NetworkResponse<Unit, ApiError>
+
+    @GET("/api/v1/user")
+    suspend fun getUser(): NetworkResponse<UserResponse, ApiError>
 
     // JWT Authorization
     @POST("/api/v1/auth/refresh-token")

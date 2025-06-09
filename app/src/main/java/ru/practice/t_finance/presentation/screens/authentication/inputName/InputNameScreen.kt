@@ -97,13 +97,13 @@ fun InputNameScreen(
                     horizontal = dimensionResource(R.dimen.padding_medium),
                     vertical = dimensionResource(R.dimen.padding_large)
                 ),
-            //enabled = viewModel.phoneNumberFlow.value.number.isNotBlank()
+            enabled = viewModel.name.isNotBlank()
         )
     }
 
     LaunchedEffect(state) {
         if (state is InputNameScreenState.Success) {
-            navController.navigate(Routes.MAIN_SCREEN)
+            navController.navigate(Routes.BUDGET_SCREEN)
         }
     }
 }

@@ -51,7 +51,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(newValue: String) {
-        val digits = newValue.filter { it.isDigit() }.take(11)
+        val digits = newValue.filter { it.isDigit() }.take(10)
         phoneNumber = digits
         formattedPhoneNumber = phoneNumberValidator.formatInput(digits)
         errorMessage = null

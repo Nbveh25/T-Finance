@@ -1,6 +1,7 @@
 package ru.practice.t_finance.data.repository
 
 import android.util.Log
+import okhttp3.Response
 import ru.practice.t_finance.data.remote.api.ApiService
 import ru.practice.t_finance.data.remote.mapper.AuthMapper
 import ru.practice.t_finance.domain.model.PhoneNumberModel
@@ -10,6 +11,7 @@ import ru.practice.t_finance.data.remote.response.SendSmsResponse
 import ru.practice.t_finance.data.remote.token.TokenService
 import ru.practice.t_finance.domain.model.CodeModel
 import ru.practice.t_finance.domain.model.FirstNameModel
+import ru.practice.t_finance.domain.model.UserModel
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -156,6 +158,35 @@ class AuthRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    override suspend fun getUser(): Result<UserModel> {
+        return try {
+            when(val response = apiService.getUser()) {
+                is NetworkResponse.Success -> {
+
+                    Result.success(AuthMapper.toModel(response.data))
+                }
+                is NetworkResponse.EmptySuccess -> {
+
+                    Result.failure(Exception("Пустой ответ"))
+                }
+                is NetworkResponse.ApiError -> {
+                    when (response.code) {
+                        401 -> Result.failure(Exception("Неавторизованный пользователь"))
+                        else -> Result.failure(Exception("Неизвестная ошибка: ${response.code}"))
+                    }
+                }
+                is NetworkResponse.NetworkError -> {
+                    Result.failure(response.error)
+                }
+                is NetworkResponse.UnknownError -> {
+                    Result.failure(response.error)
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(Exception("Неизвестная ошибка: ${e.message}"))
         }
     }
 
